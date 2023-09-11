@@ -15,10 +15,10 @@ const LodgesSchema = new mongoose.Schema({
     },
 
 
-   // photos: {
-    //    type: String,
-     //   required: true
-    //},
+    photos: {
+       type: [String],
+       required: true
+    },
 
   
     capacity: {
@@ -39,7 +39,7 @@ const LodgesSchema = new mongoose.Schema({
         max: 50000
     },
 
-   // roomNumbers: [{ number: Number, unavailableDates:{type:[Date]} }],
+    roomNumbers: [{ number: Number, unavailableDates:{type:[Date]} }],
 
 
 
