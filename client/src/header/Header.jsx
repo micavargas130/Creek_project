@@ -31,7 +31,7 @@ export default function Header() {
   const [children, setChildren] = useState(options.children);
   const [room, setRoom] = useState(options.room);
 
-  const { data, loading, error, reFetch } = useFetch(`/lodges`);
+  const {data, loading, error, reFetch } = useFetch(`/lodges`);
 
   const {dispatch} = useContext(SearchContext);
 
@@ -45,25 +45,21 @@ export default function Header() {
   };
 
   const handleClick = ()=>{
+
+
     if (window.location.pathname === '/roomsPage') {
-      window.location.reload(); // Recargar la página actual
+      navigate(window.location.reload(), {state: {date, options}});
+      dispatch({type:"NEW_SEARCH", payload:{options: { ...options, room }}});
+
   } else {
     navigate("/roomsPage", {state: {date, options}});
     dispatch({type:"NEW_SEARCH", payload:{options: { ...options, room }}});
-    reFetch();
+    
   }
 }
 
 
   const navigate = useNavigate();
-
-  const handleSearch = () => {
-    if (window.location.pathname === '/roomsPage') {
-      window.location.reload(); // Recargar la página actual
-  } else {
-    navigate("/roomsPage", {state: {date, options}});
-   }
-  };
 
  
     return (<div>

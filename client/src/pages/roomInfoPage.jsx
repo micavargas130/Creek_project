@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import "./roomInfoPage.css";
-import { useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import useFetch from "../hooks/useFetch.js";
+
 
 
 export default function roomInfoPage(){
@@ -11,6 +13,11 @@ export default function roomInfoPage(){
   const [lodge,setLodge] = useState(null);
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+
+  const {data, loading, error} = useFetch(`/lodges/`)
+
+
+
 
   useEffect(()=>{
     if(!id){

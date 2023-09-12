@@ -1,7 +1,7 @@
+/* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
 import "./searchItem.css";
 
-// eslint-disable-next-line react/prop-types
 const SearchItem = ({ item }) => {
   return (
     <div className="searchItem">
@@ -21,7 +21,7 @@ const SearchItem = ({ item }) => {
         <div className="siDetailTexts">
           <span className="siPrice">${item.price}</span>
           <span className="siTaxOp">Includes taxes and fees</span>
-          <Link to={`/hotels/${item._id}`}>
+          <Link to={`/lodges/${item._id}`}>
           <button className="siCheckButton">Reserve</button>
           </Link>
         </div>
