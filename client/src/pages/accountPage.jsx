@@ -3,11 +3,15 @@ import { useState } from "react";
 import { useContext } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import axios from "axios"
+import { useEffect } from "react";
+import RoomItem from "../components/RoomItem/roomItem.jsx";
+import useFetch from "../hooks/useFetch";
 
 export default function AccountPage(){
     const [redirect, setRedirect] = useState(null);
     const{ready,user,setUser} = useContext(UserContext);
-    
+    const {data} = useFetch(`/bookings`)
+  
     let {subpage} = useParams();
     
     if (subpage === undefined){
@@ -19,8 +23,6 @@ export default function AccountPage(){
         setUser(null);
         setRedirect('/');
     }
-
-
 
     function linkClasses(type=null) {
         let classes = 'py-2 px-6';
@@ -57,11 +59,19 @@ export default function AccountPage(){
                 <button onClick={logout} className = 'primary max-w-sm mt-2"'>Logout</button>
                 </div>
        
-        </div>
+            </div>
         )}
 
-       </div>
+       {subpage === 'bookings' && (
+ 
+        data.map((item)=> (
+        <RoomItem item={item} key={item._id} />
+        ))
+       )}
+       
+    </div>
 
 
     );
+        
 }

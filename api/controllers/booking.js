@@ -1,0 +1,60 @@
+import User from '../controllers/user.js';
+import Booking from '../models/Bookings.js';
+
+export const createBooking = async (req, res, next) =>{ 
+ try{
+        const newBooking = new Booking({
+        place: req.body.place,
+        placeName: req.body.placeName,
+        checkIn: req.body.checkIn,
+        checkOut: req.body.checkOut,
+        user: req.body.user,
+        name: req.body.name,
+        numberOfGuests: req.body.numberOfGuests,
+        totalAmount: req.body.totalAmount,
+        unavailableDates: req.body.unavailableDates
+
+    })
+    await newBooking.save();
+    res.status(200).send('Booking registered correctly');
+
+    }catch(err){
+        next(err);
+    }
+
+}
+
+export const getBookings = async(req, res, next) =>{
+    try{
+        const bookings = await Booking.find() 
+         res.status(200).json(bookings)
+     }catch(err) {
+         next(err)
+     }
+
+}
+
+export const getBookingByUser = async (req, res, next) => {
+    try {
+        const userId = req.user.id; // Supongamos que tienes el ID del usuario en req.user
+        const bookings = await Bookings.find({ user: userId }); // Busca reservas del usuario
+        res.status(200).json(bookings); // Devuelve las reservas del usuario
+    } catch (err) {
+        next(err);
+    }
+}
+
+export const deleteBooking = async (req, res, next) => {
+    try {
+      const bookingId = req.params.bookingId;
+      const deletedBooking = await Booking.findByIdAndDelete(bookingId);
+      
+      if (!deletedBooking) {
+        return res.status(404).json({ message: 'Booking not found' });
+      }
+      
+      res.status(200).json({ message: 'Booking deleted successfully' });
+    } catch (err) {
+      next(err);
+    }
+  };

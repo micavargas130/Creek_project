@@ -12,7 +12,7 @@ import useFetch from "../hooks/useFetch.js";
 export default function Header() {
   const {user} = useContext(UserContext);
   const [openDate, setOpenDate] = useState(false);
-  const [date, setDate] = useState([
+  const [dates, setDates] = useState([
     {
       startDate: new Date(),
       endDate: new Date(),
@@ -48,11 +48,11 @@ export default function Header() {
 
 
     if (window.location.pathname === '/roomsPage') {
-      navigate(window.location.reload(), {state: {date, options}});
+      navigate(window.location.reload(), {state: {dates, options}});
       dispatch({type:"NEW_SEARCH", payload:{options: { ...options, room }}});
 
   } else {
-    navigate("/roomsPage", {state: {date, options}});
+    navigate("/roomsPage", {state: {dates, options}});
     dispatch({type:"NEW_SEARCH", payload:{options: { ...options, room }}});
     
   }
@@ -69,12 +69,12 @@ export default function Header() {
 
           {
           <div className="headerSearch justify-between">
-              <span onClick={() =>setOpenDate(!openDate)} className="headerSearchText">{`${format(date[0].startDate, "dd/MM/yyyy")} to ${format(date[0].endDate, "dd/MM/yyyy")}`}</span>
+              <span onClick={() =>setOpenDate(!openDate)} className="headerSearchText">{`${format(dates[0].startDate, "dd/MM/yyyy")} to ${format(dates[0].endDate, "dd/MM/yyyy")}`}</span>
               {openDate && <DateRange
                 editableDateInputs={true}
-                onChange={(item) => setDate([item.selection])}
+                onChange={(item) => setDates([item.selection])}
                 moveRangeOnFirstSelection={false}
-                ranges={date}
+                ranges={dates}
                 className="date"
                 />}
 

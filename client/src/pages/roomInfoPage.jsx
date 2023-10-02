@@ -1,32 +1,99 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import "./roomInfoPage.css";
-import {useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import {useNavigate} from "react-router-dom";
+import { useContext, useState } from "react";
 import axios from "axios";
 import useFetch from "../hooks/useFetch.js";
 import { useLocation } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import { DateRange } from "react-date-range";
+import { format } from "date-fns";
+
 
 
 
 export default function roomInfoPage(){
 
   const location = useLocation();
+  const [options, setOptions] = useState(location.state.options);
+  const [dates, setDates] = useState(location.state.dates);
+  const [openDate, setOpenDate] = useState(false);
   const id = location.pathname.split("/")[2];
-  const [lodge,setLodge] = useState(null);
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate()
+  const {user} = useContext(UserContext)
+  const [openOptions, setOpenOptions] = useState(false);
 
-  const {data, loading, error} = useFetch(`/lodges/${id}`)
+
+ // const { datesC } = useContext(SearchContext);
 
 
+  async function bookThisLodge() {
 
 
+    if (user) {
+      try {
+        await axios.post('/bookings/createBooking', {
+          place: id,
+          placeName: data.name,
+          checkIn: format(dates[0].startDate, 'yyyy-MM-dd'),
+          checkOut: format(dates[0].endDate, 'yyyy-MM-dd'),
+          user: user.id, 
+          name: user.first_name, 
+          numberOfGuests: options.adult + options.children,
+          totalAmount: options.adult * 15000 + options.children * 10000,
+          unavailableDates: dates[0]
+        });
+
+        
+
+       alert('Cabaña reservada exitosamente')
+       navigate('/account/bookings')
   
+      } catch (error) {
+  
+        console.error('Error making reservation:', error);
+      }
+    } else {
+      navigate('/login');
+    }
+  }
+
+
+
+  const {data} = useFetch(`/lodges/${id}`)
 
  
   const handleOpen = (i) => {
     setSlideNumber(i);
     setOpen(true);
+  };
+
+  const handleOption = (name, operation) => {
+    const maxCapacity = data.capacity;
+
+    let newAdultCount = options.adult;
+    let newChildrenCount = options.children;
+
+    if (name === "adult") {
+      newAdultCount = operation === "i" ? options.adult + 1 : options.adult - 1;
+    } else if (name === "children") {
+      newChildrenCount = operation === "i" ? options.children + 1 : options.children - 1;
+    }
+
+    if (newAdultCount + newChildrenCount > maxCapacity) {
+      // Si excede, no actualiza las opciones
+      // Puedes mostrar un mensaje de error aquí si deseas
+      return;
+    }
+    setOptions((prev) => {
+      return {
+        ...prev,
+        adult: newAdultCount,
+        children: newChildrenCount,
+      };
+    });
   };
 
 
@@ -62,10 +129,73 @@ export default function roomInfoPage(){
               </p>
             </div>
             <div className="lodgeDetailsPrice">
-              
-                <b>Price: {data.price}</b> 
+              <h2>Dates</h2>
+              <div className="dateSetter">
+              <span onClick={() =>setOpenDate(!openDate)} className="headerSearchText">{`${format(dates[0].startDate, "dd/MM/yyyy")} to ${format(dates[0].endDate, "dd/MM/yyyy")}`}</span>
+              {openDate && <DateRange
+                editableDateInputs={true}
+                onChange={(item) => setDates([item.selection])}
+                moveRangeOnFirstSelection={false}
+                ranges={dates}
+                className="date"
+                />}
+                </div>
+
+                <h2>People</h2>
+                <div className="peopleSetter">
+                  <span  onClick={() => setOpenOptions(!openOptions)} className="headerSearchText">{`${options.adult} adult - ${options.children} children`}  </span>
+                   {openOptions && (
+                   <div className="optionsPeople">
+                    <div className="optionItem">
+                      <span className="optionText">Adult</span>
+                      <div className="optionCounter">
+                        <button
+                          disabled={options.adult <= 1}
+                          className="optionCounterButton"
+                          onClick={() => handleOption("adult", "d")}
+                        >
+                          -
+                        </button>
+                        <span className="optionCounterNumber">
+                          {options.adult}
+                        </span>
+                        <button
+                          className="optionCounterButton"
+                          onClick={() => handleOption("adult", "i")}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                    <div className="optionItem">
+                      <span className="optionText">Children</span>
+                      <div className="optionCounter">
+                        <button
+                          disabled={options.children <= 0}
+                          className="optionCounterButton"
+                          onClick={() => handleOption("children", "d")}
+                        >
+                          -
+                        </button>
+                        <span className="optionCounterNumber">
+                          {options.children}
+                        </span>
+                        <button
+                          className="optionCounterButton"
+                          onClick={() => handleOption("children", "i")}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>)}
+
+                  </div>
+                <b>Price: {options.adult*15000 + options.children * 10000} per night</b> 
              
-              <button>Reserve or Book Now!</button>
+              <button onClick={bookThisLodge}>Reserve or Book Now!</button>
+              
             </div>
           </div>
         </div>

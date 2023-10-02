@@ -1,8 +1,21 @@
 /* eslint-disable react/prop-types */
-import { Link } from "react-router-dom";
+import {useLocation, useNavigate } from "react-router-dom";
 import "./searchItem.css";
+import { useState } from "react";
+
 
 const SearchItem = ({ item }) => {
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [dates] = useState(location.state.dates);
+  const [options] = useState(location.state.options);
+
+  const handleClick = ()=> {
+
+      navigate(`/lodges/${item._id}`, {state: {dates, options}});
+  }
+  
   return (
     <div className="searchItem">
       <img src={item.photos[0]} alt="" className="siImg" />
@@ -21,9 +34,8 @@ const SearchItem = ({ item }) => {
         <div className="siDetailTexts">
           <span className="siPrice">${item.price}</span>
           <span className="siTaxOp">Includes taxes and fees</span>
-          <Link to={`/lodges/${item._id}`}>
-          <button className="siCheckButton">Reserve</button>
-          </Link>
+          <button onClick={handleClick} className="siCheckButton">Reserve</button>
+         
         </div>
       </div>
     </div>

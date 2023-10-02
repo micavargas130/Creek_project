@@ -3,7 +3,7 @@ import { createContext, useReducer } from "react";
 const INITAL_STATE = {
     dates:[],
     options:{
-        adutl: undefined,
+        adult: undefined,
         children: undefined,
         room: undefined,
     },
