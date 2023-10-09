@@ -5,9 +5,8 @@
     position: relative;
 }
 
-img{
-    width: 100%;
-    height: 100%;
+.heroImg{
+    width: 10000px;
     object-fit: cover;
 }
 

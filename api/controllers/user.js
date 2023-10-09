@@ -1,6 +1,6 @@
 import User from "../models/User.js"
 
-
+export default User;
 export const updateUser = async(req, res, next) =>{
     try{
         const updateUser = await User.findByIdAndUpdate(req.params.id, {$set:req.body}, {new:true})  
@@ -21,7 +21,7 @@ export const deleteUser = async(req, res, next) =>{
 
 export const getUser = async(req, res, next) =>{
     try{
-        const user = await User.findByIdAndUpdate(req.params.id) //busca el lodge con el id que le pasamos 
+        const user = await User.findById(req.params.id) //busca el lodge con el id que le pasamos 
          res.status(200).json(user)
      }catch(err) {
         next(err);
@@ -30,7 +30,7 @@ export const getUser = async(req, res, next) =>{
 
 export const getUsers = async(req, res, next) =>{
     try{
-        const users = await Users.find() //busca el lodge con el id que le pasamos 
+        const users = await User.find() //busca el lodge con el id que le pasamos 
          res.status(200).json(users)
      }catch(err) {
          next(err)

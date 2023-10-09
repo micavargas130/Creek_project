@@ -4,6 +4,7 @@
     justify-content:space-around;
     flex-direction: inherit;
     position: inherit;
+
   }
 
   .headerSearch {
@@ -30,13 +31,14 @@
   
   
   .headerSearchText {
-    color: lightgray;
+    color: rgb(103, 89, 89);
     cursor: pointer;
   }
   
   .date {
     position: absolute;
-    top: 50px;
+    color:white;
+    top: 20px;
     z-index: 2;
   }
    
@@ -46,6 +48,7 @@
    background-color:white;
    border-width: 3px;
    border-radius: 5px;
+   z-index: 100;
   }
 
   .optionItem{

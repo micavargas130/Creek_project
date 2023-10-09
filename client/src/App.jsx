@@ -23,7 +23,7 @@ function App() {
       <Route path="/register" element={<RegisterPage />} /> 
       <Route path="/account/:subpage?" element={<AccountPage />} />
       <Route path="/account/:subpage?bookings" element={<AccountPage />} />
-      <Route path="/roomInfo" element={<RoomInfoPage/>} />
+      <Route path="/lodges/:id" element={<RoomInfoPage/>} />
     </Route>
   </Routes> 
 </UserContextProvider>

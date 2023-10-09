@@ -4,7 +4,9 @@ import mongoose from "mongoose"
 import authRoute from "./api/routes/auth.js"
 import usersRoute from "./api/routes/users.js"
 import lodgeRoute from "./api/routes/lodges.js"
+import bookingsRoute from "./api/routes/bookings.js"
 import cookieParser from "cookie-parser"
+import cors from 'cors'
 import jwt from "jsonwebtoken"
 
 const app = express();
@@ -35,9 +37,17 @@ mongoose.connection.on("connected", ()=>{
 app.use(express.json())
 app.use(cookieParser())
 
+
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:5173',
+}));
+//app.use(cors())
+app.use("/bookings", bookingsRoute); 
 app.use("/", authRoute);
 app.use("/lodges", lodgeRoute);
 app.use("/user", usersRoute);
+
 
 
 //error handling middlewares
