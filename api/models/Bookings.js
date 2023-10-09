@@ -49,11 +49,6 @@ const bookingSchema = new mongoose.Schema({
         requiered: true
     },
 
-    unavailableDates:{
-        type: [Date]
-
-    }
-
    
 });
 

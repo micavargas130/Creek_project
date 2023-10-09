@@ -37,7 +37,8 @@
   
   .date {
     position: absolute;
-    top: 50px;
+    color:white;
+    top: 20px;
     z-index: 2;
   }
    

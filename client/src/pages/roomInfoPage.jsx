@@ -8,6 +8,8 @@ import { useLocation } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
+import { isBefore, startOfDay } from 'date-fns';
+
 
 
 
@@ -26,7 +28,7 @@ export default function roomInfoPage(){
   const [openOptions, setOpenOptions] = useState(false);
 
 
- // const { datesC } = useContext(SearchContext);
+  const {data} = useFetch(`/lodges/${id}`)
 
 
   async function bookThisLodge() {
@@ -34,36 +36,67 @@ export default function roomInfoPage(){
 
     if (user) {
       try {
+
         await axios.post('/bookings/createBooking', {
           place: id,
           placeName: data.name,
-          checkIn: format(dates[0].startDate, 'yyyy-MM-dd'),
-          checkOut: format(dates[0].endDate, 'yyyy-MM-dd'),
+          checkIn: format(dates[0].startDate.getTime(), 'yyyy-MM-dd'),
+          checkOut: format(dates[0].endDate.getTime(), 'yyyy-MM-dd'),
           user: user.id, 
           name: user.first_name, 
           numberOfGuests: options.adult + options.children,
           totalAmount: options.adult * 15000 + options.children * 10000,
-          unavailableDates: dates[0]
         });
 
-        
+        console.log(alldates)
+        await axios.put(`/lodges/availability/${data._id}`, {dates:alldates});
+
 
        alert('Cabaña reservada exitosamente')
        navigate('/account/bookings')
   
       } catch (error) {
   
-        console.error('Error making reservation:', error);
+        console.error('Axios error:', error);
+        console.log('Response data:', error.response.data);
+        console.log('Response status:', error.response.status);
+        console.log('Response headers:', error.response.headers);
       }
     } else {
       navigate('/login');
     }
   }
 
+  const getDatesInRange = (start,end) =>{
+    const date = new Date(start.getTime());
+    let list = []
+    while(date <= end){
+
+      list.push(new Date(date).getTime())
+      date.setDate(date.getDate()+1)
+
+    }
+    return list
+  }
+  
+  
+
+  const alldates= getDatesInRange(dates[0].startDate, dates[0].endDate)
+  
+  const isAvailable = (date) => {
+    const timestamp = date.getTime();
+    return !data.unavailableDates.some((unavailableDate) =>
+      timestamp >= new Date(unavailableDate).getTime() &&
+      timestamp <= new Date(unavailableDate).getTime()
+    );
+  };
 
 
-  const {data} = useFetch(`/lodges/${id}`)
-
+  const isDateBeforeToday = (date) => {
+    // Obtén la fecha actual sin horas, minutos y segundos para hacer una comparación precisa.
+    const today = startOfDay(new Date());
+    return isBefore(date, today);
+  };
  
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -137,6 +170,7 @@ export default function roomInfoPage(){
                 onChange={(item) => setDates([item.selection])}
                 moveRangeOnFirstSelection={false}
                 ranges={dates}
+                disabledDay= {(date) => (isDateBeforeToday(date) || !isAvailable(date))}
                 className="date"
                 />}
                 </div>

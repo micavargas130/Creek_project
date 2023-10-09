@@ -1,23 +1,55 @@
 /* eslint-disable react/prop-types */
 
 import axios from "axios";
+import { format } from "date-fns";
 
-const RoomItem = ({ item, onDelete }) => {
+const RoomItem = ({ item}) => {
+
+  
+  const getDatesInRange = (start, end) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const dates = [];
+  
+    // Agregar la fecha de inicio a la lista
+    dates.push(new Date(startDate)); // Clonar la fecha
+  
+    // Calcular las fechas intermedias
+    while (startDate < endDate) {
+      const newDate = new Date(startDate);
+      newDate.setDate(newDate.getDate() + 1);
+      console.log(newDate);
+      dates.push(newDate); // Agregar una copia de la fecha
+      startDate.setDate(startDate.getDate() + 1);
+      console.log(dates);
+    }
+  
+    // Aplicar el reemplazo a cada elemento del array
+    const datesWithReplacement = dates.map((date) => {
+      return date.toISOString().replace('T00:00:00.000Z', 'T03:00:00.000Z');
+    });
+  
+    return datesWithReplacement;
+  };
 
   const handleCancelClick = async () => {
     try {
-      // Send a DELETE request to your server to delete the booking by ID
+    
       await axios.delete(`/bookings/${item._id}`);
-     // alert("Cancelation Successfull")
-     
-      
-      // Call the onDelete function to remove the booking from the UI
-      //onDelete(item._id);
-      window.location.reload();
+      const datesToDelete = getDatesInRange(item.checkIn, item.checkOut);
+      await axios.put(`/lodges/delavailability/${item.place}`,{
+        id: item.place,
+        dates: datesToDelete
+      }); 
+
+     // window.location.reload();
     } catch (error) {
       console.error("Error canceling booking:", error);
     }
   };
+
+
+  
 
   
   return (

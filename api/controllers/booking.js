@@ -12,7 +12,6 @@ export const createBooking = async (req, res, next) =>{
         name: req.body.name,
         numberOfGuests: req.body.numberOfGuests,
         totalAmount: req.body.totalAmount,
-        unavailableDates: req.body.unavailableDates
 
     })
     await newBooking.save();

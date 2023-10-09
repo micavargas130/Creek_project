@@ -31,15 +31,8 @@ const LodgesSchema = new mongoose.Schema({
        required: true
     },
 
-
-
-    price: {
-        type: Number,
-        min: 0, 
-        max: 50000
-    },
-
-    roomNumbers: [{ number: Number, unavailableDates:{type:[Date]} }],
+    unavailableDates:{
+        type:[Date]},
 
 
 
