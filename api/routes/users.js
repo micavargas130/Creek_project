@@ -26,9 +26,9 @@ router.get("/checkauth/:id", verifyAdmin, (req,res,next)=>{
     res.send("hello admin")
 }) */
 
-router.get("/:id", verifyUser, getUser);
+router.get("/:id", getUser);  //agregar verifyUser para controlar que no entre nadie indebido
 
 //GET ALL
-router.get("/", verifyAdmin, getUsers);
+router.get("/", getUsers);
 
 export default router

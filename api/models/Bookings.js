@@ -44,8 +44,9 @@ const bookingSchema = new mongoose.Schema({
         
     },
 
-    state:{
+    status:{
         type: String,
+        default: "Available",
         requiered: true
     },
 

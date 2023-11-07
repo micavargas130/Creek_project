@@ -1,9 +1,10 @@
 /* eslint-disable react/prop-types */
 
 import axios from "axios";
-import { format } from "date-fns";
 
-const RoomItem = ({ item}) => {
+
+
+const RoomItem = ({ item, updateBookingList }) => {
 
   
   const getDatesInRange = (start, end) => {
@@ -34,19 +35,24 @@ const RoomItem = ({ item}) => {
 
   const handleCancelClick = async () => {
     try {
-    
       await axios.delete(`/bookings/${item._id}`);
+      
       const datesToDelete = getDatesInRange(item.checkIn, item.checkOut);
-      await axios.put(`/lodges/delavailability/${item.place}`,{
+      await axios.put(`/lodges/delavailability/${item.place}`, {
         id: item.place,
         dates: datesToDelete
       }); 
 
-     // window.location.reload();
+      alert("Reserva cancelada exitosamente")
+
+      // Actualizar el estado en el componente padre para eliminar la reserva
+      updateBookingList(item._id);
     } catch (error) {
       console.error("Error canceling booking:", error);
     }
   };
+  
+
 
 
   

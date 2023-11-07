@@ -42,7 +42,7 @@ export default function roomInfoPage(){
           placeName: data.name,
           checkIn: format(dates[0].startDate.getTime(), 'yyyy-MM-dd'),
           checkOut: format(dates[0].endDate.getTime(), 'yyyy-MM-dd'),
-          user: user.id, 
+          user: user._id, 
           name: user.first_name, 
           numberOfGuests: options.adult + options.children,
           totalAmount: options.adult * 15000 + options.children * 10000,
@@ -171,7 +171,7 @@ export default function roomInfoPage(){
                 moveRangeOnFirstSelection={false}
                 ranges={dates}
                 disabledDay= {(date) => (isDateBeforeToday(date) || !isAvailable(date))}
-                className="date"
+                className="roomDate"
                 />}
                 </div>
 

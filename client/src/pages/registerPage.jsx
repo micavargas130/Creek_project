@@ -7,6 +7,7 @@ export default function RegisterPage(){
     const [last_name, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [phone, setPhone] = useState('');
     const [dni, setDni] = useState('');
     const [birthday, setBirthday] = useState('');
     const [ocupation, setOcupation] = useState('');
@@ -20,6 +21,7 @@ export default function RegisterPage(){
             last_name,
             email,
             password,
+            phone,
             dni,
             birthday,
             ocupation
@@ -29,12 +31,12 @@ export default function RegisterPage(){
         setRedirect(true);
 
          } catch (err){
-             alert ('Fallo en el registro de nuevo usuario');
+             alert ('Email ya registrado');
         }
     }
 
     if(redirect){
-      return <Navigate to={'/'}/>
+      return <Navigate to={'/login'}/>
     }
 
     return (
@@ -45,7 +47,8 @@ export default function RegisterPage(){
           <input type="text" placeholder="First Name" value={first_name} onChange={ev => setFirstName(ev.target.value)}/> 
           <input type="text" placeholder="Last Name" value={last_name} onChange={ev => setLastName(ev.target.value)}/> 
           <input type="email" placeholder={'your@email.com'} value={email} onChange={ev => setEmail(ev.target.value)}/>
-          <input type="password" placeholder="password" value={password}onChange={ev => setPassword(ev.target.value)}/>
+          <input type={'text'} placeholder="password" value={password} onChange={ev => setPassword(ev.target.value)}/>
+          <input type={'number'} placeholder="Phone" value={phone} onChange={ev => setPhone(ev.target.value)}/>
           <input type="number"  placeholder="DNI" value={dni} onChange={ev => setDni(ev.target.value)}/>
           <input type="date"  value={birthday} onChange={ev => setBirthday(ev.target.value)}/>
           <input type="text" placeholder="Ocupation" value={ocupation} onChange={ev => setOcupation(ev.target.value)}/>

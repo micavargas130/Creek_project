@@ -3,14 +3,13 @@ import { useState } from "react";
 import { useContext } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import axios from "axios"
-import { useEffect } from "react";
 import RoomItem from "../components/RoomItem/roomItem.jsx";
 import useFetch from "../hooks/useFetch";
 
 export default function AccountPage(){
     const [redirect, setRedirect] = useState(null);
     const{ready,user,setUser} = useContext(UserContext);
-    const {data} = useFetch(`/bookings`)
+    const {data} = useFetch(`bookings/${user?._id || ''}/bookings`)
   
     let {subpage} = useParams();
     
@@ -21,8 +20,13 @@ export default function AccountPage(){
     async function logout(){
         await axios.post('/logout');
         setUser(null);
-        setRedirect('/');
+        setRedirect('/login');
     }
+
+    const updateBookingList = (deletedBookingId) => {
+        // Filtra la reserva eliminada y actualiza el estado
+       data.filter((item) => item._id !== deletedBookingId);
+      };
 
     function linkClasses(type=null) {
         let classes = 'py-2 px-6';
@@ -65,7 +69,7 @@ export default function AccountPage(){
        {subpage === 'bookings' && (
  
         data.map((item)=> (
-        <RoomItem item={item} key={item._id} />
+            <RoomItem item={item} data={data} updateBookingList={updateBookingList} key={item._id} />
         ))
        )}
        

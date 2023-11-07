@@ -14,8 +14,12 @@
     position: relative;
   }
 
-  .date{
+  .roomDate{
+    position: absolute;
+    color:white;
     top: 500px;
+    z-index: 100;
+    
   }
 
   .dateSetter{

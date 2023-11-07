@@ -33,7 +33,26 @@ const LodgesSchema = new mongoose.Schema({
 
     unavailableDates:{
         type:[Date]},
+    
+    state: {
+            type: String,
+            default: "Desocupada",
+        },
 
+    occupiedBy: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'booking'
+    },
+
+    comment: {
+        type: String
+    },
+
+    numberOfGuests:{
+        type: String,
+        requiered: true
+        
+    },
 
 
 });

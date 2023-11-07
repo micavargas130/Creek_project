@@ -22,20 +22,18 @@ const SearchItem = ({ item }) => {
       <div className="siDesc">
         <h1 className="siTitle">{item.name}</h1>
         <span className="siSubtitle">
-          Studio Apartment with Air conditioning
+          Descripción:
         </span>
-        <span className="siFeatures">{item.description}</span>
-        <span className="siCancelOp">Free cancellation </span>
-        <span className="siCancelOpSubtitle">
-          You can cancel later, so lock in this great price today!
-        </span>
+        <span className="siFeatures">Servicios: {item.services}</span>
+        <span className="siFeatures">Capacidad: {item.capacity}</span>
       </div>
       <div className="siDetails">
         <div className="siDetailTexts">
-          <span className="siPrice">${item.price}</span>
-          <span className="siTaxOp">Includes taxes and fees</span>
           <button onClick={handleClick} className="siCheckButton">Reserve</button>
-         
+          <span className="siCancelOp">Free cancellation </span>
+        <span className="siCancelOpSubtitle">
+          You can cancel later!
+        </span>
         </div>
       </div>
     </div>

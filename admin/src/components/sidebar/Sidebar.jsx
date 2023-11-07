@@ -13,11 +13,28 @@ import SettingsSystemDaydreamOutlinedIcon from "@mui/icons-material/SettingsSyst
 import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { UserContext} from "../../context/UserContext.jsx";
+import React, { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext.js";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 //import { DarkModeContext } from "../../context/darkModeContext";
 //import { useContext } from "react";
 
 const Sidebar = () => {
   //const { dispatch } = useContext(DarkModeContext);
+  const{ready,user,setUser} = useContext(UserContext);
+  const [redirect, setRedirect] = useState(null);
+  const { dispatch } = useContext(AuthContext);
+  const navigate = useNavigate();
+    const handleLogout = () => {
+      // Realiza el logout enviando una acción al reducer
+      dispatch({ type: "LOGOUT" });
+      navigate("/");
+    };
+  
+
   return (
     <div className="sidebar">
       <div className="top">
@@ -45,10 +62,14 @@ const Sidebar = () => {
               <CottageIcon className="icon" />
               <span>Cabañas</span>
             </li>
-          </Link>
+          </Link> 
           <li>
+          <Link to="/tents" style={{ textDecoration: "none" }}>
+            <li>
             <CreditCardIcon className="icon" />
-            <span>Orders</span>
+            <span>Carpas</span>
+            </li>
+          </Link> 
           </li>
           <li>
             <LocalShippingIcon className="icon" />
@@ -81,9 +102,10 @@ const Sidebar = () => {
             <AccountCircleOutlinedIcon className="icon" />
             <span>Profile</span>
           </li>
+          
           <li>
             <ExitToAppIcon className="icon" />
-            <span>Logout</span>
+            <span onClick={handleLogout}>Logout</span>
           </li>
         </ul>
       </div>

@@ -18,6 +18,8 @@ const Single = () => {
   // Obtén el ID del usuario de la URL
   const { bookingId } = useParams();
 
+
+
   useEffect(() => {
     // Realiza una solicitud al servidor para obtener la información de la reserva
     axios.get(`/bookings/${bookingId}`)
@@ -39,6 +41,8 @@ const Single = () => {
             setError(userError);
           });
 
+        
+
         // Realiza una solicitud al servidor para obtener la información de la cabaña
         axios.get(`/lodges/${lodgeId}`)
           .then((lodgeResponse) => {
@@ -56,6 +60,8 @@ const Single = () => {
       });
   }, [bookingId]);
 
+  //const edadUser = calcularEdad(user.birthday)
+
 
 
   return (
@@ -66,18 +72,19 @@ const Single = () => {
         <div className="top">
           <div className="left">
             <div className="editButton">Edit</div>
-            <h1 className="title">Information</h1>
+            <h1 className="title">Información del huesped</h1>
+            <h1 className="item">{user.first_name} {user.last_name}</h1>
             <div className="item">
           
               <div className="details">
-                <h1 className="itemTitle">{user.first_name} {user.last_name}</h1>
+               
                 <div className="detailItem">
                   <span className="itemKey">Email:</span>
                   <span className="itemValue">{user.email}</span>
                 </div>
                 <div className="detailItem">
                   <span className="itemKey">Phone:</span>
-                  <span className="itemValue">+1 2345 67 89</span>
+                  <span className="itemValue">{user.phone}</span>
                 </div>
                 <div className="detailItem">
                   <span className="itemKey">DNI:</span>
@@ -86,8 +93,16 @@ const Single = () => {
                   </span>
                 </div>
                 <div className="detailItem">
-                  <span className="itemKey">Country:</span>
-                  <span className="itemValue">USA</span>
+                  <span className="itemKey">Ocupation:</span>
+                  <span className="itemValue">
+                  {user.ocupation}
+                  </span>
+                </div>
+                <div className="detailItem">
+                  <span className="itemKey">Birthday:</span>
+                  <span className="itemValue">
+                  {user.birthday}
+                  </span>
                 </div>
               </div>
             </div>
@@ -95,7 +110,7 @@ const Single = () => {
         </div>
         <div className="bottom">
         <h1 className="title">Información de la cabaña</h1>
-        <h1 className="itemTitle">{lodge.description}</h1>
+        <h1 className="detailItem">{lodge.description}</h1>
           
         </div>
       </div>

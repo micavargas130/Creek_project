@@ -4,7 +4,7 @@ export const userColumns = [
     {
       field: "name",
       headerName: "Cabaña",
-      width: 100,
+      width: 200,
     },
   
     {
@@ -13,13 +13,13 @@ export const userColumns = [
       width: 100,
     },
     {
-      field: "status",
+      field: "state",
       headerName: "Estado",
-      width: 250,
+      width: 160,
       renderCell: (params) => {
         return (
-          <div className={`cellWithStatus ${params.row.status}`}>
-            {params.row.status}
+          <div className={`cellWithStatus ${params.row.state}`}>
+            {params.row.state}
           </div>
         );
       },

@@ -33,10 +33,19 @@ export const getBookings = async(req, res, next) =>{
 
 }
 
+export const getBooking = async(req, res, next) =>{
+    try{
+        const bookings = await Booking.findById(req.params.id) //busca el lodge con el id que le pasamos 
+         res.status(200).json(bookings)
+     }catch(err) {
+        next(err);
+     }
+}
+
 export const getBookingByUser = async (req, res, next) => {
-    try {
-        const userId = req.user.id; // Supongamos que tienes el ID del usuario en req.user
-        const bookings = await Bookings.find({ user: userId }); // Busca reservas del usuario
+    try { 
+        const bookings = await Booking.find({user : req.params.userId}); // Busca reservas del usuario
+        console.log(req.params.user)
         res.status(200).json(bookings); // Devuelve las reservas del usuario
     } catch (err) {
         next(err);

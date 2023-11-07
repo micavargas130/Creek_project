@@ -22,6 +22,51 @@ export const updateLodge = async(req, res, next) =>{
     }
 }
 
+export const setOcupado = async(req, res, next) =>{
+    try {
+      const lodgeId = req.params.id;
+  
+      // Realiza la actualización en la base de datos
+      const updatedLodge = await Lodges.findByIdAndUpdate(lodgeId, { state: 'Ocupado' }, { new: true });
+  
+      // Devuelve la cabaña actualizada como respuesta
+      res.json(updatedLodge);
+    } catch (error) {
+      console.error('Error al marcar la cabaña como ocupada:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  }
+
+  export const setDesocupada = async(req, res, next) =>{
+    try {
+      const lodgeId = req.params.id;
+  
+      // Realiza la actualización en la base de datos
+      const updatedLodge = await Lodges.findByIdAndUpdate(lodgeId, { state: 'Desocupada' }, { new: true });
+  
+      // Devuelve la cabaña actualizada como respuesta
+      res.json(updatedLodge);
+    } catch (error) {
+      console.error('Error al marcar la cabaña como ocupada:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  }
+
+  export const setMantenimiento = async(req, res, next) =>{
+    try {
+      const lodgeId = req.params.id;
+  
+      // Realiza la actualización en la base de datos
+      const updatedLodge = await Lodges.findByIdAndUpdate(lodgeId, { state: 'Mantenimiento' }, { new: true });
+  
+      // Devuelve la cabaña actualizada como respuesta
+      res.json(updatedLodge);
+    } catch (error) {
+      console.error('Error al marcar la cabaña como ocupada:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  }
+
 export const deleteLodge = async(req, res, next) =>{
     try{
         await Lodges.findByIdAndUpdate(req.params.id) //busca el lodge con el id que le pasamos 
@@ -78,6 +123,36 @@ export const updateLodgesAvailability = async (req, res, next) => {
       next(err);
     }
   };
+
+  export const deleteOccupiedBy = async (req, res, next) => {
+    try {
+      const lodgeId = req.params.id;
+      console.log(lodgeId)
+  
+      await Lodges.updateOne(
+        { _id: lodgeId },
+        { $unset: { occupiedBy: 1 } }
+      );
+  
+      res.status(200).json("Datos eliminados");
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  export const updateOccupiedBy = async (req, res, next) => {
+    try {
+    
+      await Lodges.updateOne(
+        { "_id": req.params.id },
+        { "occupiedBy": req.body._id},
+      );
+  
+      res.status(200).json("Lodges status has been updated.");
+    } catch (err) {
+      next(err);
+    }
+  };
   
   export const deleteLodgesAvailability = async (req, res, next) => {
     try {
@@ -93,3 +168,19 @@ export const updateLodgesAvailability = async (req, res, next) => {
       next(err);
     }
   };
+
+  export const updateLodgesComment = async (req, res, next) => {
+    try {
+    
+      await Lodges.updateOne(
+        { "_id": req.params.id },
+        { $push: {"unavailableDates": req.body.comment }, }
+      );
+  
+      res.status(200).json("Lodges status has been updated.");
+    } catch (err) {
+      next(err);
+    }
+  };
+
+

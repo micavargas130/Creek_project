@@ -38,8 +38,9 @@
   .date {
     position: absolute;
     color:white;
-    top: 20px;
-    z-index: 2;
+    top: 60px;
+    z-index: 100;
+    
   }
    
   .options{

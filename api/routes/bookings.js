@@ -1,5 +1,5 @@
 import express from "express";
-import {createBooking, getBookings, deleteBooking} from "../controllers/booking.js"
+import {createBooking, getBookings,getBooking, deleteBooking, getBookingByUser} from "../controllers/booking.js"
 import cors from "cors"
 
 const app = express();
@@ -17,6 +17,8 @@ app.post("/createBooking", createBooking);
 //GET
 
 app.get("/", getBookings);
+app.get("/:userId/bookings", getBookingByUser);
+app.get("/:id", getBooking)
 
 //DELETE
 app.delete('/:bookingId', deleteBooking);

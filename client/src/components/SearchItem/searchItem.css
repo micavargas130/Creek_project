@@ -42,30 +42,30 @@
   }
   
   .siSubtitle{
-    font-size: 12px;
+    font-size: 20px;
     font-weight: bold;
   }
   
   .siFeatures{
-    font-size: 12px;
+    font-size: 20px;
   }
   
   .siCancelOp{
-    font-size: 12px;
+    font-size: 40x;
     color: #008009;
     font-weight: bold;
   }
   
   .siCancelOpSubtitle{
-    font-size: 12px;
+    font-size: 20px;
     color: #008009;
   }
   
   .siDetails {
-    flex: 1;
     display: flex;
+    top: 10 px;
     flex-direction: column;
-    justify-content: space-between
+    justify-content:last baseline
   }
   
   .siRating{
@@ -99,7 +99,9 @@
     font-weight: bold;
     padding: 10px 50px;
     cursor: pointer;
-    border-radius: 5px;
-    font-size: 15px;
+    border-radius: 50px;
+    font-size: 20px;
     
   }
+
+ 
