@@ -3,8 +3,10 @@ import dotenv from "dotenv"
 import mongoose from "mongoose"
 import authRoute from "./api/routes/auth.js"
 import usersRoute from "./api/routes/users.js"
+import tentsRoute from "./api/routes/tents.js"
 import lodgeRoute from "./api/routes/lodges.js"
 import bookingsRoute from "./api/routes/bookings.js"
+import accountingRoute from "./api/routes/accounting.js"
 import cookieParser from "cookie-parser"
 import cors from 'cors'
 import jwt from "jsonwebtoken"
@@ -33,20 +35,24 @@ mongoose.connection.on("connected", ()=>{
     console.log("mongoDB connected!")
 });
 
+app.use(cors({
+  credentials: true,
+  origin: ['http://localhost:3001', 'http://localhost:5173'],
+}));
+
+
 //middlewares
 app.use(express.json())
 app.use(cookieParser())
 
 
-app.use(cors({
-  credentials: true,
-  origin: 'http://localhost:5173',
-}));
-//app.use(cors())
+
 app.use("/bookings", bookingsRoute); 
 app.use("/", authRoute);
 app.use("/lodges", lodgeRoute);
 app.use("/user", usersRoute);
+app.use("/tents", tentsRoute);
+app.use("/accounting", accountingRoute);
 
 
 

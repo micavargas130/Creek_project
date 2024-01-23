@@ -24,5 +24,11 @@ export const userColumns = [
         );
       },
     },
+
+    {
+      field: "comment",
+      headerName: "Comentario",
+      width: 100,
+    },
   ];
   

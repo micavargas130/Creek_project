@@ -1,13 +1,13 @@
 import express from "express";
 import Lodges from "../models/Lodges.js"
-import { createLodge, deleteLodge, getLodge, setOcupado, getLodges,updateLodgesAvailability,deleteLodgesAvailability, updateLodge, updateOccupiedBy, deleteOccupiedBy, setDesocupada, setMantenimiento, updateLodgesComment } from "../controllers/lodge.js";
+import { createLodge, deleteLodge, getLodge, setOcupado, getLodges,updateLodgesAvailability,deleteLodgesAvailability, updateLodge, updateOccupiedBy, deleteOccupiedBy, setDesocupada, setMantenimiento, setMantenimientoWithComment, eliminarComment } from "../controllers/lodge.js";
 import {  verifyAdmin } from "../utils/verifyToken.js";
 
 const router = express.Router();
 
 
 //CREATE
-router.post("/", verifyAdmin, createLodge);
+router.post("/", createLodge); //poner el verifyAdmin despues
 
 //UPDATE
 
@@ -15,14 +15,15 @@ router.post("/", verifyAdmin, createLodge);
 router.put("/:id", verifyAdmin, updateLodge);
 router.put("/availability/:id", updateLodgesAvailability);
 router.put("/occupiedBy/:id", updateOccupiedBy);
-router.put("/comment/:id", updateLodgesComment);
+router.put("/comment/:id", setMantenimientoWithComment);
 //DELETE
-router.delete("/:id", verifyAdmin, deleteLodge);
+router.delete("/:id", deleteLodge);
 router.put("/delavailability/:id", deleteLodgesAvailability);
 router.put("/deloccupiedBy/:id", deleteOccupiedBy);
 router.put("/set-occupied/:id", setOcupado);
 router.put("/set-desoccupied/:id", setDesocupada);
 router.put("/set-manteined/:id", setMantenimiento);
+router.put("/eliminarComment/:id", eliminarComment);
 
 //GET
 router.get("/:id", getLodge);

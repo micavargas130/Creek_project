@@ -10,6 +10,8 @@ import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import SettingsSystemDaydreamOutlinedIcon from "@mui/icons-material/SettingsSystemDaydreamOutlined";
+import FestivalIcon from '@mui/icons-material/Festival';
+import BadgeIcon from '@mui/icons-material/Badge';
 import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { Link } from "react-router-dom";
@@ -47,8 +49,10 @@ const Sidebar = () => {
         <ul>
           <p className="title">MAIN</p>
           <li>
+          <Link to="/" style={{ textDecoration: "none" }}>
             <DashboardIcon className="icon" />
             <span>Dashboard</span>
+          </Link>
           </li>
           <p className="title">LISTS</p>
           <Link to="/bookings" style={{ textDecoration: "none" }}>
@@ -63,39 +67,23 @@ const Sidebar = () => {
               <span>Cabañas</span>
             </li>
           </Link> 
-          <li>
           <Link to="/tents" style={{ textDecoration: "none" }}>
             <li>
-            <CreditCardIcon className="icon" />
+            <FestivalIcon className="icon" />
             <span>Carpas</span>
             </li>
           </Link> 
-          </li>
-          <li>
-            <LocalShippingIcon className="icon" />
-            <span>Delivery</span>
-          </li>
+
           <p className="title">USEFUL</p>
+          <Link to="/Accounting" style={{ textDecoration: "none" }}>
           <li>
             <InsertChartIcon className="icon" />
-            <span>Stats</span>
+            <span>Ingresos</span>
           </li>
+          </Link>
           <li>
-            <NotificationsNoneIcon className="icon" />
-            <span>Notifications</span>
-          </li>
-          <p className="title">SERVICE</p>
-          <li>
-            <SettingsSystemDaydreamOutlinedIcon className="icon" />
-            <span>System Health</span>
-          </li>
-          <li>
-            <PsychologyOutlinedIcon className="icon" />
-            <span>Logs</span>
-          </li>
-          <li>
-            <SettingsApplicationsIcon className="icon" />
-            <span>Settings</span>
+            <BadgeIcon className="icon" />
+            <span>Empleados</span>
           </li>
           <p className="title">USER</p>
           <li>
@@ -108,16 +96,6 @@ const Sidebar = () => {
             <span onClick={handleLogout}>Logout</span>
           </li>
         </ul>
-      </div>
-      <div className="bottom">
-        <div
-          className="colorOption"
-         // onClick={() => dispatch({ type: "LIGHT" })}
-        ></div>
-        <div
-          className="colorOption"
-          //onClick={() => dispatch({ type: "DARK" })}
-        ></div>
       </div>
     </div>
   );

@@ -1,14 +1,16 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns, userRows } from "../../datatablesource.js";
-import { Link } from "react-router-dom";
+import { userColumns, userRows } from "../../datatablesourceTents.js";
 import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch.js";
 import axios from "axios";
+import { Link, useNavigate} from "react-router-dom";
 
 const Datatable = () => {
-  const {data, loading, error} = useFetch("/bookings")
+  const {data, loading, error} = useFetch("/tents")
   const [userInLodge, setUserInLodge] = useState(null);
+  const navigate = useNavigate()
+
 
   const actionColumn = [
     {
@@ -46,20 +48,10 @@ const Datatable = () => {
       
         const handleCancelClick = async () => {
           try {
-          
-            await axios.delete(`/bookings/${params.row._id}`);
-            const datesToDelete = getDatesInRange(params.row.checkIn, params.row.checkOut);
-            console.log(params.row.place)
-            console.log(params.row.checkIn)
-            console.log(params.row.checkOut)
-            await axios.put(`/lodges/delavailability/${params.row.place}`,{
-              id: params.row.place,
-              dates: datesToDelete
-            }); 
-      
-           // window.location.reload();
+            await axios.delete(`tents/${params.row._id}`);
+            window.location.reload();
           } catch (error) {
-            console.error("Error canceling booking:", error);
+            console.error("Error deleting tent:", error);
           }
         };
 
@@ -80,9 +72,6 @@ const Datatable = () => {
 
         return (
           <div className="cellAction">
-            <Link to={`/bookings/${params.row._id}`} style={{ textDecoration: "none" }}>
-              <div className="viewButton">View</div>
-            </Link>
             <div
               className="deleteButton"
               onClick={handleCancelClick}
@@ -90,23 +79,25 @@ const Datatable = () => {
               Delete
             </div>
 
-            <div
-              className="arrivalButton"
-              onClick={handleArrivalClick}
-            >
-               ✔
-            </div>
           </div>
         );
       },
     },
   ];
+
+  const addNewButton = () => {
+    // Aquí puedes realizar la acción de mantenimiento con el texto ingresado
+    navigate('newTents');
+  };
+
   return (
     <div className="datatable">
       <div className="datatableTitle">
         Reservaciones
       </div>
-      
+      <button onClick={addNewButton} className="link">
+          Add New
+        </button>
     
       <DataGrid
         className="datagrid"

@@ -52,6 +52,17 @@ export const getBookingByUser = async (req, res, next) => {
     }
 }
 
+export const deleteBookingByLodge = async (req, res, next) => {
+    try { 
+       
+        const bookings = await Booking.findOneAndDelete({place: req.params.lodgeId}); // Busca reservas del usuario
+        console.log(req.params.lodgeId)
+        res.status(200).json(bookings); // Devuelve las reservas del usuario
+    } catch (err) {
+        next(err);
+    }
+}
+
 export const deleteBooking = async (req, res, next) => {
     try {
       const bookingId = req.params.bookingId;

@@ -34,16 +34,5 @@ export const userColumns = [
     headerName: "Precio",
     width: 80,
   },
-  {
-    field: "status",
-    headerName: "Estado",
-    width: 100,
-    renderCell: (params) => {
-      return (
-        <div className={`cellWithStatus ${params.row.status}`}>
-          {params.row.status}
-        </div>
-      );
-    },
-  },
+
 ];

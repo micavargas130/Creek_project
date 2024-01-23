@@ -1,4 +1,5 @@
 import Lodges from "../models/Lodges.js"
+import multer from "multer";
 
 export const createLodge = async (req, res, next) => {
     const newLodge = new Lodges(req.body)  //body guarda la info de la cabaña 
@@ -69,7 +70,7 @@ export const setOcupado = async(req, res, next) =>{
 
 export const deleteLodge = async(req, res, next) =>{
     try{
-        await Lodges.findByIdAndUpdate(req.params.id) //busca el lodge con el id que le pasamos 
+        await Lodges.findByIdAndDelete(req.params.id) //busca el lodge con el id que le pasamos 
         res.status(200).json("Cabaña eliminada")
     }catch(err) {
         next(err);
@@ -169,18 +170,35 @@ export const updateLodgesAvailability = async (req, res, next) => {
     }
   };
 
-  export const updateLodgesComment = async (req, res, next) => {
+
+  export const setMantenimientoWithComment = async (req, res, next) => {
     try {
-    
-      await Lodges.updateOne(
-        { "_id": req.params.id },
-        { $push: {"unavailableDates": req.body.comment }, }
-      );
+      const lodgeId = req.params.id;
+      const { comment } = req.body;
   
-      res.status(200).json("Lodges status has been updated.");
-    } catch (err) {
-      next(err);
+      // Realiza la actualización en la base de datos
+      const updatedLodge = await Lodges.findByIdAndUpdate(lodgeId, { state: 'Mantenimiento', comment }, { new: true });
+  
+      // Devuelve la cabaña actualizada como respuesta
+      res.json(updatedLodge);
+    } catch (error) {
+      console.error('Error al poner la cabaña en mantenimiento con comentario:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
     }
   };
 
+  export const eliminarComment = async (req, res, next) => {
+    try {
+    const lodgeId = req.params.id;
+
+    // Elimina el comentario de mantenimiento y restablece el estado a 'Disponible' (o el estado que desees)
+    const updatedLodge = await Lodges.findByIdAndUpdate(lodgeId, {comment: null }, { new: true });
+
+    // Devuelve la cabaña actualizada como respuesta
+    res.json(updatedLodge);
+  } catch (error) {
+    console.error('Error al eliminar el comentario de mantenimiento:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
 

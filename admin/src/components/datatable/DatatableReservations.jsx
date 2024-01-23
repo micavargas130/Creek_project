@@ -1,7 +1,7 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns, userRows } from "../../datatablesource.js";
-import { Link } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch.js";
 import axios from "axios";
@@ -9,6 +9,7 @@ import axios from "axios";
 const Datatable = () => {
   const {data, loading, error} = useFetch("/bookings")
   const [userInLodge, setUserInLodge] = useState(null);
+  const navigate = useNavigate()
 
   const actionColumn = [
     {
@@ -46,12 +47,9 @@ const Datatable = () => {
       
         const handleCancelClick = async () => {
           try {
-          
+            
             await axios.delete(`/bookings/${params.row._id}`);
             const datesToDelete = getDatesInRange(params.row.checkIn, params.row.checkOut);
-            console.log(params.row.place)
-            console.log(params.row.checkIn)
-            console.log(params.row.checkOut)
             await axios.put(`/lodges/delavailability/${params.row.place}`,{
               id: params.row.place,
               dates: datesToDelete
@@ -68,10 +66,24 @@ const Datatable = () => {
             // Realiza una solicitud para marcar la cabaña como "Ocupado"
             await axios.put(`/lodges/set-occupied/${params.row.place}`);
 
+            const paymentData = {
+              amount: params.row.totalAmount,
+              type: "Ingreso",
+              date: new Date(), // Fecha actual
+              user: params.row.name,
+              cabain: params.row.placeName,
+              comment: "", // Puedes dejarlo vacío o manejarlo según tus necesidades
+            };
+            
+            await axios.post(`accounting/createAccounting`, paymentData);
+            console.log(paymentData)
+
              const bookingId = params.row._id;
 
             // Realiza una solicitud al servidor para obtener la información de la reserva
             await axios.put(`/lodges/occupiedBy/${params.row.place}`, { _id: bookingId });
+            //await axios.delete(`/bookings/${params.row._id}`);
+            
 
           } catch (error) {
             console.error("Error al marcar la cabaña como ocupada:", error);

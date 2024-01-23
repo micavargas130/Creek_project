@@ -1,5 +1,5 @@
 import express from "express";
-import {createBooking, getBookings,getBooking, deleteBooking, getBookingByUser} from "../controllers/booking.js"
+import {createBooking, getBookings,getBooking, deleteBooking, getBookingByUser, deleteBookingByLodge} from "../controllers/booking.js"
 import cors from "cors"
 
 const app = express();
@@ -22,5 +22,6 @@ app.get("/:id", getBooking)
 
 //DELETE
 app.delete('/:bookingId', deleteBooking);
+app.delete('/:lodgeId/bookings', deleteBookingByLodge);
 
 export default app

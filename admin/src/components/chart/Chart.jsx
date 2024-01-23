@@ -17,7 +17,7 @@ const data = [
   { name: "June", Total: 1700 },
 ];
 
-const Chart = ({ aspect, title }) => {
+const Chart = ({ aspect, title, data }) => {
   return (
     <div className="chart">
       <div className="title">{title}</div>
@@ -25,7 +25,7 @@ const Chart = ({ aspect, title }) => {
         <AreaChart
           width={730}
           height={250}
-          data={data}
+          data={data}  // Utiliza los datos dinámicos aquí
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
           <defs>

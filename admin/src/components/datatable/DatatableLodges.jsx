@@ -9,11 +9,12 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { userColumns, userRows } from "../../datatablesourceLodges.js";
-import { Link } from "react-router-dom";
+import { Link, Navigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch.js";
 import axios from "axios";
-
+import Tooltip from '@mui/material/Tooltip';
 
 const Datatable = (props) => {
   const {data, loading, error} = useFetch("/lodges")
@@ -22,6 +23,8 @@ const Datatable = (props) => {
   const [menuStates, setMenuStates] = useState({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [maintenanceText, setMaintenanceText] = useState("");
+  const [selectedParams, setSelectedParams] = useState(null);
+  const navigate = useNavigate()
 
   const handleMenuClick = (event, rowId) => {
     setMenuStates((prevMenuStates) => ({
@@ -38,10 +41,12 @@ const Datatable = (props) => {
   };
 
   const handleOptionSelect = (option, params) => {
+    setSelectedParams(params); 
     console.log(params.row._id);
     if (option === "desocupado") {
       axios.put(`lodges/deloccupiedBy/${params.row._id}`);
       axios.put(`lodges/set-desoccupied/${params.row._id}`);
+      axios.put(`lodges/eliminarComment/${params.row._id}`);
       window.location.reload()
     }
     if (option === "mantenimiento"){
@@ -51,6 +56,24 @@ const Datatable = (props) => {
       axios.put(`lodges/set-manteined/${params.row._id}`);
     }
     handleMenuClose(params.row._id);
+  };
+
+  const handleMaintenanceSubmit = (params) => {
+    console.log("ID:",`${params.row._id}`);
+    try {
+        axios.put(`http://localhost:3000/lodges/comment/${params.row._id}`, {
+        comment: maintenanceText,
+      });
+  
+      // Cierra el diálogo y recarga la página
+      closeDialog();
+      window.location.reload();
+    } catch (error) {
+      console.error('Error al enviar el comentario de mantenimiento al servidor:', error);
+      // Puedes agregar manejo de errores aquí según tus necesidades
+    }
+    // Cierra el diálogo
+    closeDialog();
   };
 
   const openDialog = () => {
@@ -96,26 +119,23 @@ const Datatable = (props) => {
       
         const handleCancelClick = async () => {
           try {
+
+            if(params.row.state === "Ocupado"){alert("No se puede eliminar una cabaña ocupada")}
+            else {
           
-            await axios.delete(`/bookings/${params.row.id}`);
-            const datesToDelete = getDatesInRange(params.row.checkIn, params.row.checkOut);
-            console.log(params.row.place)
-            console.log(params.row.checkIn)
-            console.log(params.row.checkOut)
-            await axios.put(`/lodges/delavailability/${params.row.place}`,{
-              id: params.row.place,
-              dates: datesToDelete
-            }); 
+            axios.delete(`http://localhost:3000/lodges/${params.row._id}`);
+            axios.delete(`http://localhost:3000/bookings/${params.row._id}/bookings`);
+            console.log(`${params.row._id}`)
+            window.location.reload()
+          }
       
-           // window.location.reload();
+           window.location.reload();
           } catch (error) {
             console.error("Error canceling booking:", error);
           }
         };
 
-       
-
-        
+      
 
         return (
           <div className="cellAction">
@@ -128,18 +148,20 @@ const Datatable = (props) => {
             >
               Delete
             </div>
+            <Tooltip title={params.row.state === 'Mantenimiento' ? params.row.comment : ''}>
             <div
               className="stateButton"
               onClick={(event) => handleMenuClick(event, params.row._id)}
             >
                Cambiar estado
             </div>
+            </Tooltip>
             <Menu
           anchorEl={menuStates[params.row._id] || null}
           open={Boolean(menuStates[params.row._id])}
           onClose={() => handleMenuClose(params.row._id)}
         >
-          {["ocupado", "desocupado", "mantenimiento"].map((option) => (
+          {["desocupado", "mantenimiento"].map((option) => (
             <MenuItem key={option} onClick={() => handleOptionSelect(option, params)}>
               {option}
             </MenuItem>
@@ -151,12 +173,10 @@ const Datatable = (props) => {
     },
   ];
 
-  const handleMaintenanceSubmit = () => {
+
+  const addNewButton = () => {
     // Aquí puedes realizar la acción de mantenimiento con el texto ingresado
-    console.log("Texto de mantenimiento:", maintenanceText);
-  
-    // Cierra el diálogo
-    closeDialog();
+    navigate('new');
   };
   
   return (
@@ -164,7 +184,7 @@ const Datatable = (props) => {
       <div className="datatableTitle">
         Cabañas
       </div>
-      <button  className="link">
+      <button onClick={addNewButton} className="link">
           Add New
         </button>
       <DataGrid
@@ -192,7 +212,7 @@ const Datatable = (props) => {
         <Button onClick={closeDialog} color="primary">
           Cancelar
         </Button>
-        <Button onClick={handleMaintenanceSubmit} color="primary">
+        <Button onClick={() => handleMaintenanceSubmit(selectedParams)} color="primary">
           Guardar
         </Button>
       </DialogActions>

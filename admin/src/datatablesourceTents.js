@@ -1,15 +1,35 @@
 export const userColumns = [
+  
+  
   { field: "_id", headerName: "ID", width: 70 },
+
   {
-    field: "placeName",
-    headerName: "Cabaña",
-    width: 150,
+    field: "first_name",
+    headerName: "Nombre",
+    width: 100,
   },
 
   {
-    field: "name",
-    headerName: "Nombre",
-    width: 100,
+    field: "last_name",
+    headerName: "Apellido",
+    width: 80,
+  },
+
+  {
+    field: "dni",
+    headerName: "DNI",
+    width: 80,
+  },
+
+  {
+    field: "phone",
+    headerName: "Telefono",
+    width: 80,
+  },
+  {
+    field: "email",
+    headerName: "Email",
+    width: 80,
   },
 
   {
@@ -29,21 +49,4 @@ export const userColumns = [
     width: 100,
   },
 
-  {
-    field: "totalAmount",
-    headerName: "Precio",
-    width: 80,
-  },
-  {
-    field: "status",
-    headerName: "Estado",
-    width: 100,
-    renderCell: (params) => {
-      return (
-        <div className={`cellWithStatus ${params.row.status}`}>
-          {params.row.status}
-        </div>
-      );
-    },
-  },
 ];

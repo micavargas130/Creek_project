@@ -92,5 +92,17 @@
       border: 1px dotted rgba(55, 158, 91, 0.6);
       cursor: pointer;
     }
+
+    .commentButton {
+      padding: 2px 5px;
+      border-radius: 5px;
+      color: rgb(149, 149, 61);
+      border: 1px dotted rgba(119, 158, 55, 0.6);
+      cursor: pointer;
+    }
+
+    .MuiTooltip-tooltip {
+      opacity: 1 !important;
+    }
   }
 }
