@@ -47,8 +47,7 @@ const Datatable = () => {
       
         const handleCancelClick = async () => {
           try {
-            
-            await axios.delete(`/bookings/${params.row._id}`);
+            await axios.put(`/bookings/${params.row._id}/updateStatusCanceled`);
             const datesToDelete = getDatesInRange(params.row.checkIn, params.row.checkOut);
             await axios.put(`/lodges/delavailability/${params.row.place}`,{
               id: params.row.place,
@@ -60,6 +59,7 @@ const Datatable = () => {
             console.error("Error canceling booking:", error);
           }
         };
+
 
         const handleArrivalClick = async () => {
           try {
@@ -74,7 +74,7 @@ const Datatable = () => {
               cabain: params.row.placeName,
               comment: "", // Puedes dejarlo vacío o manejarlo según tus necesidades
             };
-            
+            await axios.put(`/bookings/${params.row._id}/updateStatusCompleted`);
             await axios.post(`accounting/createAccounting`, paymentData);
             console.log(paymentData)
 
@@ -113,10 +113,24 @@ const Datatable = () => {
       },
     },
   ];
+
+
+  const handleHistoricButton = async () => {
+    try {
+
+      navigate('historic');
+     // window.location.reload();
+    } catch (error) {
+      console.error("Error canceling booking:", error);
+    }
+  };
+
   return (
     <div className="datatable">
       <div className="datatableTitle">
         Reservaciones
+
+        <button onClick={handleHistoricButton}>Historia</button>
       </div>
       
     
