@@ -1,0 +1,53 @@
+.chart {
+  flex: 4;
+  overflow-y: auto; /* Agrega una barra de desplazamiento vertical */
+  max-height: 400px;
+  -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  padding: 10px;
+  color: black;
+
+  .title {
+    margin-bottom: 20px;
+  }
+
+  .chartGrid {
+    stroke: rgb(228, 225, 225);
+  }
+}
+
+.notification-grid {
+  display: grid;
+  grid-template-columns: repeat( minmax(250px, 1fr));
+  gap: 10px;
+}
+
+.notification-card {
+  background-color: #f9f9f9;
+  border: 5px solid #c7aeae;
+  border-radius: 5px;
+  padding: 30px;
+}
+
+.notification-date {
+  font-size: 0.9rem;
+  color: #040303;
+  margin-bottom: 5px;
+}
+
+.notification-type {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #050000;
+  margin-bottom: 10px;
+}
+
+.notification-details {
+  /* Agrega estilos adicionales según sea necesario */
+}
+
+.closeButton{
+  display: flex;
+  align-items: left;
+  padding: 20px;
+}
