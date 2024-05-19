@@ -1,0 +1,36 @@
+.bar-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 20px;
+  }
+  
+  .x-axis {
+    display: flex;
+    margin-top: 10px;
+  }
+  
+  .x-axis-label {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .bars {
+    display: flex;
+  }
+  
+  .bar {
+    width: 50px; /* Ancho de cada barra */
+    margin-right: 10px; /* Espacio entre las barras */
+    position: relative;
+  }
+  
+  .bar-label {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: white;
+  }
+  

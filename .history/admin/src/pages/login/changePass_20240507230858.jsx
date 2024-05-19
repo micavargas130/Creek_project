@@ -1,0 +1,46 @@
+import axios from "axios";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import { useState } from "react";
+import bycrypt from "bcryptjs"
+// import { AuthContext } from "../../context/AuthContext";
+import "./login.scss";
+
+const ChangePassword = () => {
+  const {data, loading, error} = useFetch("/lodges")
+  const [newPassword, setNewPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    try {
+      // Encripta la nueva contraseña antes de enviarla al backend
+      const salt = bycrypt.genSaltSync(10);
+      const hashedPassword = bycrypt.hashSync(newPassword, salt);
+      await axios.put("/changePassword", { newPassword: hashedPassword });
+      // Redirige al usuario a la página de inicio después de cambiar la contraseña
+      navigate("/");
+    } catch (err) {
+      console.error("Error changing password:", err);
+      // Manejo de errores
+    }
+  };
+
+  return (
+    <div>
+      
+      <form onSubmit={handleChangePassword}>
+        <input
+          type="password"
+          placeholder="New Password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+        <button type="submit">Change Password</button>
+      </form>
+    </div>
+  );
+};
+
+export default ChangePassword;
