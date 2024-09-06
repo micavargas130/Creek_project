@@ -1,0 +1,91 @@
+/* eslint-disable react/prop-types */
+
+import axios from "axios";
+
+
+
+const RoomItem = ({ item, updateBookingList }) => {
+
+  
+  const getDatesInRange = (start, end) => {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const dates = [];
+  
+    // Agregar la fecha de inicio a la lista
+    dates.push(new Date(startDate)); // Clonar la fecha
+  
+    // Calcular las fechas intermedias
+    while (startDate < endDate) {
+      const newDate = new Date(startDate);
+      newDate.setDate(newDate.getDate() + 1);
+      console.log(newDate);
+      dates.push(newDate); // Agregar una copia de la fecha
+      startDate.setDate(startDate.getDate() + 1);
+      console.log(dates);
+    }
+  
+    // Aplicar el reemplazo a cada elemento del array
+    const datesWithReplacement = dates.map((date) => {
+      return date.toISOString().replace('T00:00:00.000Z', 'T03:00:00.000Z');
+    });
+  
+    return datesWithReplacement;
+  };
+
+  const handleCancelClick = async () => {
+    try {
+      await axios.delete(`/bookings/${item._id}`);
+
+      const daysDifference = differenceInCalendarDays(item.che, today);
+
+      if (daysDifference <= 1) {
+        alert("No puede cancelar la reserva con menos de un día de antelación.");
+        return;
+      }
+      
+      const datesToDelete = getDatesInRange(item.checkIn, item.checkOut);
+      await axios.put(`/lodges/delavailability/${item.place}`, {
+        id: item.place,
+        dates: datesToDelete
+      }); 
+
+      alert("Reserva cancelada exitosamente")
+
+      // Actualizar el estado en el componente padre para eliminar la reserva
+      updateBookingList(item._id);
+    } catch (error) {
+      console.error("Error canceling booking:", error);
+    }
+  };
+  
+
+
+
+  
+
+  
+  return (
+    <div className="searchItem">
+      <div className="siDesc">
+        <h1 className="siTitle">{item.placeName}</h1>
+        <span className="siSubtitle">
+          Studio Apartment with Air conditioning
+        </span>
+        <span className="siFeatures">Check-in: {item.checkIn}</span>
+        <span className="siFeatures">Check-out: {item.checkOut}</span>
+        <span className="siCancelOp">Free cancellation </span>
+      </div>
+      <div className="siDetails">
+        <div className="siDetailTexts">
+          <span className="siPrice">$ {item.totalAmount}</span>
+          <span className="siTaxOp">Includes taxes and fees</span>
+          <button  className="siCheckButton" onClick={handleCancelClick}>Cancel</button>
+         
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default RoomItem;

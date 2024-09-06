@@ -1,0 +1,32 @@
+/* src/components/About.css */
+.about {
+    padding: 2rem;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.about-content {
+    margin-bottom: 2rem;
+}
+
+.about h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.about p {
+    font-size: 1.2rem;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.carousel-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.carousel-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}

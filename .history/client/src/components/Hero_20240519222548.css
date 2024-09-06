@@ -1,0 +1,135 @@
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100%; /* Full viewport height */
+    
+}
+
+.heroImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-text {
+    position: absolute;
+    top: 60%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: aliceblue;
+}
+
+.hero-text p {
+    font-size: 1.3rem;
+    color: aliceblue;
+    margin-top: 1rem; /* Margin for spacing between elements */
+    
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .hero-text h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-text p {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-text h1 {
+        font-size: 2rem;
+        .hero {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    overflow: hidden;
+}
+
+.heroImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 0 1rem; /* Padding for some space around the text */
+    width: 100%; /* Ensure full width to allow padding */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: aliceblue;
+    margin: 0; /* Remove default margin */
+}
+
+.hero-text p {
+    font-size: 1.3rem;
+    color: aliceblue;
+    margin-top: 1rem; /* Margin for spacing between elements */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .hero-text h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-text p {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-text h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero-text p {
+        font-size: 0.9rem;
+    }
+}
+
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-text h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero-text p {
+        font-size: 0.9rem;
+    }
+}
