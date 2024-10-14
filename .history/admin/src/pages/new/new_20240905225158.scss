@@ -1,0 +1,139 @@
+.new {
+  width: 100%;
+  display: flex;
+}
+
+
+//mapa del camping 
+.map {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 80px;
+}
+
+.map-row {
+  display: flex;
+}
+
+.map-cell {
+  flex: 1;
+  height: 40px;
+  width: 40px;
+  border: 1px solid #ccc;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0; /* Color de fondo predeterminado */
+}
+
+.map-cell.selected {
+  background-color: #a0c4ff; /* Cambia el color a tu preferencia */
+  border: 2px solid #1a73e8; /* Cambia el color del borde a tu preferencia */
+  border-radius: 4px; /* Agrega borde redondeado si lo deseas */
+  box-shadow: 0 0 5px rgba(26, 115, 232, 0.5);
+}
+
+.map-cell:hover {
+  background-color: #e0e0e0; /* Cambia de color al pasar el mouse */
+}
+
+.map-cell.occupied {
+  background-color: red; /* Cambia el color de fondo para las celdas ocupadas */
+ 
+}
+
+.map-cell.occupiedLodge {
+  background-color: red; /* Cambia el color de fondo para las celdas ocupadas */
+  
+}
+
+.map-cell.emptyLodge {
+  background-color: rgb(79, 197, 101); /* Cambia el color de fondo para las celdas ocupadas */
+ 
+}
+
+.map-cell.mantenimiento {
+  background-color: rgb(224, 224, 15); /* Cambia el color de fondo para las celdas ocupadas */
+  
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  color: #ffffff; /* Color del ícono */
+}
+.newContainer {
+  flex: 6;
+
+  .top,
+  .bottom {
+    box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+    padding: 35px;
+    margin: 20px;
+    margin-bottom: 10px;
+    display: flex;
+
+    .nh1 {
+      color: #333;
+      font-size: 50px;
+      display: inline;
+    }
+
+    .left {
+      flex: 1;
+      text-align: center;
+
+      img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    }
+
+    .right {
+      flex: 100;
+
+      form {
+
+        input {
+          width: 500%;
+          padding: 10px;
+          margin-bottom: 15px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          box-sizing: border-box;
+        }
+
+        button {
+          width: 150px;
+          padding: 10px;
+          border: none;
+          background-color: teal;
+          color: white;
+          font-weight: bold;
+          cursor: pointer;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+}
+
+.places-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
+}
+
+.place-item {
+  padding: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.selected {
+  background-color: #e0e0e0;
+}

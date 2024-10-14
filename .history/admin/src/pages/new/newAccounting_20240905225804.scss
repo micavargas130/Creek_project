@@ -1,0 +1,75 @@
+.new {
+  width: 100%;
+  display: flex;
+}
+
+.newContainer {
+  flex: 6;
+  padding: 20px;
+
+  .top,
+  .bottom {
+    box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+    padding: 35px;
+    margin: 20px;
+    margin-bottom: 10px;
+    display: flex;
+
+    .nh1 {
+      color: #333;
+      font-size: 50px;
+      display: inline;
+    }
+
+    .left {
+    
+    }
+
+    .right {
+      flex: 2;
+
+      form {
+        display: inline;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: space-around;
+
+        input {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 15px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          box-sizing: border-box;
+        }
+
+        button {
+          width: 150px;
+          padding: 10px;
+          border: none;
+          background-color: teal;
+          color: white;
+          font-weight: bold;
+          cursor: pointer;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+}
+
+.places-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
+}
+
+.place-item {
+  padding: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.selected {
+  background-color: #e0e0e0;
+}
