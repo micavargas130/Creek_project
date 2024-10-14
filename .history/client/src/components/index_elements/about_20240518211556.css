@@ -1,0 +1,16 @@
+/* src/components/Discounts.css */
+.discounts {
+    padding: 2rem;
+    background-color: #e8f5e9;
+    text-align: center;
+}
+
+.discounts h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.discounts p {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+}

@@ -1,0 +1,25 @@
+/* src/components/Footer.css */
+.footer {
+    padding: 1rem;
+    background-color: #333;
+    color: white;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.map-container {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 400px; /* Ensure the map does not exceed this width */
+}
+
+@media (max-width: 768px) {
+    .map-container iframe {
+        width: 100%; /* Make the map responsive */
+    }
+}

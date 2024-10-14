@@ -1,0 +1,175 @@
+.roomInfoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.lodgeContainer {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lodgeWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+.lodgeTitle {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.lodgeImages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lodgeImgWrapper {
+  width: calc(33.3333% - 10px);
+}
+
+.lodgeImg {
+  width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.lodgeDetails {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.lodgeDetailsTexts {
+  flex: 2;
+}
+
+.lodgeMinititle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.lodgeDesc {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.lodgeAmenities, .lodgeRules, .lodgeReviews {
+  margin-bottom: 20px;
+}
+
+.lodgeAmenities h2, .lodgeRules h2, .lodgeReviews h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.lodgeDetailsPrice {
+  flex: 1;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dateSetter, .peopleSetter {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.headerSearchText {
+  font-size: 14px;
+}
+
+.optionsPeople {
+  position: absolute;
+  top: 100px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 1000;
+}
+
+.optionItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.optionText {
+  font-size: 14px;
+}
+
+.optionCounter {
+  display: flex;
+  align-items: center;
+}
+
+.optionCounterButton {
+  background-color: #0071c2;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.optionCounterNumber {
+  font-size: 14px;
+  margin: 0 10px;
+}
+
+.bookNowButton {
+  background-color: #ff385c;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.slider {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sliderWrapper {
+  width: 80%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sliderImg {
+  width: 100%;
+  border-radius: 10px;
+}
