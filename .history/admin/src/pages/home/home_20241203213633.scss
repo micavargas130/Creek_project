@@ -1,0 +1,36 @@
+.home {
+  display: flex;
+
+  .homeContainer {
+    flex: 6;
+    padding: 20px;
+
+    .widgets {
+      display: flex;
+      justify-content: space-between; /* Distribuye los widgets uniformemente */
+      flex-wrap: wrap; /* Permite que los widgets se muevan si hay muchos */
+      gap: 20px; /* Espacio uniforme entre los widgets */
+      margin-bottom: 20px; /* Espacio inferior para separación de la siguiente sección */
+    }
+
+    .charts {
+      display: flex;
+      justify-content: space-between; /* Mantiene mapa y notificaciones separados */
+      padding: 10px;
+      gap: 20px;
+    }
+
+    .listContainer {
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      padding: 20px;
+      margin: 20px 0;
+
+      .listTitle {
+        font-weight: 500;
+        color: gray;
+        margin-bottom: 15px;
+      }
+    }
+  }
+}
