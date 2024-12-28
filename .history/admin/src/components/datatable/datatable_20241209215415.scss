@@ -1,0 +1,129 @@
+.datatable {
+  height: 600px;
+  padding: 20px;
+
+  .datatableTitle {
+    width: 100%;
+    font-size: 24px;
+    color: gray;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .link {
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #4caf50;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+
+      &:hover {
+        background-color: #43a047;
+        transform: scale(1.05);
+      }
+
+      &::before {
+        content: "➕"; /* Icono para "Add New" */
+        font-size: 18px;
+      }
+    }
+  }
+
+  button {
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
+    &:first-of-type {
+      background-color: #4caf50; /* Verde para "Add New" */
+      color: white;
+
+      &:hover {
+        background-color: #43a047;
+        transform: scale(1.05);
+      }
+
+      &::before {
+        content: "➕"; /* Icono para "Add New" */
+        font-size: 18px;
+      }
+    }
+
+    &:nth-of-type(2) {
+      background-color: #2196f3; /* Azul para "Historia" */
+      color: white;
+
+      &:hover {
+        background-color: #1e88e5;
+        transform: scale(1.05);
+      }
+
+      &::before {
+        content: "📜"; /* Icono para "Historia" */
+        font-size: 18px;
+      }
+    }
+  }
+
+  .cellWithImg {
+    display: flex;
+    align-items: center;
+
+    .cellImg {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 20px;
+    }
+  }
+
+  .cellWithStatus {
+    padding: 5px;
+    border-radius: 5px;
+
+    &.desocupada {
+      background-color: rgba(0, 128, 0, 0.05);
+      color: green;
+    }
+    &.mantenimiento {
+      background-color: rgba(255, 217, 0, 0.05);
+      color: goldenrod;
+    }
+    &.ocupado {
+      background-color: rgba(255, 0, 0, 0.05);
+      color: crimson;
+    }
+
+    &.pagada {
+      color: rgb(13, 146, 11);
+      font-weight: 800;
+    }
+
+    &.parcial {
+      color: rgb(155, 145, 10);
+      font-weight: 800;
+    }
+
+    &.pendiente {
+      color: crimson;
+      font-weight: 800;
+    }
+  }
+}

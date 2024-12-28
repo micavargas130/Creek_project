@@ -1,0 +1,28 @@
+.home {
+  display: flex;
+
+  .homeContainer {
+    flex: 6;
+    padding-top: 10px; /* Reduce el espacio superior */
+
+    .widgets {
+      display: flex;
+      flex-wrap: wrap; /* Permite que los widgets se ajusten en varias filas si es necesario */
+      justify-content: space-between; /* Espacio uniforme entre widgets */
+      gap: 20px; /* Espacio entre cada widget */
+      margin-bottom: 20px; /* Ajusta el espacio inferior */
+    }
+
+    .charts {
+      display: flex;
+      justify-content: space-between; /* Espacio uniforme entre mapa y notificaciones */
+      padding: 5px 20px;
+    }
+
+    .widget {
+      flex: 1;
+      min-width: 200px; /* Asegura que todos los widgets tengan un tamaño mínimo */
+      max-width: 300px;
+    }
+  }
+}
