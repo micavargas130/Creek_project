@@ -12,9 +12,9 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: import.meta.env.VITE_API_URL_PROD || import.meta.env.VITE_API_URL,
+        target: process.env.VITE_API_URL_PROD || process.env.VITE_API_URL,
         changeOrigin: true,
-        secure: import.meta.env.MODE === 'production', // Solo usar HTTPS en producción
+        secure: process.env.NODE_ENV === 'production',
       },
     },
   },
@@ -23,4 +23,6 @@ export default defineConfig({
   },
 });
 
+
+console.log(process.env.VITE_API_URL, process.env.VITE_API_URL_PROD);
 

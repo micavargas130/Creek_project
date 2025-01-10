@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
@@ -12,15 +12,15 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: import.meta.env.VITE_API_URL_PROD || import.meta.env.VITE_API_URL,
+        target: process.env.NODE_ENV === 'production'
+          ? 'https://creek-project.onrender.com' // Backend en producción
+          : 'http://localhost:3000', // Backend en desarrollo
         changeOrigin: true,
-        secure: import.meta.env.MODE === 'production', // Solo usar HTTPS en producción
+        secure: process.env.NODE_ENV === 'production', // Solo usar HTTPS en producción
       },
-    },
+    
   },
   preview: {
     port: 4173, // Opcional: especifica un puerto para el servidor de vista previa
   },
 });
-
-

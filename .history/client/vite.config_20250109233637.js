@@ -23,4 +23,5 @@ export default defineConfig({
   },
 });
 
+console.log(process.env.VITE_API_URL, process.env.VITE_API_URL_PROD);
 

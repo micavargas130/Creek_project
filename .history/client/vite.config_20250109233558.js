@@ -22,5 +22,3 @@ export default defineConfig({
     port: 4173, // Opcional: especifica un puerto para el servidor de vista previa
   },
 });
-
-
