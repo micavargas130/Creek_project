@@ -10,12 +10,6 @@ export default defineConfig({
     hmr: {
       host: 'creek-project.onrender.com', // Especifica el dominio donde está alojado
     },
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3000', // Cambia esto al URL de tu backend
-        changeOrigin: true,
-      },
-    
   },
   preview: {
     port: 4173, // Opcional: especifica un puerto para el servidor de vista previa

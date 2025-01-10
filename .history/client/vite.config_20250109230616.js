@@ -15,7 +15,6 @@ export default defineConfig({
         target: 'http://localhost:3000', // Cambia esto al URL de tu backend
         changeOrigin: true,
       },
-    
   },
   preview: {
     port: 4173, // Opcional: especifica un puerto para el servidor de vista previa

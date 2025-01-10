@@ -68,6 +68,7 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*'); // Permite cualquier origen
     res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
   }
   next();
 });
@@ -125,7 +126,7 @@ app.use((err, req, res, next) => {
 });
 
 // Conectar y escuchar en el puerto
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
   connect();
   console.log(`Connected to backend on port ${PORT}!`);

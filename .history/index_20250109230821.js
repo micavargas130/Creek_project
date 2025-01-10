@@ -63,12 +63,9 @@ app.use(cors({
 }));
 
 app.use((req, res, next) => {
-  const origin = req.headers.origin?.replace(/\/$/, ''); // Normalizar el origen
-  if (allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', '*'); // Permite cualquier origen
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  }
+  res.header('Access-Control-Allow-Origin', '*'); // Permite cualquier origen
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
 app.use(express.json());
@@ -125,7 +122,7 @@ app.use((err, req, res, next) => {
 });
 
 // Conectar y escuchar en el puerto
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 app.listen(PORT, () => {
   connect();
   console.log(`Connected to backend on port ${PORT}!`);
