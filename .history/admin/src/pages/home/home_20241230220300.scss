@@ -1,0 +1,24 @@
+.home {
+  display: flex;
+
+  .homeContainer {
+    flex: 6;
+    padding-top: 0; /* Elimina el espacio vacío superior */
+
+    h2 {
+      margin-bottom: 20px; /* Ajusta la separación debajo del título */
+    }
+
+    .occupationWidgets, .financialWidgets {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .charts {
+      display: flex;
+      justify-content: space-between; /* Distribuye mapa y notificaciones */
+      padding: 5px 20px;
+    }
+  }
+}
