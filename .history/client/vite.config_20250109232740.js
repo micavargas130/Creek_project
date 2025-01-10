@@ -15,7 +15,6 @@ export default defineConfig({
         target: 'http://localhost:3000', // Cambia esto al URL de tu backend
         changeOrigin: true,
       },
-    }
     
   },
   preview: {
