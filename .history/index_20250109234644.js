@@ -67,7 +67,9 @@ app.use((req, res, next) => {
   if (allowedOrigins.includes(origin)) {
     res.header("Access-Control-Allow-Origin", origin); // Configurar dinámicamente el origen
     res.header("Access-Control-Allow-Credentials", "true"); // Permitir credenciales
-    
+    res.header('Access-Control-Allow-Origin', '*'); // Permite cualquier origen
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   }
   next();
 });
@@ -126,7 +128,7 @@ app.use((err, req, res, next) => {
 
 // Conectar y escuchar en el puerto
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Backend running on port ${PORT}`);
+app.listen(PORT, () => {
+  connect();
+  console.log(`Connected to backend on port ${PORT}!`);
 });
-
