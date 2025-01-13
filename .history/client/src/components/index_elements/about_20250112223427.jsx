@@ -1,6 +1,5 @@
-import React from 'react';
 import Slider from 'react-slick';
-import './About.css';
+import './bout.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -16,9 +15,9 @@ function About() {
     };
 
     const images = [
-        "src/assets/",
-        "src/assets/camping2.jpg",
-        "src/assets/camping3.jpg"
+        "src/assets/cabañas.jpg",
+        "src/assets/pileta.jpg",
+        "src/assets/asador.jpg"
     ];
 
     return (
