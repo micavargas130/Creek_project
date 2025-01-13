@@ -5,6 +5,7 @@
     "dependencies": {
         "@emotion/react": "^11.8.1",
         "@emotion/styled": "^11.8.1",
+        "@fortawesome/free-solid-svg-icons": "^6.7.2",
         "@fullcalendar/angular": "^6.1.15",
         "@fullcalendar/core": "^6.1.15",
         "@fullcalendar/daygrid": "^6.1.15",
