@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react'; // Importa FullCalendar principal
 import dayGridPlugin from '@fullcalendar/daygrid'; // Plugin de cuadrícula diaria
 import interactionPlugin from '@fullcalendar/interaction'; // Para funcionalidad de arrastrar y soltar, clics
-
+import timeGridPlugin from '@fullcalendar/timegrid'; // Vista de cuadrícula por horas
+import listPlugin from '@fullcalendar/list';
 
 const Calendar = ({ lodgeId, onDateSelect }) => {
   const [occupiedDates, setOccupiedDates] = useState([]);

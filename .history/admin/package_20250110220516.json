@@ -5,19 +5,16 @@
     "dependencies": {
         "@emotion/react": "^11.8.1",
         "@emotion/styled": "^11.8.1",
-        "@fullcalendar/angular": "^6.1.15",
+        "@fullcalendar/angular": "^5.0.0",
         "@fullcalendar/core": "^6.1.15",
         "@fullcalendar/daygrid": "^6.1.15",
-        "@fullcalendar/interaction": "^6.1.15",
-        "@fullcalendar/list": "^6.1.15",
+        "@fullcalendar/interaction": "^5.0.0",
+        "@fullcalendar/list": "^5.0.0",
         "@fullcalendar/react": "^6.1.15",
-        "@fullcalendar/timegrid": "^6.1.15",
+        "@fullcalendar/timegrid": "^5.0.0",
         "@mui/icons-material": "^5.4.4",
         "@mui/material": "^5.4.4",
         "@mui/x-data-grid": "^5.5.1",
-        "@testing-library/jest-dom": "^5.16.2",
-        "@testing-library/react": "^12.1.3",
-        "@testing-library/user-event": "^13.5.0",
         "admin": "file:",
         "axios": "^0.27.2",
         "bcrypt": "^5.1.1",
@@ -32,11 +29,11 @@
         "web-vitals": "^2.1.4"
     },
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
-    },
+         "start": "serve -s build",
+            "build": "react-scripts build",
+         "test": "react-scripts test",
+    "eject": "react-scripts eject"
+}
     "eslintConfig": {
         "extends": [
             "react-app",
@@ -54,6 +51,5 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    },
-    "proxy": "http://localhost:3000"
+    }
 }

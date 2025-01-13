@@ -125,9 +125,8 @@ app.use((err, req, res, next) => {
 });
 
 // Conectar y escuchar en el puerto
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  connect();
-  console.log(`Connected to backend on port ${PORT}!`);
+const port = process.env.PORT || 4000;
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Backend running on port ${PORT}`);
 });
 
