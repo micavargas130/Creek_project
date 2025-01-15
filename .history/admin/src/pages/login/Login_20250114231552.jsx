@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
@@ -25,7 +24,13 @@ const Login = () => {
       await login(credentials);
   
       // Verifica si la contraseña es la predeterminada
-      
+      if (credentials.password === "0camping") {
+        // Redirige a la página de cambio de contraseña si es la predeterminada
+        navigate("/change-password", { state: { email: credentials.email } });
+      } else {
+        // Redirige al home si la contraseña no es "1234"
+        navigate("/");
+      }
   
       // Limpia el error local si el inicio de sesión fue exitoso
       setLocalError(null);

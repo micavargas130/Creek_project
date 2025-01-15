@@ -1,4 +1,4 @@
-import axios from "axios";
+
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
@@ -11,7 +11,7 @@ const Login = () => {
   });
   const [localError, setLocalError] = useState(null);
 
-  const { loading, login } = useContext(UserContext);
+  const { loading, error, login } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,23 +21,26 @@ const Login = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
+      // Intenta iniciar sesión
       await login(credentials);
-      navigate("/");
-      
+  
       // Verifica si la contraseña es la predeterminada
-      if (credentials.password === "1234") {
-       const response = await login(credentials); 
-        // Asegúrate de establecer el usuario en el contexto
-        navigate("/change-password", { state: { user: response } });
+      if (credentials.password === "0camping") {
+        // Redirige a la página de cambio de contraseña si es la predeterminada
+        navigate("/change-password", { state: { email: credentials.email } });
       } else {
-        await login(credentials);
-        navigate("/"); // Redirige al usuario al home después de iniciar sesión
+        // Redirige al home si la contraseña no es "1234"
+        navigate("/");
       }
+  
+      // Limpia el error local si el inicio de sesión fue exitoso
+      setLocalError(null);
     } catch (err) {
       setLocalError("Invalid credentials or insufficient permissions");
       console.error("Error logging in:", err);
     }
   };
+  
 
   return (
     <div className="login">

@@ -8,7 +8,6 @@ const baseURL =
     : "http://localhost:3000";
 
 axios.defaults.baseURL = baseURL; // Configura la base URL para axios
-axios.defaults.withCredentials = true; // Permite enviar cookies con las solicitudes
 
 const UserContext = createContext();
 
@@ -86,3 +85,5 @@ const UserContextProvider = ({ children }) => {
 };
 
 export { UserContext, UserContextProvider };
+
+

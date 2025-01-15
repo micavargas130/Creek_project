@@ -1,7 +1,18 @@
 import { createContext, useEffect, useReducer, useState } from "react";
 import axios from "axios";
 
+// Configurar la URL base según el entorno
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? "https://creek-project-ruby.vercel.app"
+    : "http://localhost:3000";
+
+axios.defaults.baseURL = baseURL; // Configura la base URL para axios
+axios.defaults.withCredentials = true; // Permite enviar cookies con las solicitudes
+
 const UserContext = createContext();
+
+// El resto de tu código sigue igual...
 
 const userReducer = (state, action) => {
   switch (action.type) {
