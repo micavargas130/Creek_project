@@ -50,7 +50,7 @@ export default function RoomInfoPage() {
           user: user._id,
           numberOfAdults: options.adult,
           numberOfChildren: options.children,
-          totalAmount:totalPrice
+          totalAmount
         });
   
         console.log(alldates)
