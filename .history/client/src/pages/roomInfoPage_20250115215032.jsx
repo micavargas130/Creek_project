@@ -40,6 +40,7 @@ export default function RoomInfoPage() {
     fetchPrice();
   }, []);
   
+
   async function bookThisLodge() {
     if (user) {
       try {

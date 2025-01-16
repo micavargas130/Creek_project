@@ -6,7 +6,8 @@ const app = express();
 
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:5173',  'https://creek-project.vercel.app']
+  origin: 'http://localhost:5173',  'https://creek-project.vercel.app',
+  'https://creek-project-ruby.vercel.app'
 }));
 
 // Middleware para parsear JSON

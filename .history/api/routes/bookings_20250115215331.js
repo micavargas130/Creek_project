@@ -4,11 +4,9 @@ import cors from "cors"
 
 const app = express();
 
-const app = express();
-
 app.use(cors({
   credentials: true,
-  origin: 'http://localhost:5173',
+  origin: 'http://localhost:5173',  'https://creek-project.vercel.app']
 }));
 
 // Middleware para parsear JSON
