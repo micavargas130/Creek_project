@@ -11,16 +11,15 @@ export default function AccountPage() {
   let { subpage } = useParams();
 
   if (subpage === undefined) {
-    subpage = "profile";
+    subpage = "bookings";
   }
-
   useEffect(() => {
     if (user && subpage === "bookings") {
       axios
-        .get(`bookings/${user._id}/bookings`)
+        .get(`bookings/${user.id}/bookings`)
         .then((response) => {
           // Filtra las reservas con estado "activo"
-          const activeBookings = response.data.filter((booking) => booking.status === "Activa");
+          const activeBookings = response.data.filter((booking) => booking.status.status === "Activa");
           setBookings(activeBookings);
         })
         .catch((error) => {
@@ -38,11 +37,12 @@ export default function AccountPage() {
   const updateBookingList = (deletedBookingId) => {
     setBookings((prev) => prev.filter((item) => item._id !== deletedBookingId));
   };
-
   function linkClasses(type = null) {
     let classes = "py-2 px-6";
     if (type === subpage) {
-      classes += " bg-primary rounded-full";
+      classes += " bg-primary text-white rounded-full";
+    } else {
+      classes += " bg-gray-200 text-black rounded-full";
     }
     return classes;
   }
@@ -51,12 +51,10 @@ export default function AccountPage() {
     return "Loading...";
   }
 
+  console.log(subpage)
+
   if (ready && !user) {
     return <Navigate to={"/login"} />;
-  }
-
-  if (redirect) {
-    return <Navigate to={"/redirect"} />;
   }
 
   return (

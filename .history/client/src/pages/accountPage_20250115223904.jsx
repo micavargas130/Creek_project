@@ -13,14 +13,14 @@ export default function AccountPage() {
   if (subpage === undefined) {
     subpage = "profile";
   }
-
+ console.log("user", user.id);
   useEffect(() => {
     if (user && subpage === "bookings") {
       axios
         .get(`bookings/${user._id}/bookings`)
         .then((response) => {
           // Filtra las reservas con estado "activo"
-          const activeBookings = response.data.filter((booking) => booking.status === "activo");
+          const activeBookings = response.data.filter((booking) => booking.status.status === "Activa");
           setBookings(activeBookings);
         })
         .catch((error) => {

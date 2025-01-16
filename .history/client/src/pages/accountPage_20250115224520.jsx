@@ -14,7 +14,7 @@ export default function AccountPage() {
 
   
   console.log(subpage) 
-  
+
   if (subpage === undefined) {
     subpage = "profile";
   }
@@ -68,7 +68,7 @@ export default function AccountPage() {
         <Link className={linkClasses("profile")} to={"/account"}>
           My Profile
         </Link>
-        <Link className={linkClasses("bookings")} to={"/account/bookings"}>
+        <Link className={linkClasses("bookings")} to={"/bookings"}>
           My Bookings
         </Link>
       </nav>

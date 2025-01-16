@@ -10,13 +10,8 @@ export default function AccountPage() {
   const [bookings, setBookings] = useState([]);
   let { subpage } = useParams();
 
-
-
-  
-  console.log(subpage) 
-  
   if (subpage === undefined) {
-    subpage = "profile";
+    subpage = "bookings";
   }
   useEffect(() => {
     if (user && subpage === "bookings") {
@@ -42,12 +37,11 @@ export default function AccountPage() {
   const updateBookingList = (deletedBookingId) => {
     setBookings((prev) => prev.filter((item) => item._id !== deletedBookingId));
   };
+
   function linkClasses(type = null) {
     let classes = "py-2 px-6";
     if (type === subpage) {
-      classes += " bg-primary text-white rounded-full";
-    } else {
-      classes += " bg-gray-200 text-black rounded-full";
+      classes += " bg-primary rounded-full";
     }
     return classes;
   }
@@ -55,8 +49,6 @@ export default function AccountPage() {
   if (!ready) {
     return "Loading...";
   }
-
-  console.log(subpage)
 
   if (ready && !user) {
     return <Navigate to={"/login"} />;

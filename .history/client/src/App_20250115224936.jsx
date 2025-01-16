@@ -24,8 +24,8 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/roomsPage" element={<RoomsPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/account" element={<AccountPage />} />
-            <Route path="/account/:subpage" element={<AccountPage />} />
+            <Route path="/account/:subpage?" element={<AccountPage />} />
+            <Route path="/account/:subpage?bookings" element={<AccountPage />} />
             <Route path="/lodges/:id" element={<RoomInfoPage />} />
           </Route>
         </Routes>

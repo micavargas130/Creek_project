@@ -63,7 +63,7 @@ export default function RoomInfoPage() {
         });
   
         alert('Cabaña reservada exitosamente');
-        navigate(`/account/${data._id}/bookings`);
+        navigate(/account/${data._id}/bookings');
       } catch (error) {
         console.error('Axios error:', error);
       }

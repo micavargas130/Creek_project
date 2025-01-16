@@ -11,9 +11,6 @@ export default function AccountPage() {
   let { subpage } = useParams();
 
 
-
-  
-  console.log(subpage) 
   
   if (subpage === undefined) {
     subpage = "profile";

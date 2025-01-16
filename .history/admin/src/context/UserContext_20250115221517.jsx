@@ -53,9 +53,8 @@ const UserContextProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      console.log("cedentials",credentials);
+      console.log(credentials);
       const res = await axios.post("/login", credentials);
-      console.log("res.data fuera del if", res.data)
       if (res.data.isAdmin || res.data.isEmployee) {
         console.log("res.data dentro del if", res.data)
       } else {

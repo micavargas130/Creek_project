@@ -14,7 +14,6 @@ export default function AccountPage() {
 
   
   console.log(subpage) 
-  
   if (subpage === undefined) {
     subpage = "profile";
   }

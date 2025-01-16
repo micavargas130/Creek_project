@@ -65,7 +65,8 @@ export default function AccountPage() {
   return (
     <div>
       <nav className="w-full flex justify-center mt-9 gap-6">
-        <Link className={linkClasses("profile")} to={"/account"}>
+        <Route path="/account" element={<AccountPage />} />
+      <Route path="/account/:subpage" element={<AccountPage />} />
           My Profile
         </Link>
         <Link className={linkClasses("bookings")} to={"/account/bookings"}>

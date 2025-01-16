@@ -10,13 +10,8 @@ export default function AccountPage() {
   const [bookings, setBookings] = useState([]);
   let { subpage } = useParams();
 
-
-
-  
-  console.log(subpage) 
-  
   if (subpage === undefined) {
-    subpage = "profile";
+    subpage = "account";
   }
   useEffect(() => {
     if (user && subpage === "bookings") {
