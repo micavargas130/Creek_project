@@ -42,7 +42,7 @@ export const login = async (req, res, next) => {
         }
 
         console.log(user);
-        const isPasswordCorrect = await bycrypt.compare(req.body.password, user.password);
+        const isPasswordCorrect = bycrypt.compare(req.body.password, user.password);
         if (!isPasswordCorrect) {
             return next(createError(400, "Incorrect password or email"));
         }
@@ -55,7 +55,7 @@ export const login = async (req, res, next) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // Asegúrate de que sea true en producción
             sameSite: "none", // Necesario para solicitudes cross-origin
-          }).status(200).json(user);
+          })status(200).json(user);
     } catch (err) {
         next(err);
     }

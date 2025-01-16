@@ -53,9 +53,7 @@ const UserContextProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      console.log(credentials)
       const res = await axios.post("/login", credentials);
-      console.log(res)
       if (res.data.isAdmin || res.data.isEmployee) {
         dispatchUser({ type: "SET_USER", payload: res.data });
         localStorage.setItem("user", JSON.stringify(res.data)); // Guardar en localStorage

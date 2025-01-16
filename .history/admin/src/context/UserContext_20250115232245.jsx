@@ -53,7 +53,7 @@ const UserContextProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      console.log(credentials)
+     console.log(credentials)
       const res = await axios.post("/login", credentials);
       console.log(res)
       if (res.data.isAdmin || res.data.isEmployee) {

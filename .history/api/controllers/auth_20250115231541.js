@@ -41,8 +41,8 @@ export const login = async (req, res, next) => {
             return next(createError(404, "User not found"));
         }
 
-        console.log(user);
-        const isPasswordCorrect = await bycrypt.compare(req.body.password, user.password);
+        console.log(user)
+        const isPasswordCorrect = bycrypt.compare(req.body.password, user.password);
         if (!isPasswordCorrect) {
             return next(createError(400, "Incorrect password or email"));
         }
@@ -51,11 +51,7 @@ export const login = async (req, res, next) => {
         const token = jwt.sign({ id: user._id, email: user.email, first_name: user.first_name, last_name: user.last_name, isEmployee: user.isEmployee, isAdmin: user.isAdmin }, process.env.JWT_KEY);
         
         // Establece la cookie con el nombre "token"
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // Asegúrate de que sea true en producción
-            sameSite: "none", // Necesario para solicitudes cross-origin
-          }).status(200).json(user);
+        res.cookie("token", token, { httpOnly: true }).status(200).json(user);
     } catch (err) {
         next(err);
     }
