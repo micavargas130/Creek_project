@@ -49,6 +49,7 @@ const __dirname = path.dirname(__filename);
 //middleware
 const allowedOrigins = [
   'http://localhost:3001',
+  'http://localhost:5173',
   'http://localhost:3000',
   'https://creek-project.vercel.app',
   'https://creek-project-ruby.vercel.app',
