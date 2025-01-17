@@ -23,7 +23,7 @@ const Login = () => {
     try {
       // Intenta iniciar sesión
 
-    const response = await axios.get("http://localhost:3000/bookings");
+    const response = await axios.get(" http://localhost:3000/bookings");
      console.log("Conexión exitosa con la base de datos:", response.data);
   
       // Verifica si la contraseña es la predeterminada
