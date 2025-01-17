@@ -88,9 +88,15 @@ export const profile = async (req, res, next) => {
 }
 
 
-
-
-
+export const (req, res) => {
+    mongoose.connection.db.admin().ping((err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Database connection failed", error: err });
+      }
+      return res.status(200).json({ message: "Database connected successfully", result });
+    });
+  });
+  
 export const logout = async (req, res, next) => {
     try {
         // Borra el token del usuario estableciendo una cookie vacía y con una fecha de expiración en el pasado

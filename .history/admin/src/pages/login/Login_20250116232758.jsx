@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
-import axios from "axios";
 import "./login.scss";
 
 const Login = () => {
@@ -21,22 +20,11 @@ const Login = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      // Intenta iniciar sesión
-
-    const response = await axios.get("/bookings", { withCredentials: true });
-     console.log("Conexión exitosa con la base de datos:", response.data);
-  
-      // Verifica si la contraseña es la predeterminada
-      if (credentials.password === "0camping") {
-        // Redirige a la página de cambio de contraseña si es la predeterminada
-        navigate("/change-password", { state: { email: credentials.email } });
-      } else {
-        // Redirige al home si la contraseña no es "1234"
         navigate("/");
       }
   
       // Limpia el error local si el inicio de sesión fue exitoso
-      setLocalError(null); 
+      setLocalError(null);
     } catch (err) {
       setLocalError("Invalid credentials or insufficient permissions");
       console.error("Error logging in:", err);

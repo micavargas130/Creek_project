@@ -1,5 +1,5 @@
 import express from "express";
-import { login, register, profile, logout } from "../controllers/auth.js";
+import { login, register, profile, checkConnection logout } from "../controllers/auth.js";
 import cors from "cors"
 import cookieParser from "cookie-parser" 
 
@@ -26,7 +26,7 @@ app.get("/profile", profile)
 app.post("/register", register)
 app.post("/login", login)
 app.post("/logout", logout)
-
+app.post("/checkConnection", checkConnection);
 
 
 export default app

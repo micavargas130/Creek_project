@@ -26,7 +26,7 @@ app.get("/profile", profile)
 app.post("/register", register)
 app.post("/login", login)
 app.post("/logout", logout)
-
+app.post(/check)
 
 
 export default app

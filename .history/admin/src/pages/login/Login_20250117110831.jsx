@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
-import axios from "axios";
 import "./login.scss";
 
 const Login = () => {
@@ -23,8 +22,7 @@ const Login = () => {
     try {
       // Intenta iniciar sesión
 
-    const response = await axios.get("/bookings", { withCredentials: true });
-     console.log("Conexión exitosa con la base de datos:", response.data);
+      a
   
       // Verifica si la contraseña es la predeterminada
       if (credentials.password === "0camping") {

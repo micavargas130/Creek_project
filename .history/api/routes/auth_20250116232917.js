@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser"
 const app = express();
 
 app.use(cors({
-    origin: ["https://creek-project-ruby.vercel.app", "https://creek-project.vercel.app", "https://localhost:3000"],  // Dominio de tu frontend en Vercel
+    origin: ["https://creek-project-ruby.vercel.app", "creek-project.vercel.app", ],  // Dominio de tu frontend en Vercel
     credentials: true, // Permitir que las cookies sean enviadas
   }));
   
@@ -26,7 +26,6 @@ app.get("/profile", profile)
 app.post("/register", register)
 app.post("/login", login)
 app.post("/logout", logout)
-
 
 
 export default app
