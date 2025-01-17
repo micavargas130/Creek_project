@@ -1,9 +1,10 @@
 import express from "express";
-import { login, register, profile, logout, makeEmployee } from "../controllers/auth.js";
+import { login, register, profile, logout } from "../controllers/auth.js";
 import cors from "cors"
 import cookieParser from "cookie-parser" 
 
 const app = express();
+
 
 app.use(cookieParser());
 
@@ -19,8 +20,6 @@ app.post("/register", register)
 app.post("/login", login)
 app.post("/logout", logout)
 
-//PUT
-app.put("/")
 
 
 

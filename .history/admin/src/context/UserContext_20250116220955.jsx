@@ -9,6 +9,8 @@ axios.defaults.withCredentials = true; // Permite enviar cookies con las solicit
 
 const UserContext = createContext();
 
+// El resto de tu código sigue igual...
+
 const userReducer = (state, action) => {
   switch (action.type) {
     case "SET_USER":

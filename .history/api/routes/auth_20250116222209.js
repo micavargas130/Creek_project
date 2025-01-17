@@ -1,9 +1,17 @@
 import express from "express";
-import { login, register, profile, logout, makeEmployee } from "../controllers/auth.js";
+import { login, register, profile, logout } from "../controllers/auth.js";
 import cors from "cors"
 import cookieParser from "cookie-parser" 
 
 const app = express();
+
+app.use(cors({
+    origin: "https://creek-project-ruby.vercel.app/", // Dominio de tu frontend en Vercel
+    credentials: true, // Permitir que las cookies sean enviadas
+  }));
+  
+  // Middleware para parsear JSON
+  app.use(express.json());
 
 app.use(cookieParser());
 
@@ -19,8 +27,6 @@ app.post("/register", register)
 app.post("/login", login)
 app.post("/logout", logout)
 
-//PUT
-app.put("/")
 
 
 

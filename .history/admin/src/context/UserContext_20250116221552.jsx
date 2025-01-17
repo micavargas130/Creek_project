@@ -1,5 +1,6 @@
 import { createContext, useEffect, useReducer, useState } from "react";
 import axios from "axios";
+import { UserContext } from "../context/UserContext";
 
 // Configurar la URL base según el entorno
 const baseURL ="https://creek-project-ruby.vercel.app"

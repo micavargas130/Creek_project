@@ -58,7 +58,8 @@ export const login = async (req, res, next) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", // Solo en HTTPS
             sameSite: "none", // Necesario para solicitudes cross-origin
-          }).status(200).json(user);
+          });
+          
     } catch (err) {
         next(err);
     }
