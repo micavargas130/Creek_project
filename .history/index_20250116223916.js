@@ -47,7 +47,7 @@ const __dirname = path.dirname(__filename);
 
 
 app.use(cors({
-  origin: ['https://creek-project-ruby.vercel.app', 'http://localhost:3000'],
+  origin: ['http://localhost:3000', 'https://creek-project-ruby.vercel.app'],
   credentials: true, // Permitir cookies
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Asegúrate de que todos los métodos estén permitidos
   allowedHeaders: ['Content-Type', 'Authorization'], // Asegúrate de permitir los encabezados necesarios

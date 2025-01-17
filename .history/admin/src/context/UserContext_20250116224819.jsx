@@ -49,9 +49,7 @@ const UserContextProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       console.log("email",credentials.email)
-      const email = credentials.email;
-      const password = credentials.password;
-      const res = await axios.post("/login", {email, password});
+      const res = await axios.post("/login",  {credentials.email,password});
       console.log(res)
       if (res.data.isAdmin || res.data.isEmployee) {
         dispatchUser({ type: "SET_USER", payload: res.data });

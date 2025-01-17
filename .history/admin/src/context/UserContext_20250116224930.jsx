@@ -50,7 +50,7 @@ const UserContextProvider = ({ children }) => {
     try {
       console.log("email",credentials.email)
       const email = credentials.email;
-      const password = credentials.password;
+      const password = credentials.password
       const res = await axios.post("/login", {email, password});
       console.log(res)
       if (res.data.isAdmin || res.data.isEmployee) {

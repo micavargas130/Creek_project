@@ -48,10 +48,9 @@ const UserContextProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      console.log("email",credentials.email)
-      const email = credentials.email;
-      const password = credentials.password;
-      const res = await axios.post("/login", {email, password});
+      console.log(credentials)
+      const res = await axios.post("https://creek-project-ruby.vercel.app/login", credentials);
+
       console.log(res)
       if (res.data.isAdmin || res.data.isEmployee) {
         dispatchUser({ type: "SET_USER", payload: res.data });

@@ -46,12 +46,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-app.use(cors({
-  origin: ['https://creek-project-ruby.vercel.app', 'http://localhost:3000'],
-  credentials: true, // Permitir cookies
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Asegúrate de que todos los métodos estén permitidos
-  allowedHeaders: ['Content-Type', 'Authorization'], // Asegúrate de permitir los encabezados necesarios
-}));
+//middleware
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://creek-project-ruby.vercel.app',
+];
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  }
+  next();
+});
 
 app.use(express.json());
 app.use(cookieParser());
