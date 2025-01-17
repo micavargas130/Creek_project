@@ -11,7 +11,7 @@ app.use(cors({
   }));
   
   // Middleware para parsear JSON
-app.use(express.json());
+  app.use(express.json());
 
 app.use(cookieParser());
 

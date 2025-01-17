@@ -46,22 +46,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-//middleware
-const allowedOrigins = [
-  'http://localhost:3001',
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'https://creek-project.vercel.app',
-  'https://creek-project-ruby.vercel.app',
-];
-
-// Usar CORS como middleware global
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: ['https://creek-project-ruby.vercel.app','http://localhost:3000'],
+  credentials: true, // Permitir cookies
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Asegúrate de que todos los métodos estén permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Asegúrate de permitir los encabezados necesarios
 }));
+
 app.use(express.json());
 app.use(cookieParser());
 

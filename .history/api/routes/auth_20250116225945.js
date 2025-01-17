@@ -6,12 +6,12 @@ import cookieParser from "cookie-parser"
 const app = express();
 
 app.use(cors({
-    origin: ["https://creek-project-ruby.vercel.app", "creek-project.vercel.app"],  // Dominio de tu frontend en Vercel
+    origin: ["https://creek-project-ruby.vercel.app", creek-project.vercel.app],  // Dominio de tu frontend en Vercel
     credentials: true, // Permitir que las cookies sean enviadas
   }));
   
   // Middleware para parsear JSON
-app.use(express.json());
+  app.use(express.json());
 
 app.use(cookieParser());
 
