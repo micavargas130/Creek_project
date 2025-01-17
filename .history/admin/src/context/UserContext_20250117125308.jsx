@@ -49,11 +49,12 @@ const UserContextProvider = ({ children }) => {
       const email = credentials.email;
       const password = credentials.password;
       const res = await axios.post('http://localhost:3000/login', credentials);
-      console.log("res",res.data)
+      console.log("res",res)
       if (res.data.isAdmin || res.data.isEmployee) {
         dispatchUser({ type: "SET_USER", payload: res.data });
         localStorage.setItem("user", JSON.stringify(res.data)); // Guardar en localStorage
-        setError(null); // Limpia el error si la autenticación es exitosaror si la autenticación es exitosa
+        console.log("localStorage",localStorage);
+        setError(null); // Limpia el error si la autenticación es exitosa
       } else {
         throw new Error("User does not have the required permissions");
       }

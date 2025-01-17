@@ -50,7 +50,7 @@ const UserContextProvider = ({ children }) => {
       const password = credentials.password;
       const res = await axios.post('http://localhost:3000/login', credentials);
       console.log("res",res.data)
-      if (res.data.isAdmin || res.data.isEmployee) {
+      if (res.data.isAdmin === true || res.data.isEmployee) {
         dispatchUser({ type: "SET_USER", payload: res.data });
         localStorage.setItem("user", JSON.stringify(res.data)); // Guardar en localStorage
         setError(null); // Limpia el error si la autenticación es exitosaror si la autenticación es exitosa

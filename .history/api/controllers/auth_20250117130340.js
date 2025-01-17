@@ -44,16 +44,19 @@ export const login = async (req, res, next) => {
 
         console.log(user);
         const isPasswordCorrect = await bycrypt.compare(req.body.password, user.password);
-        console.log("pass", isPasswordCorrect)
         if (!isPasswordCorrect) {
             return next(createError(400, "Incorrect password or email"));
         }
 
         // Usamos este token para verificar la información de cada usuario y saber si es admin o no 
         const token = jwt.sign({ id: user._id, email: user.email, first_name: user.first_name, last_name: user.last_name, isEmployee: user.isEmployee, isAdmin: user.isAdmin }, process.env.JWT_KEY);
-        console.log("token", token)
+        
         // Establece la cookie con el nombre "token"
-        res.cookie("token", token, { httpOnly: true }).status(200).json(user);
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // Solo en HTTPS
+            sameSite: "none", // Necesario para solicitudes cross-origin
+          }).status(200).json(user);
     } catch (err) {
         next(err);
     }
