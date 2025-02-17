@@ -73,5 +73,6 @@ test('Cerrando', async() => {
     await mongoose.connection.close();
     console.log("✅ Conexión cerrada.");
   }
+  console.log("🛑 Servidor Express cerrado.");
 });
 
