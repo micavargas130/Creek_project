@@ -11,12 +11,13 @@ process.env.NODE_ENV = 'test';
 
 let createdEmployeeId;
 let createdUserId;
-let server;
+let finished = false;
 
 before(async () => {
   console.log("Iniciando test de Employees...");
 
   const mongoURI = process.env.NODE_ENV === 'test' ? process.env.MONGO_TEST : process.env.MONGO;
+
   console.log("🌍 Conectando a:", mongoURI);
 
   if (!mongoose.connection.readyState) {
@@ -26,12 +27,7 @@ before(async () => {
     });
   }
 
-  // Inicia el servidor en un puerto dinámico
-  server = app.listen(0, () => {
-    console.log(`🟢 Servidor de pruebas corriendo en el puerto ${server.address().port}`);
-  });
-
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 1000)); 
 });
 
 test('POST /employees debe crear un empleado', async () => {
@@ -103,21 +99,6 @@ test('Cerrando', async() => {
     console.error("❌ Error eliminando registros de prueba:", err);
   }
 
-
-  if (server) {
-    // Usamos un timeout para asegurarnos de que se cierra correctamente
-    await new Promise(resolve => {
-      server.close(err => {
-        if (err) {
-          console.error("❌ Error cerrando el servidor:", err);
-        } else {
-          console.log("✅ Servidor cerrado.");
-        }
-        resolve();
-      });
-    });
-  }
-  
   console.log("Cerrando servidor y base de datos...");
 
 

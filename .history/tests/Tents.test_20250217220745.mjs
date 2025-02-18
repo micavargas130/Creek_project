@@ -10,27 +10,14 @@ dotenv.config();
 process.env.NODE_ENV = 'test';
 
 let lodgeId; // Guardará el ID de la cabaña creada para las pruebas
-let server;
 
 before(async () => {
-  console.log("Iniciando test de Employees...");
+  console.log("🛠 Iniciando tests de Lodges...");
 
-  const mongoURI = process.env.NODE_ENV === 'test' ? process.env.MONGO_TEST : process.env.MONGO;
-  console.log("🌍 Conectando a:", mongoURI);
+  // Conectar a la BD de test antes de empezar
+  await connect();
 
-  if (!mongoose.connection.readyState) {
-    await mongoose.connect(mongoURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
-  }
-
-  // Inicia el servidor en un puerto dinámico
-  server = app.listen(0, () => {
-    console.log(`🟢 Servidor de pruebas corriendo en el puerto ${server.address().port}`);
-  });
-
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  console.log("✅ Base de datos de testing conectada.");
 });
 
 // Variable para almacenar el ID de la carpa creada

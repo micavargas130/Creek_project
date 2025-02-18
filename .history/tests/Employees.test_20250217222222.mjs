@@ -102,22 +102,8 @@ test('Cerrando', async() => {
   } catch (err) {
     console.error("❌ Error eliminando registros de prueba:", err);
   }
-
-
-  if (server) {
-    // Usamos un timeout para asegurarnos de que se cierra correctamente
-    await new Promise(resolve => {
-      server.close(err => {
-        if (err) {
-          console.error("❌ Error cerrando el servidor:", err);
-        } else {
-          console.log("✅ Servidor cerrado.");
-        }
-        resolve();
-      });
-    });
-  }
   
+
   console.log("Cerrando servidor y base de datos...");
 
 
