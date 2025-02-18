@@ -2,7 +2,6 @@ import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';
 import mongoose from 'mongoose';
-import EmployeeModel from '../api/models/Employees.js';
 import { app } from '../index.js';
 import dotenv from 'dotenv';
 
@@ -80,10 +79,9 @@ test('Cerrando', async() => {
     const deleteRequests = [];
 
     if (createdEmployeeId) {
-      const res = await EmployeeModel.deleteOne({ _id: createdEmployeeId });
-      console.log("🗑 Eliminado empleado:", res);
+      deleteRequests.push(request(app).delete(`/employees/${createdEmployeeId}`));
+      console.log('')
     }
-    
 
     if (createdUserId) {
       deleteRequests.push(request(app).delete(`/user/${createdUserId}`));
