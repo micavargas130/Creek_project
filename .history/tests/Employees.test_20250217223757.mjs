@@ -121,8 +121,6 @@ test('Cerrando', async() => {
     });
   }
 
-  process.exit(0);
-
   // Espera adicional después de cerrar el servidor
   await new Promise(resolve => setTimeout(resolve, 1000));
 });

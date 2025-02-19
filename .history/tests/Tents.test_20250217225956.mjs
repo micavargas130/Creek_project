@@ -13,7 +13,7 @@ let lodgeId; // Guardará el ID de la cabaña creada para las pruebas
 let server;
 
 before(async () => {
-  console.log("Iniciando test de Tents...");
+  console.log("Iniciando test de Employees...");
 
   const mongoURI = process.env.NODE_ENV === 'test' ? process.env.MONGO_TEST : process.env.MONGO;
   console.log("🌍 Conectando a:", mongoURI);
@@ -103,7 +103,7 @@ let createdTentId;
 });
 
 
-test(async () => {
+after(async () => {
   console.log("Cerrando servidor y base de datos...");
 
   try {

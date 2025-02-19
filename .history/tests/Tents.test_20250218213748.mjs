@@ -103,7 +103,7 @@ let createdTentId;
 });
 
 
-test(async () => {
+after(async () => {
   console.log("Cerrando servidor y base de datos...");
 
   try {

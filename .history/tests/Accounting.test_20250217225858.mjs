@@ -103,7 +103,7 @@ test('Cerrando', async() => {
       } else {
         console.log("⚠️ Mongoose ya estaba cerrada.");
       }
-      process.exit(0);
+      
     
   }
 );

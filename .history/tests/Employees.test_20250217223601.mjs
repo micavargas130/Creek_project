@@ -109,20 +109,15 @@ test('Cerrando', async() => {
 
   // Cierra el servidor de pruebas de manera correcta
   if (server) {
-    await new Promise((resolve, reject) => {
-      server.close((err) => {
+    await new Promise(resolve => {
+      server.close(err => {
         if (err) {
-          reject(`❌ Error cerrando el servidor: ${err}`);
+          console.error("❌ Error cerrando el servidor:", err);
         } else {
           console.log("✅ Servidor cerrado.");
-          resolve();
         }
+        resolve();
       });
     });
   }
-
-  process.exit(0);
-
-  // Espera adicional después de cerrar el servidor
-  await new Promise(resolve => setTimeout(resolve, 1000));
 });

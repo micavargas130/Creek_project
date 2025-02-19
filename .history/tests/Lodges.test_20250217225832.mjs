@@ -88,5 +88,5 @@ test('PUT /lodges/:id debe actualizar una cabaña', async () => {
   await mongoose.connection.close();  // Cierra la conexión
 
   console.log("✅ Base de datos de testing cerrada.");
-  process.exit(0);
+  
 });
