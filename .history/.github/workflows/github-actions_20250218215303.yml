@@ -44,6 +44,9 @@ jobs:
       - name: Instalar Vercel CLI
         run: npm install -g vercel
 
-      - name: Deploy a Producción en Vercel
-        run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
+      - name: Autenticar en Vercel
+        run: vercel login --token ${{ secrets.VERCEL_TOKEN }}
+
+        - name: Deploy a Producción en Vercel
+    run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
 
