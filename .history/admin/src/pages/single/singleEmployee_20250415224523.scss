@@ -1,0 +1,173 @@
+.singleContainer {
+  flex: 6;
+  padding: 20px;
+
+  .headerSection {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    .infoCard {
+      flex: 3;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      h1 {
+        margin-bottom: 20px;
+        font-size: 24px;
+      }
+
+      .editButtons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+
+        .editButton,
+        .saveButton {
+          padding: 6px 12px;
+          border-radius: 5px;
+          font-size: 14px;
+          cursor: pointer;
+          border: none;
+        }
+
+        .editButton {
+          background-color: #f0f0f0;
+          color: #333;
+        }
+
+        .saveButton {
+          background-color: #28a745;
+          color: white;
+        }
+      }
+
+      .detailsGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 10px;
+
+        .detail {
+          font-size: 14px;
+          display: flex;
+          flex-direction: column;
+
+          input,
+          select {
+            padding: 5px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+          }
+        }
+      }
+    }
+
+    .photoCard {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .employeePhoto {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ddd;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+
+  .bottomSection {
+    margin-top: 30px;
+
+    .personalInfoCard {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      h2 {
+        margin-bottom: 15px;
+        color: #444;
+      }
+
+      .detailsGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+
+        .detail {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .taskSection {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+    
+      .addTaskForm {
+        flex: 1;
+        min-width: 250px;
+      }
+    
+      .calendarSection {
+        flex: 3;
+        width: 100%;
+      }
+    }
+      
+      input[type="text"],
+      input[type="date"],
+      input[type="time"] {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      .addTaskForm {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        input {
+          padding: 8px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+        }
+
+        button {
+          background-color: #007bff;
+          color: white;
+          padding: 10px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+      }
+
+      .calendarSection {
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        h2 {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}

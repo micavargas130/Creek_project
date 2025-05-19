@@ -1,0 +1,74 @@
+.widget {
+  display: flex;
+  flex-direction: column; /* Asegura que el contenido se apile verticalmente */
+  align-items: center;
+  justify-content: center;
+  text-align: center; /* Alinea el texto correctamente */
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra más sutil */
+  border-radius: 12px;
+  background-color: white;
+  width: auto;
+  min-width: 200px;
+  max-width: 320px; /* Limita el ancho para evitar distorsión */
+  height: auto; /* Ajusta la altura según el contenido */
+  overflow: hidden; /* Evita que el texto se desborde */
+
+  .title {
+    font-weight: bold;
+    font-size: 18px;
+    color: rgb(100, 100, 100);
+    margin-bottom: 5px;
+  }
+
+  .counter {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+  }
+
+  .icon {
+    font-size: 30px;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 255, 0.1);
+  }
+}
+
+/* Contenedor de widgets */
+.widgetsContainer {
+  display: flex;
+  flex-wrap: wrap; /* Permite que los widgets se acomoden en pantallas pequeñas */
+  justify-content: center;
+  gap: 20px;
+  padding: 10px;
+}
+
+/* Estilos mejorados para botones en .combinedWidget */
+.combinedWidget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  .controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 5px;
+
+    button {
+      background-color: #f0f0f0;
+      border: 1px solid #bbb;
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #e0e0e0;
+    }
+  }
+}

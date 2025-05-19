@@ -1,0 +1,90 @@
+.widget {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centra el contenido verticalmente */
+  align-items: center; /* Centra el contenido horizontalmente */
+  text-align: center;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background-color: white;
+  min-width: 220px;
+  max-width: 300px;
+  height: auto;
+  overflow: hidden;
+
+  .header {
+    display: flex;
+    align-items: center; /* Alinea título e icono */
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+
+    .title {
+      font-weight: bold;
+      font-size: 18px;
+      color: rgb(100, 100, 100);
+    }
+
+    .icon {
+      font-size: 20px;
+      padding: 5px;
+      border-radius: 8px;
+      background-color: rgba(0, 0, 255, 0.1);
+    }
+  }
+
+  .counter {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin: 10px 0; /* Centra el número */
+  }
+
+  select {
+    width: 90%;
+    padding: 6px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f9f9f9;
+    cursor: pointer;
+  }
+}
+
+/* Contenedor principal */
+.widgetsContainer {
+  display: flex;
+  flex-wrap: wrap; /* Permite que los widgets se ordenen en varias filas si es necesario */
+  justify-content: center;
+  gap: 20px;
+  padding: 10px;
+}
+
+/* Estilos específicos para widgets con controles */
+.combinedWidget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  .controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 5px;
+
+    button {
+      background-color: #f0f0f0;
+      border: 1px solid #bbb;
+      border-radius: 6px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #e0e0e0;
+    }
+  }
+}
