@@ -97,6 +97,9 @@ jobs:
       - name: Instalar Vercel CLI
         run: npm install -g vercel
 
+      - name: Autenticarse en Vercel
+        run: vercel login --token ${{ secrets.VERCEL_TOKEN }}
+
       - name: Deploy a entorno correcto
         run: |
           if [ "${GITHUB_REF##*/}" = "master" ]; then
