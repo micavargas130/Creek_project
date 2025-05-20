@@ -1,0 +1,1 @@
+Análisis de temporadas: Un gráfico de líneas con la evolución de reservas y ocupación para identificar temporadas altas y bajas.

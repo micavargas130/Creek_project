@@ -1,0 +1,136 @@
+import {
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+    BarChart, Bar, ResponsiveContainer
+  } from 'recharts';
+  import axiosInstance from "../../axios/axiosInstance.js"
+  import { useEffect, useState } from 'react';
+  
+  const Single = () => {
+    const [reservasPorMes, setReservasPorMes] = useState([]);
+    const [reservasPorCabaña, setReservasPorCabaña] = useState([]);
+    const [promedioHuespedes, setPromedioHuespedes] = useState({});
+    const [promedioEstadias, setPromedioEstadias] = useState({});
+    const [vista, setVista] = useState("mes");
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const res1 = await axiosInstance.get("/graphs/reservas-tiempo");
+          const res2 = await axiosInstance.get("/graphs/reservas-cabana");
+          const res3 = await axiosInstance.get("/graphs/promedio-huespedes");
+          const res4 = await axiosInstance.get("/graphs/promedio-estadia");
+  
+          const agrupado = {};
+  
+          const formatearFecha = (fechaStr) => {
+            const fecha = new Date(fechaStr);
+            if (isNaN(fecha)) return null;
+  
+            const año = fecha.getFullYear();
+            const mes = fecha.getMonth() 
+            const dia = String(fecha.getDate()).padStart(2, '0');
+  
+            if (vista === "dia") return `${año}-${mes}-${dia}`;
+            if (vista === "mes") return `${año}-${mes}`;
+            if (vista === "año") return `${año}`;
+            return null;
+          };
+  
+          const agregarReserva = (data, tipo) => {
+            data.forEach(item => {
+              console.log(item)
+              const clave = formatearFecha(item.createdAt);
+              if (!clave) return;
+  
+              if (!agrupado[clave]) {
+                agrupado[clave] = { fecha: clave, cabañas: 0, carpas: 0 };
+              }
+  
+              agrupado[clave][tipo] += 1;
+            });
+          };
+  
+          agregarReserva(res1.data.bookings, "cabañas");
+          agregarReserva(res1.data.tents, "carpas");
+  
+          const formateado = Object.values(agrupado).sort((a, b) => a.fecha.localeCompare(b.fecha));
+          setReservasPorMes(formateado);
+          setReservasPorCabaña(res2.data);
+          setPromedioHuespedes(res3.data);
+          setPromedioEstadias(res4.data);
+  
+        } catch (err) {
+          console.error("Error al cargar estadísticas", err);
+        }
+      };
+  
+      fetchData();
+    }, [vista]);
+  
+    return (
+      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+  
+        {/* Selector de vista */}
+        <div className="col-span-2 mb-4">
+          <label className="mr-2 font-medium">Vista:</label>
+          <select
+            value={vista}
+            onChange={(e) => setVista(e.target.value)}
+            className="border rounded p-1"
+          >
+            <option value="dia">Por día</option>
+            <option value="mes">Por mes</option>
+            <option value="año">Por año</option>
+          </select>
+        </div>
+  
+        {/* Gráfico de reservas por tiempo */}
+        <div className="bg-white rounded-2xl p-4 shadow">
+          <h2 className="text-lg font-semibold mb-2">Reservas por {vista}</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={reservasPorMes}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="fecha" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="cabañas" stroke="#8884d8" name="Cabañas" />
+              <Line type="monotone" dataKey="carpas" stroke="#82ca9d" name="Carpas" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+  
+        {/* Gráfico de reservas por cabaña */}
+        <div className="bg-white rounded-2xl p-4 shadow">
+          <h2 className="text-lg font-semibold mb-2">Reservas por cabaña</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={reservasPorCabaña}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="_id" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="total" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+  
+        {/* Promedio de huéspedes */}
+        <div className="bg-white rounded-2xl p-4 shadow flex flex-col justify-center items-center">
+          <h2 className="text-lg font-semibold mb-2">Promedio de huéspedes</h2>
+          <p>Cabañas: {promedioHuespedes.avgGuestsLodges?.toFixed(2)}</p>
+          <p>Carpas: {promedioHuespedes.avgGuestsTents?.toFixed(2)}</p>
+        </div>
+  
+        {/* Promedio de estadía */}
+        <div className="bg-white rounded-2xl p-4 shadow flex flex-col justify-center items-center">
+          <h2 className="text-lg font-semibold mb-2">Duración promedio de estadía</h2>
+          <p>Cabañas: {promedioEstadias.avgStayLodges?.toFixed(2)} días</p>
+          <p>Carpas: {promedioEstadias.avgStayTents?.toFixed(2)} días</p>
+        </div>
+      </div>
+    );
+  };
+  
+  export default Single;
+  

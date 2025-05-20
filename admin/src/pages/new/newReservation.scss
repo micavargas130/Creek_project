@@ -1,0 +1,81 @@
+.new {
+    display: flex;
+  
+    .newContainer {
+      flex: 6;
+      padding: 20px;
+  
+      .top {
+        h1 {
+          font-size: 24px;
+          margin-bottom: 20px;
+          font-weight: bold;
+        }
+      }
+  
+      .bottom {
+        display: flex;
+        gap: 20px; // Espacio entre el calendario y el formulario
+  
+        .left {
+          flex: 1;
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          background: #f9f9f9;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+  
+        .right {
+          flex: 2;
+          background: #fff;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  
+          form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+  
+            label {
+              font-weight: 600;
+              margin-bottom: 5px;
+            }
+  
+            input, select {
+              width: 100%;
+              padding: 10px;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              font-size: 14px;
+              outline: none;
+              transition: border-color 0.2s;
+  
+              &:focus {
+                border-color: #007bff;
+              }
+            }
+  
+            button {
+              background: #007bff;
+              color: white;
+              border: none;
+              padding: 12px;
+              border-radius: 5px;
+              font-size: 16px;
+              cursor: pointer;
+              transition: background 0.3s;
+  
+              &:hover {
+                background: #0056b3;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

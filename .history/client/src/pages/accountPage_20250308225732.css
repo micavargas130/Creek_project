@@ -1,0 +1,73 @@
+.profileContainer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    margin: auto;
+  }
+  
+  .profileContainer h2 {
+    font-size: 22px;
+    color: #0071c2;
+  }
+  
+  .profileContainer p {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .logoutButton {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .logoutButton:hover {
+    background-color: darkred;
+  }
+  
+  h3 {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+  
+  .changePasswordForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .cpInput {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .cpButton {
+    background-color: #0071c2;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .cpButton:hover {
+    background-color: #005fa3;
+  }
+  
+  .cpError {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  
