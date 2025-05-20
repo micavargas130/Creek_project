@@ -65,7 +65,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'https://creek-project.vercel.app',
   'https://creek-project-ruby.vercel.app',
-  'https://creek-project-micavargas130-micavargas130s-projects.vercel.app'
+  'https://creek-project-micavargas130-micavargas130s-projects.vercel.app/login'
 ];
 
 // Usar CORS como middleware global
