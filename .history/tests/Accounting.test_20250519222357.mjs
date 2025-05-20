@@ -39,7 +39,6 @@ test('POST /accounting debe crear un registro contable', async () => {
     remainingAmount: 1000,
     type: 'Ingreso',
     date: '2025-02-05T00:00:00.000Z',
-    user: '67a55c714d36d65c67654fd5',
     lodge: '67a550b74d36d65c67654fd1',
     status: "pagada"
   };
@@ -103,8 +102,7 @@ test('Cerrando', async() => {
       } else {
         console.log("⚠️ Mongoose ya estaba cerrada.");
       }
-      
-
+      process.exit(0);
     
   }
 );

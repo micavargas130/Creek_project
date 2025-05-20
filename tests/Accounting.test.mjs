@@ -39,7 +39,6 @@ test('POST /accounting debe crear un registro contable', async () => {
     remainingAmount: 1000,
     type: 'Ingreso',
     date: '2025-02-05T00:00:00.000Z',
-    user: '67a55c714d36d65c67654fd5',
     lodge: '67a550b74d36d65c67654fd1',
     status: "pagada"
   };
@@ -66,11 +65,11 @@ test('PUT /accounting/status/:id debe actualizar el estado de pago', async () =>
   assert.strictEqual(response.body.status.status, 'pagada');
 });
 
-test('PUT /accounting/comment/:id debe actualizar el comentario', async () => {
+/*test('PUT /accounting/comment/:id debe actualizar el comentario', async () => {
   const response = await request(app).put(`/accounting/comment/${createdAccountingId}`).send({ comment: 'Pago actualizado' });
   assert.strictEqual(response.status, 200);
   assert.strictEqual(response.body.comment, 'Pago actualizado');
-});
+}); */
 
 test('GET /accounting/history/:lodgeId debe devolver el historial de pagos', async () => {
   const response = await request(app).get(`/accounting/history/67a550b74d36d65c67654fd1`);

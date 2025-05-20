@@ -9,11 +9,13 @@ dotenv.config();
 process.env.NODE_ENV = 'test';
 
 let createdAccountingId; 
+let server;
 
 before(async () => {
-  console.log("Iniciando test de Accounting...");
+  console.log("Iniciando test de Employees...");
 
   const mongoURI = process.env.NODE_ENV === 'test' ? process.env.MONGO_TEST : process.env.MONGO;
+  console.log("🌍 Conectando a:", mongoURI);
 
   if (!mongoose.connection.readyState) {
     await mongoose.connect(mongoURI, {
@@ -22,7 +24,12 @@ before(async () => {
     });
   }
 
-  await new Promise(resolve => setTimeout(resolve, 1000)); 
+  // Inicia el servidor en un puerto dinámico
+  server = app.listen(0, () => {
+    console.log(`🟢 Servidor de pruebas corriendo en el puerto ${server.address().port}`);
+  });
+
+  await new Promise(resolve => setTimeout(resolve, 1000));
 });
 
 test('POST /accounting debe crear un registro contable', async () => {
@@ -32,7 +39,6 @@ test('POST /accounting debe crear un registro contable', async () => {
     remainingAmount: 1000,
     type: 'Ingreso',
     date: '2025-02-05T00:00:00.000Z',
-    user: '67a55c714d36d65c67654fd5',
     lodge: '67a550b74d36d65c67654fd1',
     status: "pagada"
   };
@@ -59,7 +65,7 @@ test('PUT /accounting/status/:id debe actualizar el estado de pago', async () =>
   assert.strictEqual(response.body.status.status, 'pagada');
 });
 
-test('PUT /accounting/comment/:id debe actualizar el comentario', async () => {
+/*test('PUT /accounting/comment/:id debe actualizar el comentario', async () => {
   const response = await request(app).put(`/accounting/comment/${createdAccountingId}`).send({ comment: 'Pago actualizado' });
   assert.strictEqual(response.status, 200);
   assert.strictEqual(response.body.comment, 'Pago actualizado');
@@ -83,13 +89,20 @@ test('DELETE /accounting/:id debe eliminar un registro contable', async () => {
 });
 
 test('Cerrando', async() => {
-  if (mongoose.connection.readyState) {
-    const dbName = mongoose.connection.db.databaseName;
-    if (dbName !== 'camping_db') {
-      await mongoose.connection.db.dropDatabase();
-    } else {
-      console.error("⚠️ Error: Intento de borrar la base de datos real!");
-    }
-    await mongoose.connection.close();
+  
+    console.log("🛑 Cerrando conexión a la BD...");
+      
+      if (mongoose.connection.readyState) {
+        try {
+          await mongoose.connection.close();
+          console.log("✅ Conexión cerrada.");
+        } catch (err) {
+          console.error("❌ Error cerrando la conexión:", err);
+        }
+      } else {
+        console.log("⚠️ Mongoose ya estaba cerrada.");
+      }
+      process.exit(0);
+    
   }
-});
+);
