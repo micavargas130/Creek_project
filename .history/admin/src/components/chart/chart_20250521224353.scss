@@ -1,0 +1,144 @@
+.chart {
+  flex: 4;
+  overflow-y: auto; /* Agrega una barra de desplazamiento vertical */
+  max-height: 400px;
+  -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+  padding: 10px;
+  color: black;
+
+  .title {
+    margin-bottom: 20px;
+  }
+
+  .chartGrid {
+    stroke: rgb(228, 225, 225);
+  }
+}
+
+.notification-grid {
+  display: grid;
+  grid-template-columns: repeat( minmax(250px, 1fr));
+  gap: 10px;
+}
+
+.notification-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.notification-card {
+  display: flex;
+  align-items: flex-start;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 15px 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: transform 0.2s ease;
+  gap: 15px;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.notification-icon {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-content {
+  flex: 1;
+
+  .notification-type {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 5px;
+  }
+
+  .notification-details {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 5px;
+  }
+
+  .notification-date {
+    font-size: 0.8rem;
+    color: #999;
+  }
+}
+
+.cancelIcon {
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.2s ease;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  &:hover {
+    color: #ff6b6b;
+  }
+}
+
+
+.maintenance-comment {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 8px 12px;
+  border-radius: 4px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+.notification-type {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #050000;
+  margin-bottom: 10px;
+}
+
+
+.cancelIcon{
+  display: flex;
+  padding: 20px;
+  cursor: pointer;
+  color:rgba(0, 0, 0, 0.47)
+}
+
+.chartTabsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tabButtons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tabButtons button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #8884d8;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.tabButtons button:hover {
+  background-color: #6c5ce7;
+}
+
+.chartContent {
+  width: 100%;
+}
+

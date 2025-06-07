@@ -1,0 +1,156 @@
+.home {
+  display: flex;
+
+  .homeContainer {
+    flex: 6;
+    padding-top: 0; /* Elimina el espacio vacío superior */
+
+    h2 {
+      margin-bottom: 20px; /* Ajusta la separación debajo del título */
+    }
+
+    .financialWidgets {
+      display: flex;
+      justify-content: space-between; /* Widgets financieros en una fila */
+      gap: 20px; /* Espacio entre cada widget */
+      margin-bottom: 20px; /* Espacio debajo de los widgets financieros */
+    }
+
+    .occupationWidgets {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    
+      .occupationWidget {
+        flex: 1; // hace que no ocupe tanto
+        max-width: 300px; // ajustá este valor según lo que quieras
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+        text-align: center;
+    
+        h4 {
+          margin-bottom: 10px;
+          font-size: 16px;
+          color: #444;
+        }
+    
+        .progressBar {
+          height: 10px;
+          border-radius: 5px;
+          background-color: #e0e0e0;
+          margin-top: 10px;
+    
+          .progress {
+            height: 100%;
+            border-radius: 5px;
+            background-color: #1976d2; // color MUI
+          }
+        }
+    
+        .percentage {
+          margin-top: 10px;
+          font-size: 14px;
+          font-weight: 500;
+          color: #1976d2;
+        }
+      }
+    }
+    
+
+    .charts {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 20px;
+
+    .chartItem {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
+  }
+    
+      .notifications {
+        flex: 1;
+        max-width: 400px;
+        background-color: #fff;
+        border-radius: 20px;
+        padding: 20px;
+        margin-left: 20px;
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    
+        h3 {
+          font-size: 18px;
+          margin-bottom: 15px;
+          color: #333;
+        }
+    
+        .notificationItem {
+          padding: 10px 15px;
+          background-color: #f9f9f9;
+          border-radius: 10px;
+          margin-bottom: 10px;
+          border: 1px solid #e0e0e0;
+          font-size: 14px;
+          color: #555;
+    
+          &:hover {
+            background-color: #f1f1f1;
+          }
+        }
+      }
+    }
+    
+
+    .employeeCalendar {
+      margin: 0 20px 30px 20px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 20px;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    
+      h3 {
+        font-size: 20px;
+        margin-bottom: 15px;
+        color: #333;
+      }
+    
+      .calendarCard {
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e0e0e0;
+      }
+    
+      .rbc-calendar {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 14px;
+      }
+
+      buttonEdit {
+        padding: 5px 5px;
+        font-size: 13px;
+        background-color: #686f77; // azul estilo MUI
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 400;
+        transition: background-color 0.3s ease;
+      
+        &:hover {
+          background-color: #1565c0;
+        }
+      
+        &:disabled {
+          background-color: #90caf9;
+          cursor: not-allowed;
+        }
+      }
+      
+      
+    }
+    
+  }
+}
+
+
