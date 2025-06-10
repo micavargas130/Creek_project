@@ -68,7 +68,7 @@ const allowedOrigins = [
   'https://creek-project-ruby.vercel.app',
   'https://creek-project.onrender.com',
   'https://creek-project-micavargas130-micavargas130s-projects.vercel.app',
-  'https://web-camping-arroyito-micavargas130s-projects.vercel.app/'
+  https://web-camping-arroyito-micavargas130s-projects.vercel.app/
 ];
 
 // Usar CORS como middleware global

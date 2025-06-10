@@ -40,10 +40,9 @@ test('POST /accounting debe crear un registro contable', async () => {
     type: 'Ingreso',
     date: '2025-02-05T00:00:00.000Z',
     lodge: '682fd255d764b1cb65ca39dc',
-    status: "pagada",
+    status: "pagada"
   };
   const response = await request(app).post('/accounting/createAccounting').send(newAccounting);
-  console.log(response.status, response.body);
   assert.strictEqual(response.status, 200);
   assert.ok(response.body._id);
   createdAccountingId = response.body._id;

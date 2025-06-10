@@ -43,7 +43,6 @@ test('POST /accounting debe crear un registro contable', async () => {
     status: "pagada",
   };
   const response = await request(app).post('/accounting/createAccounting').send(newAccounting);
-  console.log(response.status, response.body);
   assert.strictEqual(response.status, 200);
   assert.ok(response.body._id);
   createdAccountingId = response.body._id;
