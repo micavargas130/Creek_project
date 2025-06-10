@@ -1,5 +1,5 @@
 import { createContext, useEffect, useReducer, useState } from "react";
-import axiosInstance from "../axios/axiosInstance.js"
+import axiosInstance from "../../axios/axiosInstance.js"
 
 // Configurar la URL base según el entorno
 

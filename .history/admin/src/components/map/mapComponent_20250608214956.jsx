@@ -8,7 +8,7 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 import GrillIcon from '@mui/icons-material/OutdoorGrillOutlined';
 import GarageIcon from '@mui/icons-material/Garage';
 import OtherHousesIcon from '@mui/icons-material/OtherHouses';
-import axiosInstance from "../../axios/axiosInstance.js"
+import axiosInstance from "../axios/axiosInstance.js"
 
 const MapComponent = ({ onCellClick, lodgesInfo }) => {
   const [occupiedPositions, setOccupiedPositions] = useState([]);
@@ -17,7 +17,8 @@ const MapComponent = ({ onCellClick, lodgesInfo }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/tents/occupiedPositions");
+        const response = await import axiosInstance from "../axios/axiosInstance.js"
+.get("/tents/occupiedPositions");
         const { occupiedPositions } = response.data;
         setOccupiedPositions(occupiedPositions);
       } catch (error) {

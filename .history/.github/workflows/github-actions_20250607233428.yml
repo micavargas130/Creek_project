@@ -33,7 +33,7 @@ jobs:
         run: npm test
         continue-on-error: true
 
-  deploy:
+deploy:
    name: Deploy a Render y Vercel
    needs: test
    runs-on: ubuntu-latest

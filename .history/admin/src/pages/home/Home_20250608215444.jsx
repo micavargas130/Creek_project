@@ -51,7 +51,7 @@ const Home = () => {
         const completedTents = tents.filter(tent => tent.status.status === "Activa");
         setTentCount(completedTents.length);
 
-        const accountingResponse = await axiosInstance.get("/accounting");
+        const accountingResponse = await axiosInstance.get("http://localhost:3000/accounting");
         setAccountingData(accountingResponse.data);
 
         const userRes = await axiosInstance.get(`/user/${user._id}`);

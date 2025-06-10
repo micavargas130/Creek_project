@@ -12,4 +12,6 @@ cron.schedule(" * 3 * * *", async () => {
   await checkTodayCheckouts();
   console.log("Borrar notificaciones viejas");
   await deleteOldNotifications();
+
+
 });

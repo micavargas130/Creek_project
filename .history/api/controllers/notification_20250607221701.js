@@ -33,7 +33,7 @@ export const getClosedNotification = async (req, res) => {
     const notifications = await Notifications.find({
       closedBy: { $ne: req.params.userId }
     })
-    .populate("client")
+    .populate("cabain");
 
     res.send(notifications);
   } catch (error) {

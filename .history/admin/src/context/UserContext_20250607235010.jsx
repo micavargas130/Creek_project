@@ -1,5 +1,5 @@
+import axios from "axios";
 import { createContext, useEffect, useReducer, useState } from "react";
-import axiosInstance from "../axios/axiosInstance.js"
 
 // Configurar la URL base según el entorno
 
@@ -29,7 +29,7 @@ const UserContextProvider = ({ children }) => {
         if (storedUser) {
           dispatchUser({ type: "SET_USER", payload: storedUser });
         } else {
-          const response = await axiosInstance.get("/profile");
+          const response = await axios.get("/profile");
           dispatchUser({ type: "SET_USER", payload: response.data });
         }
       } catch (error) {
@@ -45,7 +45,7 @@ const UserContextProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const res = await axiosInstance.post('/login', credentials);
+      const res = await axios.post('/login', credentials);
       if (res.data.isAdmin || res.data.isEmployee) {
         dispatchUser({ type: "SET_USER", payload: res.data });
         localStorage.setItem("user", JSON.stringify(res.data)); // Guardar en localStorage
@@ -62,7 +62,7 @@ const UserContextProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axiosInstance.post("/logout");
+      await axios.post("/logout");
       dispatchUser({ type: "CLEAR_USER" });
       localStorage.removeItem("user"); // Eliminar del localStorage
     } catch (err) {

@@ -17,12 +17,11 @@ const Chart = ({ title }) => {
       try {
         if (!user || !user._id) return;
         const response = await axiosInstance.get(`/notifications/closed/${user._id}`);
-        
 
         const enrichedNotifications = await Promise.all(
           response.data.map(async (notification) => {
-            const userResponse = await axiosInstance.get(`/user/${notification.client._id}`);
-            const lodgeResponse = await axiosInstance.get(`/lodges/${notification.cabain._id}`);
+            const userResponse = await axiosInstance.get(`/user/${notification.client}`);
+            const lodgeResponse = await axiosInstance.get(`/lodges/${notification.cabain}`);
 
             return {
               ...notification,
