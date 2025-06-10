@@ -1,0 +1,62 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+      - production
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Ejecutar Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar Repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Instalar Dependencias
+        run: npm install --legacy-peer-deps
+
+      - name: Configurar Variables de Entorno
+        run: echo "MONGO_TEST=${{ secrets.MONGO_TEST }}" >> .env
+
+      - name: Ejecutar Tests
+        run: npm test
+        continue-on-error: true
+
+  deploy:
+  name: Deploy a Render y Vercel
+  needs: test
+  runs-on: ubuntu-latest
+
+  steps:
+    - name: Clonar Repositorio
+      uses: actions/checkout@v3
+
+    - name: Deploy a Render
+      run: |
+        echo "Desplegando backend a Render..."
+        curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
+    - name: Instalar Vercel CLI
+      run: npm install -g vercel
+
+    - name: Deploy a entorno correcto en Vercel
+      run: |
+        if [ "${GITHUB_REF##*/}" = "master" ]; then
+          echo "Haciendo deploy a producción en Vercel..."
+          vercel --prod --yes --token ${{ secrets.VERCEL_TOKEN }}
+        elif [ "${GITHUB_REF##*/}" = "production" ]; then
+          echo "Haciendo deploy a entorno de pruebas en Vercel..."
+          vercel --yes --token ${{ secrets.VERCEL_TOKEN }}
+        fi
+
