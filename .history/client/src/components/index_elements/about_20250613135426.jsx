@@ -15,8 +15,8 @@ function About() {
     };
 
     const images = [
-        "src/assets/cabañas.jpg",
-        "src/assets/pileta.jpg",
+        "/images/cabañas.jpg",
+        "/images/pileta.jpg",
         "src/assets/asador.jpg"
     ];
 

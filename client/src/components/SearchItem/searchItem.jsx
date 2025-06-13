@@ -17,7 +17,7 @@ const SearchItem = ({ item }) => {
   return (
     <div className="searchItemCard">
       <img
-        src={item.photos[0] ? `http://localhost:3000/${item.photos[0]}` : "ruta/a/imagen_por_defecto.jpg"}
+        src={item.photos[0] ? `https://creek-project.onrender.com/${item.photos[0]}` : "ruta/a/imagen_por_defecto.jpg"}
         alt={item.name}
         className="cardImg"
       />
