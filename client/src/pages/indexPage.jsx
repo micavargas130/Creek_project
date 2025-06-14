@@ -8,10 +8,9 @@ import Reviews from "../components/index_elements/reviews.jsx";
 export default function IndexPage(){
     return(
         <>
-        
             <Hero
                 cName="hero"
-                heroImg="src/assets/rodeoLake.jpg"
+                heroImg="/images/rodeoLake.jpg"
                 title="Ven a conocer Rodeo"
                 text="Tu descanso es nuestra prioridad"
             />

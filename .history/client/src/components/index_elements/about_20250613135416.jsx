@@ -1,5 +1,5 @@
 import Slider from 'react-slick';
-import './bout.css';
+import './about.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
@@ -15,7 +15,7 @@ function About() {
     };
 
     const images = [
-        "src/assets/cabañas.jpg",
+        "/images/rodeoLake.jpg/cabañas.jpg",
         "src/assets/pileta.jpg",
         "src/assets/asador.jpg"
     ];

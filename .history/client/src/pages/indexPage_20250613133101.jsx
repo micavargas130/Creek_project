@@ -3,11 +3,11 @@ import Services from "../components/index_elements/services.jsx";
 import About from "../components/index_elements/about.jsx";
 import Activities from "../components/index_elements/activities.jsx";
 import Footer from "../components/index_elements/footer.jsx";
-import Footer from "../components/index_elements/footer.jsx";
+import Reviews from "../components/index_elements/reviews.jsx";
+
 export default function IndexPage(){
     return(
         <>
-        
             <Hero
                 cName="hero"
                 heroImg="src/assets/rodeoLake.jpg"

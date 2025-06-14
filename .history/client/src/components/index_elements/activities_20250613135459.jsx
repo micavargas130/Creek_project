@@ -1,11 +1,11 @@
 import './activities.css';
 
 const activities = [
-    { title: "Kayac", img: "src/assets/kayac.jpg" },
-    { title: "Cabalgatas", img: "src/assets/cabalgatas.jpg" },
-    { title: "Senderismo", img: "src/assets/senderismo.jpg" },
-    { title: "Pesca", img: "src/assets/pesca.jpg" },
-    { title: "Mountain Bike", img: "src/assets/mountain_bike.jpg" }
+    { title: "Kayak", img: "/images/kayak.jpeg" },
+    { title: "Cabalgatas", img: "/images/cabalgata.jpeg" },
+    { title: "Senderismo", img: "/images/senderismo.jpeg" },
+    { title: "Kite Surf", img: "/images/KiteFest.jpg" },
+    { title: "Festivales", img: "src/assets/gastronomia.jpeg" }
 ];
 
 function Activities() {

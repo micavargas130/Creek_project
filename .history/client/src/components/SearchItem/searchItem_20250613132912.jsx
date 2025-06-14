@@ -17,23 +17,18 @@ const SearchItem = ({ item }) => {
   return (
     <div className="searchItemCard">
       <img
-        src={item.photos[0] ? `http://localhost:3000/${item.photos[0]}` : "ruta/a/imagen_por_defecto.jpg"}
+        src={item.photos[0] ? `https://creek-project.onrender.com/${item.photos[0]}` : "ruta/a/imagen_por_defecto.jpg"}
         alt={item.name}
         className="cardImg"
       />
       <div className="cardContent">
         <h2 className="cardTitle">{item.name}</h2>
-        <p className="cardDescription">Descripción breve de la cabaña.</p>
         <div className="cardInfo">
           <span><FaConciergeBell /> Servicios: {item.services}</span>
           <span><FaUsers /> Capacidad: {item.capacity}</span>
         </div>
         <div className="cardActions">
           <button className="cardButton" onClick={handleClick}>Reservar</button>
-          <div className="cardCancel">
-            <span>Cancelación gratuita</span>
-            <small>¡Puedes cancelar más tarde!</small>
-          </div>
         </div>
       </div>
     </div>
