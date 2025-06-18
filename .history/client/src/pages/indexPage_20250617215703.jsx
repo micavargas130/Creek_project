@@ -10,7 +10,7 @@ export default function IndexPage(){
         <>
             <Hero
                 cName="hero"
-                heroImg="/images/rodeoLake.jpg"
+                heroImg="src/assets/rodeoLake.jpg"
                 title="Ven a conocer Rodeo"
                 text="Tu descanso es nuestra prioridad"
             />
@@ -25,3 +25,7 @@ export default function IndexPage(){
         </>
     );
 }
+
+<div className="border border-red-500">
+{/* Contenido de la página */}
+</div>

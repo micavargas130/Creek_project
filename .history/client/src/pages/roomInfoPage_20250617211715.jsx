@@ -43,7 +43,7 @@ export default function RoomInfoPage() {
     console.log("user", user)
     const fetchPrice = async () => {
       try {
-        const response = await axios.get("/prices?category=cabañas");
+        const response = await axios.get("http://localhost:3000/prices?category=cabañas");
         if (response.data.length > 0) {
           const latestPrice = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
           setPrice(latestPrice);
@@ -176,7 +176,7 @@ const totalPrice = totalPricePerNight * nights;
                 {data.photos.map((photo, i) => (
                   <div key={i}>
                     <img
-                      src={`/${photo}`}
+                      src={`http://localhost:3000/${photo}`}
                       alt={`Foto ${i}`}
                       className="lodgeImg"
                     />
@@ -185,7 +185,7 @@ const totalPrice = totalPricePerNight * nights;
               </Slider>
             ) : (
               <img
-                src={`/${data.photos?.[0]}`}
+                src={`http://localhost:3000/${data.photos?.[0]}`}
                 alt="Foto única"
                 className="lodgeImg"
               />
