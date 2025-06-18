@@ -25,3 +25,7 @@ export default function IndexPage(){
         </>
     );
 }
+
+<div className="border border-red-500">
+{/* Contenido de la página */}
+</div>
