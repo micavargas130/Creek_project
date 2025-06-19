@@ -43,6 +43,25 @@
   margin-bottom: 10px;
 }
 
+.lodgeImages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.lodgeImgWrapper {
+  width: 30%;
+}
+
+.lodgeImg {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
 .lodgeDetails {
   display: flex;
   flex-direction: column;

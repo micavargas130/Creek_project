@@ -6,6 +6,22 @@ import useFetch from "../../hooks/useFetch.js";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import Calendar from "../../components/calendar/calendar.jsx";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+
+import Slider from "react-slick";
+
+const sliderSettings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1, // o más si querés miniaturas
+  slidesToScroll: 1,
+  arrows: true,
+  adaptiveHeight: true
+};
+
 
 export default function LodgeInfo() {
   const location = useLocation();
@@ -16,6 +32,7 @@ export default function LodgeInfo() {
   const [open, setOpen] = useState(false);
   const [newPhotos, setNewPhotos] = useState([]);
   const navigate = useNavigate();
+
 
   const { data } = useFetch(`/lodges/${id}`);
 
@@ -53,6 +70,7 @@ export default function LodgeInfo() {
     setNewService('');
   };
 
+
    const handlePhotoChange = (e) => {
     setNewPhotos([...newPhotos, e.target.files[0]]);
   };
@@ -66,6 +84,7 @@ export default function LodgeInfo() {
         headers: { "Content-Type": "multipart/form-data" },
       });
   
+      // Actualiza las fotos con el campo `photos` del documento actualizado
       const updatedPhotos = res.data.updatedLodge.photos;
   
       setFormData((prevData) => ({
@@ -209,6 +228,7 @@ export default function LodgeInfo() {
                   {editing ? "Cancel" : "Edit"}
                 </button>
                 </div>
+
               <div className="calendarContainer">
                 <h2>Availability Calendar</h2>
                 <Calendar lodgeId={id} readOnly={true} />

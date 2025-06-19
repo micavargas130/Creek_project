@@ -84,6 +84,7 @@ useEffect(() => {
     return filteredLodges.filter((lodge) => lodge !== null);
   };
   
+
   return (
     <div className="listContainer">
       <div className="listWrapper">

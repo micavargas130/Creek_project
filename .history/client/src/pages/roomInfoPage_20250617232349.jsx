@@ -43,9 +43,12 @@ export default function RoomInfoPage() {
     console.log("user", user)
     const fetchPrice = async () => {
       try {
-        const response = await axios.get("/prices/last/cabañas");
+        const response = await axios.get("/prices/last/cabanas");
         const latestPrice = response.data
         setPrice(latestPrice);
+        console.log("price", price)
+
+
       } catch (error) {
         console.error("Error fetching price:", error);
       }
@@ -174,7 +177,7 @@ const totalPrice = totalPricePerNight * nights;
                 {data.photos.map((photo, i) => (
                   <div key={i}>
                     <img
-                      src={`https://creek-project.onrender.com/${photo}`}
+                      src={`/${photo}`}
                       alt={`Foto ${i}`}
                       className="lodgeImg"
                     />
@@ -183,7 +186,7 @@ const totalPrice = totalPricePerNight * nights;
               </Slider>
             ) : (
               <img
-                src={`https://creek-project.onrender.com//${data.photos?.[0]}`}
+                src={`/${data.photos?.[0]}`}
                 alt="Foto única"
                 className="lodgeImg"
               />

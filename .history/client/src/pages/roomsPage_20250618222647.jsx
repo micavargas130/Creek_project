@@ -73,6 +73,7 @@ useEffect(() => {
     }
   };
   
+
   const filteredLodges = async () => {
     const filteredLodges = await Promise.all(
       lodges.map(async (lodge) => {
@@ -84,6 +85,7 @@ useEffect(() => {
     return filteredLodges.filter((lodge) => lodge !== null);
   };
   
+
   return (
     <div className="listContainer">
       <div className="listWrapper">

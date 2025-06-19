@@ -53,6 +53,7 @@ export default function LodgeInfo() {
     setNewService('');
   };
 
+
    const handlePhotoChange = (e) => {
     setNewPhotos([...newPhotos, e.target.files[0]]);
   };
@@ -66,6 +67,7 @@ export default function LodgeInfo() {
         headers: { "Content-Type": "multipart/form-data" },
       });
   
+      // Actualiza las fotos con el campo `photos` del documento actualizado
       const updatedPhotos = res.data.updatedLodge.photos;
   
       setFormData((prevData) => ({

@@ -174,7 +174,7 @@ const totalPrice = totalPricePerNight * nights;
                 {data.photos.map((photo, i) => (
                   <div key={i}>
                     <img
-                      src={`https://creek-project.onrender.com/${photo}`}
+                      src={`https://creek-project.onrender.com//${photo}`}
                       alt={`Foto ${i}`}
                       className="lodgeImg"
                     />

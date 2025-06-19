@@ -53,6 +53,7 @@ export default function LodgeInfo() {
     setNewService('');
   };
 
+
    const handlePhotoChange = (e) => {
     setNewPhotos([...newPhotos, e.target.files[0]]);
   };
@@ -66,6 +67,7 @@ export default function LodgeInfo() {
         headers: { "Content-Type": "multipart/form-data" },
       });
   
+      // Actualiza las fotos con el campo `photos` del documento actualizado
       const updatedPhotos = res.data.updatedLodge.photos;
   
       setFormData((prevData) => ({
@@ -109,45 +111,47 @@ export default function LodgeInfo() {
         <div className="roomInfoContainer">
           <div className="lodgeContainer">
             {open && (
-               <div className="lodgeImagesScroll">
-                 {formData.photos?.map((photo, i) => (
-                   <div className="lodgeImgWrapper" key={i}>
-                     <img
-                       src={`https://creek-project.onrender.com/${photo}`}
-                       alt="Imagen de la cabaña"
-                       className="lodgeImg"
-                     />
-                   </div>
-                 ))}
-               </div>
+              <div className="slider">
+               <div className="lodgeImagesCarousel">
+                <Slider {...sliderSettings}>
+                  {formData.photos?.map((photo, i) => (
+                    <div className="lodgeImgWrapper" key={i}>
+                      <img
+                        src={`https://creek-project.onrender.com/${photo}`}
+                        alt={`Imagen ${i}`}
+                        className="lodgeImg"
+                      />
+                    </div>
+                  ))}
+                </Slider>
+              </div>
+              </div>
             )}
             <div className="lodgeWrapper">
-              <div className="lodgeName">
-                <h1 className="lodgeTitle">
-                  {editing ? (
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name || ''}
-                      onChange={handleInputChange}
-                      className="editInput"
+              <h1 className="lodgeTitle">
+                {editing ? (
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name || ''}
+                    onChange={handleInputChange}
+                    className="editInput"
+                  />
+                ) : (
+                  formData.name
+                )}
+              </h1>
+                <div className="lodgeImages">
+                {formData.photos?.map((photo, i) => (
+                  <div className="lodgeImgWrapper" key={i}>
+                    <img
+                      src={`https://creek-project.onrender.com/${photo}`}
+                      alt="Imagen de la cabaña"
+                      className="lodgeImg"
                     />
-                  ) : (
-                    formData.name
-                  )}
-                </h1>
+                  </div>
+                ))}
               </div>
-              <div className="lodgeImagesScroll">
-               {formData.photos?.map((photo, i) => (
-                 <div className="lodgeImgWrapper" key={i}>
-                   <img
-                     src={`https://creek-project.onrender.com/${photo}`}
-                     alt="Imagen de la cabaña"
-                     className="lodgeImg"
-                   />
-                 </div>
-               ))}
-             </div>
               {editing && (
                 <div className="addPhoto">
                   <input type="file" onChange={handlePhotoChange} className="editInput" />
@@ -209,6 +213,7 @@ export default function LodgeInfo() {
                   {editing ? "Cancel" : "Edit"}
                 </button>
                 </div>
+
               <div className="calendarContainer">
                 <h2>Availability Calendar</h2>
                 <Calendar lodgeId={id} readOnly={true} />

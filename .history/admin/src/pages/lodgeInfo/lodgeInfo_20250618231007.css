@@ -43,6 +43,25 @@
   margin-bottom: 10px;
 }
 
+.lodgeImages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.lodgeImgWrapper {
+  width: 30%;
+}
+
+.lodgeImg {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
 .lodgeDetails {
   display: flex;
   flex-direction: column;
@@ -176,29 +195,4 @@
 .lodgeImagesScroll::-webkit-scrollbar-thumb {
   background: #ccc;
   border-radius: 4px;
-}
-.lodgeImagesScroll {
-  display: flex;
-  flex-direction: row; /* por las dudas */
-  gap: 10px;
-  overflow-x: auto;
-  padding: 10px 0;
-  max-width: 100%;
-  scroll-snap-type: x mandatory;
-}
-
-.lodgeImgWrapper {
-  flex: 0 0 auto; /* que no se reduzca */
-  width: 300px;
-  height: 200px;
-  border-radius: 8px;
-  overflow: hidden;
-  scroll-snap-align: start;
-}
-
-.lodgeImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 8px;
 }

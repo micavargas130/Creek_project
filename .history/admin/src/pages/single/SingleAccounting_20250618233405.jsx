@@ -225,7 +225,7 @@ const Single = () => {
                       src={`https://creek-project.onrender.com/${payment.receipt[0]}`}
                       alt="Comprobante"
                       style={{ width: 80, height: 80, objectFit: "cover", cursor: "pointer" }}
-                      onClick={() => window.open(`https://creek-project.onrender.com/${payment.receipt[0]}`, "_blank")}
+                      onClick={() => window.open(`http://localhost:3000/${payment.receipt[0]}`, "_blank")}
                     />
                     <DeleteForeverIcon
                       onClick={async () => {

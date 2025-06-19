@@ -66,6 +66,7 @@ export default function LodgeInfo() {
         headers: { "Content-Type": "multipart/form-data" },
       });
   
+      // Actualiza las fotos con el campo `photos` del documento actualizado
       const updatedPhotos = res.data.updatedLodge.photos;
   
       setFormData((prevData) => ({
