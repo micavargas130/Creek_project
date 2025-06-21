@@ -49,7 +49,7 @@ const [checkingUser, setCheckingUser] = useState(false);
     const delayDebounce = setTimeout(async () => {
       if (email) {
         try {
-          const res = await axiosInstance.get(`/user/byEmail/${email}`);
+          const res = await axiosInstance.get(`http://localhost:3000/user/byEmail/${email}`);
           if (res.data) {
             setFirstName(res.data.first_name);
             setLastName(res.data.last_name);
@@ -99,20 +99,20 @@ const [checkingUser, setCheckingUser] = useState(false);
       let sendEmailFlag = true;
   
       //Verificar si el usuario ya existe
-      const existingUser = await axiosInstance.get(`/user/byEmail/${email}`);
+      const existingUser = await axiosInstance.get(`http://localhost:3000/user/byEmail/${email}`);
       if (existingUser.data) {
         userId = existingUser.data._id;
         sendEmailFlag = false; // No enviar correo si el usuario ya está registrado
       } else {
         //Si no existe, crearlo
-        const userResponse = await axiosInstance.post("/register", {
+        const userResponse = await axiosInstance.post("http://localhost:3000/register", {
           first_name, last_name, email, dni, birthday, phone, ocupation, password: temporaryPassword,
         });
         userId = userResponse.data._id;
       }
 
       //Crear la reserva
-      await axiosInstance.post("/bookings/createBooking", {
+      await axiosInstance.post("http://localhost:3000/bookings/createBooking", {
         lodge: lodgeId,
         user: userId,
         checkIn, checkOut,
@@ -202,7 +202,7 @@ const [checkingUser, setCheckingUser] = useState(false);
                       if (!email) return;
                       setCheckingUser(true);
                       try {
-                        const res = await axiosInstance.get(`/user/byEmail/${email}`);
+                        const res = await axiosInstance.get(`http://localhost:3000/user/byEmail/${email}`);
                         if (res.data) {
                           setFirstName(res.data.first_name);
                           setLastName(res.data.last_name);

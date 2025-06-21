@@ -22,10 +22,10 @@ const New = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/tents/occupiedPositions");
+        const response = await axiosInstance.get("http://localhost:3000/tents/occupiedPositions");
         const { occupiedPositions } = response.data;
 
-        const lodgesResponse = await axiosInstance.get("/lodges");
+        const lodgesResponse = await axiosInstance.get("http://localhost:3000/lodges");
         setLodgesInfo(lodgesResponse.data);
 
       } catch (error) {
@@ -62,7 +62,7 @@ const New = () => {
       const imagePath = response.data.filePath;
 
       // Ahora envías la ruta al endpoint `lodges`
-      await axiosInstance.post("/lodges/", {
+      await axiosInstance.post("http://localhost:3000/lodges/", {
         name,
         description,
         capacity,

@@ -112,7 +112,7 @@ const [checkingUser, setCheckingUser] = useState(false);
       }
 
       //Crear la reserva
-      await axiosInstance.post("/bookings/createBooking", {
+      await axiosInstance.post("http://localhost:3000/bookings/createBooking", {
         lodge: lodgeId,
         user: userId,
         checkIn, checkOut,
@@ -202,7 +202,7 @@ const [checkingUser, setCheckingUser] = useState(false);
                       if (!email) return;
                       setCheckingUser(true);
                       try {
-                        const res = await axiosInstance.get(`/user/byEmail/${email}`);
+                        const res = await axiosInstance.get(`http://localhost:3000/user/byEmail/${email}`);
                         if (res.data) {
                           setFirstName(res.data.first_name);
                           setLastName(res.data.last_name);

@@ -25,7 +25,7 @@ const New = () => {
         const response = await axiosInstance.get("/tents/occupiedPositions");
         const { occupiedPositions } = response.data;
 
-        const lodgesResponse = await axiosInstance.get("/lodges");
+        const lodgesResponse = await axiosInstance.get("http://localhost:3000/lodges");
         setLodgesInfo(lodgesResponse.data);
 
       } catch (error) {

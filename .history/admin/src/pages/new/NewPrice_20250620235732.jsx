@@ -24,7 +24,7 @@ const New = ({ inputs, title }) => {
     ev.preventDefault();
   
     try {
-      await axios.post("/employees/", {
+      await axios.post("http://localhost:/3000employees/", {
         first_name,
         last_name,
         birthday,
