@@ -11,10 +11,10 @@ export const createPrice = async (req, res, next) => {
   }
 };
 
-export const getPrice = async (req, res, next) => {
+export const getBooking = async (req, res, next) => {
   try {
-    const price = await Price.findById(req.params.id)
-    res.status(200).json(price);
+    const booking = await Booking.findById(req.params.id).populate('user', 'first_name last_name').populate('status').populate('lodge');
+    res.status(200).json(booking);
   } catch (err) {
     next(err);
   }

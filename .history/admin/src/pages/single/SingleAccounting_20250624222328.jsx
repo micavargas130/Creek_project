@@ -54,9 +54,9 @@ const Single = () => {
          setPaymentHistory(historyResponse.data);
          console.log("history", historyResponse.data)
 
-         const pricesResponse = await axiosInstance.get(`/prices/${accountingData.price}`);
-         console.log("prices", pricesResponse)
-         setPrices(pricesResponse);
+         const pricesResponse = await axiosInstance.get(`/prices/${bookingData.prices}`);
+         console.log("prices", price)
+         setPrices(priceResponse);
 
 
         // Verifica que entity.lodge esté definido antes de intentar acceder a sus propiedades

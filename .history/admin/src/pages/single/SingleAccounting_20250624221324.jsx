@@ -16,7 +16,6 @@ const Single = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [paymentHistory, setPaymentHistory] = useState([]);
-  const [prices, setPrices] = useState([]);
 
   // Obtengo ID del ingreso de la URL
   const { accountingId } = useParams();
@@ -53,10 +52,6 @@ const Single = () => {
          const historyResponse = await axiosInstance.get(`/accounting/history/lodge/${bookingData._id}`);
          setPaymentHistory(historyResponse.data);
          console.log("history", historyResponse.data)
-
-         const pricesResponse = await axiosInstance.get(`/prices/${accountingData.price}`);
-         console.log("prices", pricesResponse)
-         setPrices(pricesResponse);
 
 
         // Verifica que entity.lodge esté definido antes de intentar acceder a sus propiedades

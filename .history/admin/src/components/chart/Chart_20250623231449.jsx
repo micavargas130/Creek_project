@@ -21,7 +21,7 @@ const Chart = ({ title }) => {
 
         const enrichedNotifications = await Promise.all(
           response.data.map(async (notification) => {
-            const userResponse = await axiosInstance.get(`/user/${notification.client._id}`);
+            const userResponse = await axiosInstance.get(`/user/${notification.client}`);
             const lodgeResponse = await axiosInstance.get(`/lodges/${notification.cabain}`);
 
             return {

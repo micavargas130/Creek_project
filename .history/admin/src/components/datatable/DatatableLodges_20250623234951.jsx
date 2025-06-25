@@ -71,6 +71,9 @@ const Datatable = (props) => {
     
         // Función para liberar la cabaña (de ocupada o mantenimiento a desocupada)
         const handleLiberar = async () => {
+        const isMantained = params.row.latestStatus === "mantenimiento";
+        const isOccupied = params.row.latestStatus === "ocupado";
+        const isPaid = params.row.paymentInfo?.paymentStatus === "pagada";
       
         if (isOccupied && !isPaid) return; // Bloquear si está ocupada y no pagada
       
@@ -95,6 +98,7 @@ const Datatable = (props) => {
           console.error("Error al cambiar el estado de la cabaña:", error);
         }
       };
+
   
         // Función para poner en mantenimiento
         const handleMantenimiento = () => {
@@ -105,7 +109,7 @@ const Datatable = (props) => {
         return (
           <div className="cellAction">
             {/* Si la cabaña está ocupada o en mantenimiento, muestra el botón "Liberar" */}
-            {isOccupied || isMantained ? (
+            {isOccupied ? (
               <Tooltip title={isOccupied && !isPaid ? "No se puede liberar: pago pendiente" : ""}>
                 <div
                   className="stateButton"

@@ -95,6 +95,7 @@ const Datatable = (props) => {
           console.error("Error al cambiar el estado de la cabaña:", error);
         }
       };
+
   
         // Función para poner en mantenimiento
         const handleMantenimiento = () => {

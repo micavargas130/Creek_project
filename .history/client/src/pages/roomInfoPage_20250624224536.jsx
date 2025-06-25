@@ -292,6 +292,7 @@ const totalPrice = totalPricePerNight * nights;
               <button onClick={bookThisLodge} className="bookNowButton" disabled={isLoading} > 
                 {isLoading ? "Reservando..." : "Reserva ahora!"}
               </button>
+
             </div>
           </div>
         </div>

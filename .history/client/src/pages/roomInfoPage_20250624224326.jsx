@@ -66,44 +66,39 @@ export default function RoomInfoPage() {
     fetchPrice();
   }, []);
 
- async function bookThisLodge() {
-  if (user) {
-    try {
-      setIsLoading(true); // 👉 empieza loading
+  async function bookThisLodge() {
+    if (user) {
+      try {
 
-      const sendEmailFlag = true;
-      await axios.post('/bookings/createBooking', {
-        lodge: id,
-        checkIn: format(localDates[0].startDate.getTime(), 'yyyy-MM-dd'),
-        checkOut: format(localDates[0].endDate.getTime(), 'yyyy-MM-dd'),
-        user: user._id,
-        numberOfAdults: options.adult,
-        numberOfChildren: options.children,
-        totalAmount: totalPrice,
-        sendEmail: sendEmailFlag,
-        origin: "cliente",
-      });
+        const sendEmailFlag = true;
+        await axios.post('/bookings/createBooking', {
+          lodge: id,
+          checkIn: format(localDates[0].startDate.getTime(), 'yyyy-MM-dd'),
+          checkOut: format(localDates[0].endDate.getTime(), 'yyyy-MM-dd'),
+          user: user._id,
+          numberOfAdults: options.adult,
+          numberOfChildren: options.children,
+          totalAmount: totalPrice,
+          sendEmail:  sendEmailFlag,
+          origin: "cliente", 
+        });
 
-      await axios.post(`/notifications/`, {
-        type: "Nueva reserva",
-        cabain: id,
-        client: user._id,
-        date: Date.now()
-      });
+        await axios.post(`/notifications/`, {
+          type: "Nueva reserva",
+          cabain: id,
+          client: user._id,
+          date: Date.now()
+        });
 
-      alert('Cabaña reservada exitosamente');
-      navigate("/account/bookings");
-    } catch (error) {
-      console.error('Axios error:', error);
-      alert('Error al reservar. Intente nuevamente.');
-    } finally {
-      setIsLoading(false); // 👉 termina loading
+        alert('Cabaña reservada exitosamente');
+        navigate("/account/bookings");
+      } catch (error) {
+        console.error('Axios error:', error);
+      }
+    } else {
+      navigate('/login');
     }
-  } else {
-    navigate('/login');
   }
-}
-
 
   const formattedStartDate = localDates.length > 0 ? format(localDates[0].startDate, "dd/MM/yyyy") : "";
   const formattedEndDate = localDates.length > 0 ? format(localDates[0].endDate, "dd/MM/yyyy") : "";
@@ -289,9 +284,7 @@ const totalPrice = totalPricePerNight * nights;
                  <span><strong>${totalPrice}</strong></span>
                </div>
              </div>
-              <button onClick={bookThisLodge} className="bookNowButton" disabled={isLoading} > 
-                {isLoading ? "Reservando..." : "Reserva ahora!"}
-              </button>
+              <button onClick={bookThisLodge} className="bookNowButton">Reserva ahora!</button>
             </div>
           </div>
         </div>

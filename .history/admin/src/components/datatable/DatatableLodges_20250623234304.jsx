@@ -71,30 +71,18 @@ const Datatable = (props) => {
     
         // Función para liberar la cabaña (de ocupada o mantenimiento a desocupada)
         const handleLiberar = async () => {
-      
-        if (isOccupied && !isPaid) return; // Bloquear si está ocupada y no pagada
-      
-        try {
-          if (isMantained) {
-            // Si está en mantenimiento, cambia a desocupado sin comentario
+          if (isOccupied && !isPaid) return; // Solo bloquea si está ocupada y no pagada
+          try {
             await axiosInstance.post(`lodge_x_status/`, {
               lodge: params.row._id,
-              status: "668f301d70711974d54762ce", // Estado "desocupado"
-            });
-          } else if (isOccupied) {
-            // Si está ocupada y pagada, cambia a mantenimiento con comentario
-            await axiosInstance.post(`lodge_x_status/`, {
-              lodge: params.row._id,
-              status: "668f308770711974d54762d0", // Estado "mantenimiento"
+              status: "668f308770711974d54762d0", 
               comment: "Limpiar cabaña",
             });
+            globalObserver.notify("changesLodges");
+          } catch (error) {
+            console.error("Error liberando la cabaña:", error);
           }
-      
-          globalObserver.notify("changesLodges");
-        } catch (error) {
-          console.error("Error al cambiar el estado de la cabaña:", error);
-        }
-      };
+        };
   
         // Función para poner en mantenimiento
         const handleMantenimiento = () => {
@@ -105,7 +93,7 @@ const Datatable = (props) => {
         return (
           <div className="cellAction">
             {/* Si la cabaña está ocupada o en mantenimiento, muestra el botón "Liberar" */}
-            {isOccupied || isMantained ? (
+            {isOccupied ? (
               <Tooltip title={isOccupied && !isPaid ? "No se puede liberar: pago pendiente" : ""}>
                 <div
                   className="stateButton"
