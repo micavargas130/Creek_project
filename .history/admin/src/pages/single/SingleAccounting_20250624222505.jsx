@@ -54,7 +54,7 @@ const Single = () => {
          setPaymentHistory(historyResponse.data);
          console.log("history", historyResponse.data)
 
-         const pricesResponse = await axiosInstance.get(`/prices/${accountingData.price}`);
+         const pricesResponse = await axiosInstance.get(`/prices/${bookingData.price}`);
          console.log("prices", pricesResponse)
          setPrices(pricesResponse);
 

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import axiosInstance from "../../axios/axiosInstance";
 
 const Calendar = ({ lodgeId, onDateSelect, readOnly = false }) => {
   const [occupiedDates, setOccupiedDates] = useState([]);

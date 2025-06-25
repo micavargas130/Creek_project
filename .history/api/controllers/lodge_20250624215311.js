@@ -167,7 +167,7 @@ export const getLodgeAvailability = async (req, res) => {
       occupiedDates = occupiedDates.concat(dates);
     });
 
-        console.log("ocupadas", occupiedDates)
+        console.log("ocupadas")
 
     res.json({ occupiedDates });
   } catch (error) {
