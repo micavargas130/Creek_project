@@ -1,0 +1,273 @@
+.single {
+  display: flex;
+  width: 100%;
+
+   .sectionTitle {
+         font-size: 22px;
+         font-weight: 600;
+         margin-bottom: 20px;
+         color: #333;
+         border-bottom: 2px solid #ececec;
+         padding-bottom: 8px;
+       }
+  .singleContainer {
+    flex: 6;
+
+    .top {
+      padding: 20px;
+      display: flex;
+      gap: 20px;
+
+      .right {
+        // Center the image and add some padding
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+  
+        .employeePhoto {
+          // Set the maximum width and height for the image
+          max-width: 500px;
+          max-height: 500px;
+  
+          // Apply border-radius to create a circular frame
+          border-radius: 40%;
+  
+          // Ensure the image maintains its aspect ratio
+          object-fit: cover;
+        }
+      }
+  
+
+      .left {
+        flex: 1;
+        -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+        box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+        padding: 20px;
+        position: relative;
+
+        .editButton {
+          position: absolute;
+          top: 0;
+          right: 0;
+          padding: 5px;
+          font-size: 12px;
+          color: #7451f8;
+          background-color: #7551f818;
+          cursor: pointer;
+          border-radius: 0px 0px 0px 5px;
+        }
+
+        .saveButton {
+          position: absolute;
+          top: 30px;
+          right: 0;
+          padding: 5px;
+          font-size: 12px;
+          color: #000000;
+          background-color: #0aa84988;
+          cursor: pointer;
+          border-radius: 5px 0px 0px 5px;
+        }
+
+        h1{
+          height: 9vh;
+          position:relative;
+          display: inline;
+          justify-self: center;
+          
+        }
+
+        .item {
+          display: flex;
+          gap: 20px;
+
+          .itemImg {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+          .contactItem{
+            height: 30vh;
+            position:relative;
+            display: inline;
+            justify-self: center;
+          }
+
+          .details {
+            .itemTitle {
+              margin-bottom: 10px;
+              color: #555;
+            }
+
+            .detailItem {
+              margin-bottom: 10px;
+              font-size: 14px;
+
+              .itemKey {
+                font-weight: bold;
+                color: gray;
+                margin-right: 5px;
+              }
+
+              .itemValue {
+                font-weight: 300;
+              }
+
+             
+            }
+          }
+        }
+      }
+
+      .right {
+        flex: 2;
+      }
+    }
+
+    .bottom {
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      padding: 20px;
+      margin: 10px 20px;
+    }
+    h1{
+      height: 6vh;
+      position:relative;
+      gap: 30 px;
+      display: block;
+      
+      
+      
+    }
+
+    .title {
+      font-size: 20px;
+      color: lightgray;
+     
+    }
+    .detailItem {
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+  }
+
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #333;
+  }
+  
+  .tableContainer {
+    overflow-x: auto; /* Permite scroll horizontal si la tabla es muy grande */
+    margin: 1rem auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+  }
+  
+  .paymentHistoryTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+  }
+  
+  .paymentHistoryTable thead {
+    background-color: #f4f4f4;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .paymentHistoryTable th {
+    padding: 0.75rem;
+    text-align: left;
+    color: #555;
+    font-weight: bold;
+  }
+  
+  .paymentHistoryTable tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+  }
+  
+  .paymentHistoryTable tbody tr:nth-child(even) {
+    background-color: #fff;
+  }
+  
+  .paymentHistoryTable td {
+    padding: 0.75rem;
+    text-align: left;
+    color: #333;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .paymentHistoryTable tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .noPaymentsMessage {
+    text-align: center;
+    color: #888;
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+  
+}
+
+.reservationInfoSection {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 30px;
+  max-width: 1000px;
+
+  .sectionTitle {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
+    border-bottom: 2px solid #ececec;
+    padding-bottom: 8px;
+  }
+
+  .infoRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+
+    .label {
+      font-weight: 500;
+      color: #555;
+      font-size: 15px;
+    }
+
+    .value {
+      color: #111;
+      font-size: 15px;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .totalAmount {
+    margin-top: 20px;
+    padding: 12px;
+    background-color: #f9f9f9;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+
+    .label {
+      font-weight: 600;
+      color: #222;
+    }
+
+    .value {
+      font-weight: bold;
+      color: #00796b;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 Arguments: 
-  C:\nvm4w\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js install
+  C:\nvm4w\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add --dev cross-env
 
 PATH: 
   C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Git\cmd;%NVM_HOME%;%NVM_SYMLINK%;C:\Users\Usuario\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Users\Usuario\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Usuario\AppData\Local\Yarn\bin;C:\Users\Usuario\AppData\Roaming\npm;C:\Program Files\heroku\bin;C:\Users\Usuario\AppData\Local\nvm;C:\nvm4w\nodejs
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@ant-design/icons-svg/-/icons-svg-4.4.2.tgz: ESOCKETTIMEDOUT
+  Error: https://registry.yarnpkg.com/date-fns/-/date-fns-2.30.0.tgz: ESOCKETTIMEDOUT
       at ClientRequest.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141517:19)
       at Object.onceWrapper (node:events:627:28)
       at ClientRequest.emit (node:events:513:28)
@@ -33,15 +33,15 @@ npm manifest:
     "main": "index.js",
     "type": "module",
     "scripts": {
-      "start": "nodemon index.js",
-      "test": "npm-run-all --serial test:*",
-      "test:users": "node --test tests/Users.test.mjs",
-      "test:accounting": "node --test tests/Accounting.test.mjs",
-      "test:auth": "node --test tests/Auth.test.mjs",
-      "test:employees": "node --test tests/Employees.test.mjs",
-      "test:bookings": "node --test tests/Bookings.test.mjs",
-      "test:lodges": "node --test tests/Lodges.test.mjs",
-      "test:tents": "node --test tests/Tents.test.mjs"
+    "start": "nodemon index.js",
+    "test": "npm-run-all --serial test:*",
+    "test:users": "NODE_ENV=test node --test tests/Users.test.mjs",
+    "test:accounting": "NODE_ENV=test node --test tests/Accounting.test.mjs",
+    "test:auth": "NODE_ENV=test node --test tests/Auth.test.mjs",
+    "test:employees": "NODE_ENV=test node --test tests/Employees.test.mjs",
+    "test:bookings": "NODE_ENV=test node --test tests/Bookings.test.mjs",
+    "test:lodges": "NODE_ENV=test node --test tests/Lodges.test.mjs",
+    "test:tents": "NODE_ENV=test node --test tests/Tents.test.mjs"
     },
     "keywords": [],
     "author": "",
