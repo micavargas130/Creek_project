@@ -87,7 +87,7 @@ app.use(cookieParser());
 // Configuración de multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-  cb(null, path.join(__dirname, '../admin/public/uploads'));
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -96,6 +96,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use('/uploads', express.static(path.join(__dirname, '../admin/public/uploads')));
+
 
 // Ruta para manejar la carga de imágenes
 app.post("/lodge/upload", upload.single("photos"), (req, res) => {
