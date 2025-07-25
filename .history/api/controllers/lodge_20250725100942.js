@@ -199,7 +199,7 @@ export const getLodgeAvailability = async (req, res) => {
 };
 
 
-//Multer
+// ===== Multer =====
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "/data/uploads"); 
@@ -221,6 +221,7 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
+
 export const uploadPhotos = async (req, res) => {
   upload.array("photos", 10)(req, res, async (err) => {
     if (err) {
@@ -237,7 +238,7 @@ export const uploadPhotos = async (req, res) => {
 
       const lodgeId = req.params.id;
 
-      // Path público
+      // 👇 Guardamos el path PÚBLICO (el que vas a consumir desde el front)
       const filePaths = req.files.map((file) => `uploads/${file.filename}`);
 
       const updatedLodge = await Lodges.findByIdAndUpdate(
@@ -258,18 +259,20 @@ export const uploadPhotos = async (req, res) => {
 };
 
 export const deletePhoto = async (req, res) => {
-  const { photo } = req.body;  // "uploads/xxxx.png"
+  const { photo } = req.body; 
   const { id } = req.params;
 
   try {
     const lodge = await Lodges.findById(id);
     if (!lodge) return res.status(404).json({ message: "Lodge not found" });
 
+    // Quitamos la referencia en la BD
     lodge.photos = lodge.photos.filter((p) => p !== photo);
     await lodge.save();
 
-    const filename = path.basename(photo);
-    const diskPath = path.join("/data/uploads", filename);
+    // Borrar el archivo físico
+    const filename = path.basename(photo); // "1734659-foo.png"
+    const diskPath = path.join(process.cwd(), "api/public/uploads", filename);
 
     if (fs.existsSync(diskPath)) {
       fs.unlinkSync(diskPath);
