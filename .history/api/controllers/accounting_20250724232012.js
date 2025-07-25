@@ -271,6 +271,7 @@ export const addPartialPayment = async (req, res, next) => {
 // Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    // 👉 misma carpeta que exponés con express.static
     cb(null, path.join(process.cwd(), "api/public/uploads"));
   },
   filename: function (req, file, cb) {
@@ -294,12 +295,13 @@ export const uploadReceipt = async (req, res, next) => {
         return res.status(400).json({ message: "No se subió ninguna imagen." });
       }
 
-      const paymentId = req.params.id; 
+      const paymentId = req.params.id; // asegurate que tu ruta use :id
       const payment = await PaymentHistory.findById(paymentId);
       if (!payment) {
         return res.status(404).json({ message: "Pago no encontrado" });
       }
 
+      // 👉 guardá el path PÚBLICO (coincide con el express.static)
       const filePaths = req.files.map((file) => `uploads/${file.filename}`);
       payment.receipt = [...(payment.receipt || []), ...filePaths];
       await payment.save();
@@ -317,7 +319,7 @@ export const uploadReceipt = async (req, res, next) => {
 
 export const deleteReceipt = async (req, res, next) => {
   try {
-    const { paymentId } = req.params; 
+    const { paymentId } = req.params; // o usa req.params.id y sé consistente
     const { receiptPath } = req.body; 
 
     const payment = await PaymentHistory.findById(paymentId);
@@ -346,116 +348,3 @@ export const deleteReceipt = async (req, res, next) => {
     return next(error);
   }
 };
-export const returnPayment = async (req, res, next) => {
-  try { 
-    const amount = req.body.amount;
-    const accounting = await Accounting.findById(req.params.id);
-    console.log("amount",amount);
-
-    if (!accounting) {
-            return res.status(404).json({ message: 'Registro de contabilidad no encontrado' });     
-    }
-
-    const status = await PaymentStatus.findOne({ status: req.body.status });
-
-   //Crear un nuevo registro en PaymentHistory
-    const paymentHistory = new PaymentHistory({
-        accounting: accounting._id,
-        amount: 0 - req.body.amount,
-        status: status._id, 
-    });
-
-    console.log("payment", paymentHistory);
-    await paymentHistory.save();
-
-    //Actualizar el registro de Accounting
-    accounting.amount = amount;
-    accounting.status = status._id; // Cambia el estado de accounting
-    await accounting.save(); 
-  
-    res.status(200).json({ message: "Reenbolso registrado", paymentHistory, accounting });
-  } catch (error) {
-        console.error("Error al registrar el pago:", error);
-        res.status(500).json({ message: 'Error al registrar el pago', error });
-    }
-
-}; 
-export const paymentHistory = async (req, res, next) => {
-    try {
-        const { amount } = req.body;
-        const accounting = await Accounting.findById(req.params.accountingId);
-
-        if (!accounting) {
-            return res.status(404).json({ message: 'Registro de contabilidad no encontrado' });     
-        }
-
-        // Calcular el nuevo saldo restante
-        const newRemainingAmount = accounting.remainingAmount - amount;
-        let newStatus;
-        const depositAmount = accounting.totalAmount * 0.3;
-
-        if (newRemainingAmount <= 0) {
-          newStatus = "pagado";
-        } else if (amount === depositAmount) {
-          newStatus = "seña";
-        } 
-        else {
-          newStatus = "parcial";
-        }
-        const status = await PaymentStatus.findOne({ status: newStatus });
-
-        //Crear un nuevo registro en PaymentHistory
-        const paymentHistory = new PaymentHistory({
-            accounting: accounting._id,
-            amount,
-            status: status._id, 
-        });
-
-        await paymentHistory.save();
-
-        //Actualizar el registro de Accounting
-        accounting.remainingAmount = newRemainingAmount <= 0 ? 0 : newRemainingAmount;
-        const oldAmount = accounting.amount;
-        accounting.amount = oldAmount + amount;
-        accounting.status = status._id; // Cambia el estado de accounting
-        await accounting.save(); 
-  
-        res.status(200).json({ message: "Pago registrado con éxito", paymentHistory, accounting });
-    } catch (error) {
-        console.error("Error al registrar el pago:", error);
-        res.status(500).json({ message: 'Error al registrar el pago', error });
-    }
-};
-
-export const getPaymentHistoryByEntity = async (req, res, next) => {
-  try {
-    const { bookingId, type } = req.params;
-
-    if (!["lodge", "tent"].includes(type)) {
-      return res.status(400).json({ message: "Tipo de entidad no válido." });
-    }
-
-    const query = {};
-    query[type] = bookingId;
-
-    const accountingRecords = await Accounting.find(query);
-
-    if (accountingRecords.length === 0) {
-      return res.status(404).json({ message: "No se encontraron registros contables para esta reserva." });
-    }
-
-    const accountingIds = accountingRecords.map((a) => a._id);
-
-    const paymentHistory = await PaymentHistory.find({
-      accounting: { $in: accountingIds },
-    })
-      .populate("status")
-      .sort({ date: 1 });
-
-    res.status(200).json(paymentHistory);
-  } catch (err) {
-    next(err);
-  }
-};
-
-  

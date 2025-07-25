@@ -271,7 +271,7 @@ export const addPartialPayment = async (req, res, next) => {
 // Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(process.cwd(), "api/public/uploads"));
+    cb(null, path.join(__dirname, 'public', 'api/public/uploads'));
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
@@ -304,21 +304,23 @@ export const uploadReceipt = async (req, res, next) => {
       payment.receipt = [...(payment.receipt || []), ...filePaths];
       await payment.save();
 
-      return res.status(200).json({
+      res.status(200).json({
         message: "Comprobante(s) subido(s) exitosamente.",
         payment,
       });
     } catch (error) {
       console.error("Error al subir comprobante:", error);
-      return res.status(500).json({ error: "Error interno del servidor" });
+      res.status(500).json({ error: "Error interno del servidor" });
     }
   });
 };
 
 export const deleteReceipt = async (req, res, next) => {
   try {
-    const { paymentId } = req.params; 
+    const { paymentId } = req.params;
     const { receiptPath } = req.body; 
+    // => mandá desde el front el path exacto que querés borrar: "uploads/123-foo.png"
+    // si no querés mandarlo, podés seguir usando payment.receipt[0] como antes.
 
     const payment = await PaymentHistory.findById(paymentId);
     if (!payment) return res.status(404).json("Pago no encontrado");
@@ -326,16 +328,18 @@ export const deleteReceipt = async (req, res, next) => {
     const toDelete = receiptPath || payment.receipt?.[0];
     if (!toDelete) return res.status(404).json("No hay comprobante que eliminar");
 
-    const diskPath = path.join(
-      process.cwd(),
-      "api/public/uploads",
-      path.basename(toDelete)
-    );
+    // Convertir el path público a path físico
+    const diskPath = path.join(api/public/uploads, path.basename(toDelete));
     console.log("Intentando borrar archivo:", diskPath);
 
-    if (fs.existsSync(diskPath)) {
-      fs.unlinkSync(diskPath);
+    if (!fs.existsSync(diskPath)) {
+      // igual limpiamos la BD si ya no existe en disco
+      payment.receipt = payment.receipt.filter((p) => p !== toDelete);
+      await payment.save();
+      return res.status(404).json("El archivo no existe en el sistema, se limpió la BD");
     }
+
+    fs.unlinkSync(diskPath);
 
     payment.receipt = payment.receipt.filter((p) => p !== toDelete);
     await payment.save();

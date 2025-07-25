@@ -269,6 +269,8 @@ export const addPartialPayment = async (req, res, next) => {
 };
 
 // Configuración de almacenamiento
+
+// Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(process.cwd(), "api/public/uploads"));

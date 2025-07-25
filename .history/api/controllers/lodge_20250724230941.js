@@ -198,12 +198,10 @@ export const getLodgeAvailability = async (req, res) => {
   }
 };
 
-
-// ===== Multer =====
+// Configuración de almacenamiento para Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Carpeta física donde se guardan las imágenes
-    const uploadPath = path.join(process.cwd(), "api/public/uploads");
+    const uploadPath = path.join(process.cwd(), "api/public/uploads"); // Carpeta donde se guardan las imágenes
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
@@ -212,10 +210,14 @@ const storage = multer.diskStorage({
   },
 });
 
+// Filtro de tipo de archivo
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
-  if (allowedTypes.includes(file.mimetype)) cb(null, true);
-  else cb(new Error("Tipo de archivo no permitido. Solo se permiten imágenes."));
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Tipo de archivo no permitido. Solo se permiten imágenes."));
+  }
 };
 
 const upload = multer({
@@ -224,14 +226,34 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-// ===== Controllers =====
-export const uploadPhotos = async (req, res) => {
+export const deletePhoto = async (req, res) => {
+  const { photo } = req.body;
+  const { id } = req.params;
+
+  try {
+    const lodge = await Lodges.findById(id);
+    if (!lodge) return res.status(404).json({ message: "Lodge not found" });
+
+    lodge.photos = lodge.photos.filter(p => p !== photo);
+    await lodge.save();
+
+    // Borrar archivo físico
+    const filePath = path.join(api/public/uploads", path.basename(photo));
+    if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+
+    res.status(200).json({ message: "Foto eliminada" });
+  } catch (err) {
+    res.status(500).json({ error: "Error deleting photo" });
+  }
+};
+
+export const uploadPhotos = async (req, res, next) => {
   upload.array("photos", 10)(req, res, async (err) => {
     if (err) {
       if (err instanceof multer.MulterError) {
-        return res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message }); 
       }
-      return res.status(500).json({ error: err.message });
+      return res.status(500).json({ error: err.message }); 
     }
 
     try {
@@ -239,51 +261,23 @@ export const uploadPhotos = async (req, res) => {
         return res.status(400).json({ message: "No se subió ninguna imagen." });
       }
 
-      const lodgeId = req.params.id;
+      const lodgeId = req.params.id; 
+      const filePaths = req.files.map((file) => `api/public/uploads/${file.filename}`); //rutas de las imágenes
 
-      // 👇 Guardamos el path PÚBLICO (el que vas a consumir desde el front)
-      const filePaths = req.files.map((file) => `uploads/${file.filename}`);
-
+      //actualizar el modelo con las nuevas imágenes
       const updatedLodge = await Lodges.findByIdAndUpdate(
         lodgeId,
         { $push: { photos: { $each: filePaths } } },
         { new: true }
       );
 
-      return res.status(200).json({
+      res.status(200).json({
         message: "Imágenes cargadas exitosamente.",
         updatedLodge,
       });
     } catch (error) {
       console.error("Error al subir imágenes:", error);
-      return res.status(500).json({ error: "Error interno del servidor" });
+      res.status(500).json({ error: "Error interno del servidor" });
     }
   });
-};
-
-export const deletePhoto = async (req, res) => {
-  const { photo } = req.body; // ejemplo: "uploads/1734659-foo.png"
-  const { id } = req.params;
-
-  try {
-    const lodge = await Lodges.findById(id);
-    if (!lodge) return res.status(404).json({ message: "Lodge not found" });
-
-    // Quitamos la referencia en la BD
-    lodge.photos = lodge.photos.filter((p) => p !== photo);
-    await lodge.save();
-
-    // Borrar el archivo físico
-    const filename = path.basename(photo); // "1734659-foo.png"
-    const diskPath = path.join(process.cwd(), "api/public/uploads", filename);
-
-    if (fs.existsSync(diskPath)) {
-      fs.unlinkSync(diskPath);
-    }
-
-    return res.status(200).json({ message: "Foto eliminada" });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Error deleting photo" });
-  }
 };

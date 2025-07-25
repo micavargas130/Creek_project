@@ -98,7 +98,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 console.log("Sirviendo /uploads desde:", UPLOADS_DIR);
-app.use('/uploads', express.static(path.join(process.cwd(), 'api/public/uploads')));
+app.use("/uploads", express.static(UPLOADS_DIR));
 
 //ruta para manejar la carga de imágenes
 app.post("/lodge/upload", upload.single("photos"), (req, res, next) => {

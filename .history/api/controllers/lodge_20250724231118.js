@@ -198,6 +198,10 @@ export const getLodgeAvailability = async (req, res) => {
   }
 };
 
+import path from "path";
+import fs from "fs";
+import multer from "multer";
+import Lodges from "../models/Lodges.js"; // ajustá el path a tu modelo
 
 // ===== Multer =====
 const storage = multer.diskStorage({
