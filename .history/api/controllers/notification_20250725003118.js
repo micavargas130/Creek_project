@@ -140,7 +140,7 @@ export const deleteOldNotifications = async () => {
         const fullName = `${booking.user.first_name} ${booking.user.last_name}`;
         const lodgeName = booking.lodge.name;
 
-        console.log("booking", booking);
+        console.log("booking", booking)
   
         const notification = new Notifications({
           type: "Checkout",
