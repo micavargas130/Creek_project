@@ -17,19 +17,34 @@ import lodge_x_statusRoute from "./api/routes/lodge_x_status.js";
 import lodgeRoute from "./api/routes/lodges.js";
 import bookingsRoute from "./api/routes/bookings.js";
 import accountingRoute from "./api/routes/accounting.js";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 import http from "http";
+import fs from "fs";
 import "./api/utils/cronJobs.js";
-
 
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-//Coneccion a mongo
+// Obtener el directorio actual
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// === 🔧 1) Un solo path para todo ===
+const UPLOADS_DIR = path.resolve(__dirname, "api/public/uploads");
+
+// Crear la carpeta si no existe (localmente ayuda mucho)
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  console.log("📁 Creada carpeta uploads en:", UPLOADS_DIR);
+}
+
+//conexion a mongo
 const connect = async () => {
-  const mongoURI = process.env.NODE_ENV === "test" ? process.env.MONGO_TEST : process.env.MONGO;
-  
+  console.log("NODE_ENV:", process.env.NODE_ENV);
+  console.log("MONGO_TEST:", process.env.MONGO_TEST);
+  const mongoURI =
+    process.env.NODE_ENV === "test" ? process.env.MONGO_TEST : process.env.MONGO;
   console.log(`🌍 Conectando a: ${mongoURI}`);
 
   try {
@@ -44,68 +59,67 @@ const connect = async () => {
   }
 };
 mongoose.connection.on("disconnected", () => {
-  const mongoURI = process.env.NODE_ENV === "test" ? process.env.MONGO_TEST : process.env.MONGO;
+  const mongoURI =
+    process.env.NODE_ENV === "test" ? process.env.MONGO_TEST : process.env.MONGO;
   console.log(`🌍 Conectando a: ${mongoURI}`);
   console.log("MongoDB disconnected!");
 });
 
 mongoose.connection.on("connected", () => {
-
   console.log("MongoDB connected!");
 });
 
-// Obtener el directorio actual
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-
 //middleware
 const allowedOrigins = [
-  'http://localhost:3001',
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'https://creek-project.vercel.app',
-  'https://creek-project-ruby.vercel.app',
-  'https://creek-project.onrender.com',
-  'https://web-camping-arroyito-micavargas130s-projects.vercel.app'
-  'https://web-camping-arroyito-git-production-micavargas130s-projects.vercel.app'
+  "http://localhost:3001",
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://creek-project.vercel.app",
+  "https://creek-project-ruby.vercel.app",
+  "https://creek-project.onrender.com",
+  "https://web-camping-arroyito-micavargas130s-projects.vercel.app",
+  "https://web-camping-arroyito-git-production-micavargas130s-projects.vercel.app",
+  "https://creek-project-micavargas130-micavargas130s-projects.vercel.app",
 ];
 
-// Usar CORS como middleware global
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
-// Configuración de multer
+//multer para las imagenes
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    cb(null, UPLOADS_DIR);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+console.log("Sirviendo /uploads desde:", UPLOADS_DIR);
+app.use("/uploads", express.static(UPLOADS_DIR));
 
-
-// Ruta para manejar la carga de imágenes
-app.post("/lodge/upload", upload.single("photos"), (req, res) => {
+//ruta para manejar la carga de imágenes
+app.post("/lodge/upload", upload.single("photos"), (req, res, next) => {
   try {
-    res.status(200).json({ filePath: `uploads/${req.file.filename}` });
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+    return res.status(200).json({ filePath: `uploads/${req.file.filename}` });
   } catch (error) {
-    res.status(500).json({ error: "Error al cargar la imagen" });
+    return next(error);
   }
 });
 
-
-// Rutas
+//rutas
 app.use("/notifications", notificationsRoute);
 app.use("/employees", employeesRoute);
 app.use("/bookings", bookingsRoute);
@@ -118,30 +132,31 @@ app.use("/lodge_x_status", lodge_x_statusRoute);
 app.use("/tents", tentsRoute);
 app.use("/accounting", accountingRoute);
 app.use("/graphs", graphsRoute);
-app.use('/uploads', express.static('uploads'));
 
-// Middleware de manejo de errores
+//mddleware de manejo de errores
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";
+  if (res.headersSent) return next(err); 
   return res.status(errorStatus).json({
     success: false,
     status: errorStatus,
     message: errorMessage,
-    stack: err.stack
+    stack: err.stack,
   });
 });
 
-// Conectar y escuchar en el puerto
-const PORT = process.env.PORT || (process.env.NODE_ENV === 'test' ? 0 : 3000);
-if (process.env.NODE_ENV === 'test') {
-    console.log(`Connected to backend on port ${PORT}!`);
-  }
-if (process.env.NODE_ENV !== 'test') {
-app.listen(PORT, () => {
-  connect();
-  console.log(`Connected to backend on port ${PORT}!`);
-});
-}
+//conectar y escuchar en el puerto
+const PORT = process.env.PORT || 3000;
+const startServer = async () => {
+  await connect();
+  app.listen(PORT, () => {
+    console.log(
+      `✅ Backend escuchando en el puerto ${PORT} (modo ${process.env.NODE_ENV})`
+    );
+  });
+};
 
-export { app, connect};
+startServer();
+
+export { app, connect };

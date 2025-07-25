@@ -271,6 +271,7 @@ export const addPartialPayment = async (req, res, next) => {
 // Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    // 👉 misma carpeta que exponés con express.static
     cb(null, path.join(process.cwd(), "api/public/uploads"));
   },
   filename: function (req, file, cb) {
@@ -294,12 +295,13 @@ export const uploadReceipt = async (req, res, next) => {
         return res.status(400).json({ message: "No se subió ninguna imagen." });
       }
 
-      const paymentId = req.params.id; 
+      const paymentId = req.params.id; // asegurate que tu ruta use :id
       const payment = await PaymentHistory.findById(paymentId);
       if (!payment) {
         return res.status(404).json({ message: "Pago no encontrado" });
       }
 
+      // 👉 guardá el path PÚBLICO (coincide con el express.static)
       const filePaths = req.files.map((file) => `uploads/${file.filename}`);
       payment.receipt = [...(payment.receipt || []), ...filePaths];
       await payment.save();

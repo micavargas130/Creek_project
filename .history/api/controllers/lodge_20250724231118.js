@@ -1,5 +1,6 @@
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 import Lodges from '../models/Lodges.js';
 import Accounting from '../models/Accounting.js';
 import Status from '../models/Status.js';
@@ -9,12 +10,11 @@ import LodgeXStatus from "../models/Lodge_X_Status.js";
 
 export const createLodge = async (req, res, next) => {
   try {
-
     const status = await Status.findOne({ status: "desocupada" });
     const newLodge = new Lodges({
       ...req.body,
       state: status._id,
-      photos: req.file ? req.file.path : req.body.photos // Usa el path del archivo o el link
+      photos: req.file ? req.file.path : req.body.photos 
     });
 
     const savedLodge = await newLodge.save();
@@ -24,7 +24,6 @@ export const createLodge = async (req, res, next) => {
     next(err);
   }
 };
-
 
 export const updateLodge = async (req, res, next) => {
   try {
@@ -77,13 +76,12 @@ export const getLodges = async (req, res) => {
       lodges.map(async (lodge) => {
 
         const latestStatus = await LodgeXStatus.findOne({ lodge: lodge._id })
-          .sort({ createdAt: -1 }) // Buscar el más reciente
-          .populate("status") // Poblar estado
+          .sort({ createdAt: -1 }) 
+          .populate("status") 
           .populate({
             path: "booking",
             populate: { path: "user", select: "name email phone", options: { strictPopulate: false } }
           });
-
 
         //Verificar si latestStatus existe antes de acceder a sus propiedades
         const estado = latestStatus?.status?.status || "desocupada";
@@ -103,7 +101,6 @@ export const getLodges = async (req, res) => {
             };
           }
         }
-
         return {
           ...lodge.toObject(),
           latestStatus: estado,
@@ -133,41 +130,66 @@ export const countByTitle = async (req, res, next) =>{
     }
 };
 
-
-// Función auxiliar para generar un array de fechas en un rango
+//función auxiliar para generar un array de fechas en un rango
 const getDatesInRange = (start, end) => {
   const date = new Date(start);
   let list = [];
   while (date <= new Date(end)) {
-    list.push(new Date(date).toISOString().split("T")[0]); // Formato YYYY-MM-DD
+    list.push(new Date(date).toISOString().split("T")[0]); //formato YYYY-MM-DD
     date.setDate(date.getDate() + 1);
   }
   return list;
 };
 
+export const getLodgesByAvailableDate = async (req, res) => {
+  try {
+    const { checkIn, checkOut } = req.query;
+
+    if (!checkIn || !checkOut) {
+      return res.status(400).json({ message: "Faltan fechas checkIn o checkOut" });
+    }
+    const lodges = await Lodges.find();
+    const canceledStatus = await BookingStatus.findOne({ status: "Cancelada" });
+    const overlappingBookings = await Booking.find({
+      status: { $ne: canceledStatus._id },
+      $or: [ { checkIn: { $lt: new Date(checkOut) },
+                checkOut: { $gt: new Date(checkIn) }, },
+      ],
+    });
+
+    const occupiedLodgeIds = overlappingBookings.map(b => b.lodge.toString());
+    const availableLodges = lodges.filter(l => !occupiedLodgeIds.includes(l._id.toString()));
+    res.json(availableLodges);
+  } catch (error) {
+    console.error("Error en getLodgesByAvailableDate:", error);
+    res.status(500).json({ message: "Error interno del servidor" });
+  }
+};
+
 export const getLodgeAvailability = async (req, res) => {
   try {
     const lodgeId = req.params.id;
+    console.log("lodge", lodgeId);
 
-    // Obtener el estado "Cancelada" para excluirlo de la consulta
+    //obtener el estado "Cancelada" para excluirlo de la consulta
     const canceledStatus = await BookingStatus.findOne({ status: "Cancelada" });
 
-    // Buscar solo reservas activas (que no estén canceladas)
+    //buscar solo reservas activas
     const activeBookings = await Booking.find({
       lodge: lodgeId,
-      status: { $ne: canceledStatus._id }, // Excluye las reservas canceladas
+      status: { $ne: canceledStatus._id }, //ignorar las reservas canceladas
     }).select("checkIn checkOut");
 
-    console.log("aca")
+    console.log("activeBookings", activeBookings)
 
-    // Extraer todas las fechas ocupadas
+    //extraer todas las fechas ocupadas
     let occupiedDates = [];
     activeBookings.forEach((booking) => {
       let dates = getDatesInRange(booking.checkIn, booking.checkOut);
       occupiedDates = occupiedDates.concat(dates);
     });
 
-        console.log("aca")
+    console.log("ocupadas", occupiedDates)
 
     res.json({ occupiedDates });
   } catch (error) {
@@ -176,10 +198,16 @@ export const getLodgeAvailability = async (req, res) => {
   }
 };
 
-// Configuración de almacenamiento para Multer
+import path from "path";
+import fs from "fs";
+import multer from "multer";
+import Lodges from "../models/Lodges.js"; // ajustá el path a tu modelo
+
+// ===== Multer =====
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = path.join(process.cwd(), "uploads"); // Carpeta donde se guardan las imágenes
+    // Carpeta física donde se guardan las imágenes
+    const uploadPath = path.join(process.cwd(), "api/public/uploads");
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {
@@ -188,14 +216,10 @@ const storage = multer.diskStorage({
   },
 });
 
-// Filtro de tipo de archivo
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(new Error("Tipo de archivo no permitido. Solo se permiten imágenes."));
-  }
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+  if (allowedTypes.includes(file.mimetype)) cb(null, true);
+  else cb(new Error("Tipo de archivo no permitido. Solo se permiten imágenes."));
 };
 
 const upload = multer({
@@ -204,13 +228,14 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-export const uploadPhotos = async (req, res, next) => {
+// ===== Controllers =====
+export const uploadPhotos = async (req, res) => {
   upload.array("photos", 10)(req, res, async (err) => {
     if (err) {
       if (err instanceof multer.MulterError) {
-        return res.status(400).json({ error: err.message }); // Errores específicos de Multer
+        return res.status(400).json({ error: err.message });
       }
-      return res.status(500).json({ error: err.message }); // Otros errores
+      return res.status(500).json({ error: err.message });
     }
 
     try {
@@ -218,23 +243,51 @@ export const uploadPhotos = async (req, res, next) => {
         return res.status(400).json({ message: "No se subió ninguna imagen." });
       }
 
-      const lodgeId = req.params.id; // ID de la cabaña
-      const filePaths = req.files.map((file) => `uploads/${file.filename}`); // Rutas de las imágenes
+      const lodgeId = req.params.id;
 
-      // Actualizar el modelo con las nuevas imágenes
+      // 👇 Guardamos el path PÚBLICO (el que vas a consumir desde el front)
+      const filePaths = req.files.map((file) => `uploads/${file.filename}`);
+
       const updatedLodge = await Lodges.findByIdAndUpdate(
         lodgeId,
         { $push: { photos: { $each: filePaths } } },
         { new: true }
       );
 
-      res.status(200).json({
+      return res.status(200).json({
         message: "Imágenes cargadas exitosamente.",
         updatedLodge,
       });
     } catch (error) {
       console.error("Error al subir imágenes:", error);
-      res.status(500).json({ error: "Error interno del servidor" });
+      return res.status(500).json({ error: "Error interno del servidor" });
     }
   });
+};
+
+export const deletePhoto = async (req, res) => {
+  const { photo } = req.body; // ejemplo: "uploads/1734659-foo.png"
+  const { id } = req.params;
+
+  try {
+    const lodge = await Lodges.findById(id);
+    if (!lodge) return res.status(404).json({ message: "Lodge not found" });
+
+    // Quitamos la referencia en la BD
+    lodge.photos = lodge.photos.filter((p) => p !== photo);
+    await lodge.save();
+
+    // Borrar el archivo físico
+    const filename = path.basename(photo); // "1734659-foo.png"
+    const diskPath = path.join(process.cwd(), "api/public/uploads", filename);
+
+    if (fs.existsSync(diskPath)) {
+      fs.unlinkSync(diskPath);
+    }
+
+    return res.status(200).json({ message: "Foto eliminada" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Error deleting photo" });
+  }
 };

@@ -26,13 +26,20 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
+// Obtener el directorio actual
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const UPLOADS_DIR = path.resolve(__dirname, "api/public/uploads"); //path para las img
+// === 🔧 1) Un solo path para todo ===
+const UPLOADS_DIR = path.resolve(__dirname, "api/public/uploads");
 
+// Crear la carpeta si no existe (localmente ayuda mucho)
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  console.log("📁 Creada carpeta uploads en:", UPLOADS_DIR);
+}
 
-//conexion a mongo
+// Conexion a mongo
 const connect = async () => {
   console.log("NODE_ENV:", process.env.NODE_ENV);
   console.log("MONGO_TEST:", process.env.MONGO_TEST);
@@ -86,7 +93,7 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-//multer para las imagenes
+// === 🔧 2) Multer usa UPLOADS_DIR ===
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, UPLOADS_DIR);
@@ -97,7 +104,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-console.log("Sirviendo /uploads desde:", UPLOADS_DIR);
+// === 🔧 3) express.static usa el MISMO UPLOADS_DIR ===
+console.log("🗂️  Sirviendo /uploads desde:", UPLOADS_DIR);
 app.use("/uploads", express.static(UPLOADS_DIR));
 
 //ruta para manejar la carga de imágenes

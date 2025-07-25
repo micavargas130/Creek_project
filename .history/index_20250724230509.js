@@ -26,10 +26,11 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
+// Obtener el directorio actual
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const UPLOADS_DIR = path.resolve(__dirname, "api/public/uploads"); //path para las img
+const UPLOADS_DIR = path.resolve(__dirname, "api/public/uploads");
 
 
 //conexion a mongo

@@ -271,7 +271,7 @@ export const addPartialPayment = async (req, res, next) => {
 // Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(process.cwd(), "api/public/uploads"));
+    cb(null, path.join(__dirname, 'public', 'api/public/uploads'));
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
@@ -304,21 +304,23 @@ export const uploadReceipt = async (req, res, next) => {
       payment.receipt = [...(payment.receipt || []), ...filePaths];
       await payment.save();
 
-      return res.status(200).json({
+      res.status(200).json({
         message: "Comprobante(s) subido(s) exitosamente.",
         payment,
       });
     } catch (error) {
       console.error("Error al subir comprobante:", error);
-      return res.status(500).json({ error: "Error interno del servidor" });
+      res.status(500).json({ error: "Error interno del servidor" });
     }
   });
 };
 
 export const deleteReceipt = async (req, res, next) => {
   try {
-    const { paymentId } = req.params; 
+    const { paymentId } = req.params;
     const { receiptPath } = req.body; 
+    // => mandá desde el front el path exacto que querés borrar: "uploads/123-foo.png"
+    // si no querés mandarlo, podés seguir usando payment.receipt[0] como antes.
 
     const payment = await PaymentHistory.findById(paymentId);
     if (!payment) return res.status(404).json("Pago no encontrado");
@@ -326,16 +328,18 @@ export const deleteReceipt = async (req, res, next) => {
     const toDelete = receiptPath || payment.receipt?.[0];
     if (!toDelete) return res.status(404).json("No hay comprobante que eliminar");
 
-    const diskPath = path.join(
-      process.cwd(),
-      "api/public/uploads",
-      path.basename(toDelete)
-    );
+    // Convertir el path público a path físico
+    const diskPath = path.join(api/public/uploads", path.basename(toDelete));
     console.log("Intentando borrar archivo:", diskPath);
 
-    if (fs.existsSync(diskPath)) {
-      fs.unlinkSync(diskPath);
+    if (!fs.existsSync(diskPath)) {
+      // igual limpiamos la BD si ya no existe en disco
+      payment.receipt = payment.receipt.filter((p) => p !== toDelete);
+      await payment.save();
+      return res.status(404).json("El archivo no existe en el sistema, se limpió la BD");
     }
+
+    fs.unlinkSync(diskPath);
 
     payment.receipt = payment.receipt.filter((p) => p !== toDelete);
     await payment.save();
@@ -346,3 +350,116 @@ export const deleteReceipt = async (req, res, next) => {
     return next(error);
   }
 };
+export const returnPayment = async (req, res, next) => {
+  try { 
+    const amount = req.body.amount;
+    const accounting = await Accounting.findById(req.params.id);
+    console.log("amount",amount);
+
+    if (!accounting) {
+            return res.status(404).json({ message: 'Registro de contabilidad no encontrado' });     
+    }
+
+    const status = await PaymentStatus.findOne({ status: req.body.status });
+
+   //Crear un nuevo registro en PaymentHistory
+    const paymentHistory = new PaymentHistory({
+        accounting: accounting._id,
+        amount: 0 - req.body.amount,
+        status: status._id, 
+    });
+
+    console.log("payment", paymentHistory);
+    await paymentHistory.save();
+
+    //Actualizar el registro de Accounting
+    accounting.amount = amount;
+    accounting.status = status._id; // Cambia el estado de accounting
+    await accounting.save(); 
+  
+    res.status(200).json({ message: "Reenbolso registrado", paymentHistory, accounting });
+  } catch (error) {
+        console.error("Error al registrar el pago:", error);
+        res.status(500).json({ message: 'Error al registrar el pago', error });
+    }
+
+}; 
+export const paymentHistory = async (req, res, next) => {
+    try {
+        const { amount } = req.body;
+        const accounting = await Accounting.findById(req.params.accountingId);
+
+        if (!accounting) {
+            return res.status(404).json({ message: 'Registro de contabilidad no encontrado' });     
+        }
+
+        // Calcular el nuevo saldo restante
+        const newRemainingAmount = accounting.remainingAmount - amount;
+        let newStatus;
+        const depositAmount = accounting.totalAmount * 0.3;
+
+        if (newRemainingAmount <= 0) {
+          newStatus = "pagado";
+        } else if (amount === depositAmount) {
+          newStatus = "seña";
+        } 
+        else {
+          newStatus = "parcial";
+        }
+        const status = await PaymentStatus.findOne({ status: newStatus });
+
+        //Crear un nuevo registro en PaymentHistory
+        const paymentHistory = new PaymentHistory({
+            accounting: accounting._id,
+            amount,
+            status: status._id, 
+        });
+
+        await paymentHistory.save();
+
+        //Actualizar el registro de Accounting
+        accounting.remainingAmount = newRemainingAmount <= 0 ? 0 : newRemainingAmount;
+        const oldAmount = accounting.amount;
+        accounting.amount = oldAmount + amount;
+        accounting.status = status._id; // Cambia el estado de accounting
+        await accounting.save(); 
+  
+        res.status(200).json({ message: "Pago registrado con éxito", paymentHistory, accounting });
+    } catch (error) {
+        console.error("Error al registrar el pago:", error);
+        res.status(500).json({ message: 'Error al registrar el pago', error });
+    }
+};
+
+export const getPaymentHistoryByEntity = async (req, res, next) => {
+  try {
+    const { bookingId, type } = req.params;
+
+    if (!["lodge", "tent"].includes(type)) {
+      return res.status(400).json({ message: "Tipo de entidad no válido." });
+    }
+
+    const query = {};
+    query[type] = bookingId;
+
+    const accountingRecords = await Accounting.find(query);
+
+    if (accountingRecords.length === 0) {
+      return res.status(404).json({ message: "No se encontraron registros contables para esta reserva." });
+    }
+
+    const accountingIds = accountingRecords.map((a) => a._id);
+
+    const paymentHistory = await PaymentHistory.find({
+      accounting: { $in: accountingIds },
+    })
+      .populate("status")
+      .sort({ date: 1 });
+
+    res.status(200).json(paymentHistory);
+  } catch (err) {
+    next(err);
+  }
+};
+
+  

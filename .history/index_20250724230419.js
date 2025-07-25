@@ -26,13 +26,20 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
+// Obtener el directorio actual
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const UPLOADS_DIR = path.resolve(__dirname, "api/public/uploads"); //path para las img
+// === 🔧 1) Un solo path para todo ===
+const UPLOADS_DIR = path.resolve(__dirname, "api/public/uploads");
 
+// Crear la carpeta si no existe (localmente ayuda mucho)
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  console.log("📁 Creada carpeta uploads en:", UPLOADS_DIR);
+}
 
-//conexion a mongo
+// Conexion a mongo
 const connect = async () => {
   console.log("NODE_ENV:", process.env.NODE_ENV);
   console.log("MONGO_TEST:", process.env.MONGO_TEST);
@@ -86,7 +93,6 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-//multer para las imagenes
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, UPLOADS_DIR);
