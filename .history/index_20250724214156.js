@@ -26,10 +26,12 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-//Coneccion a mongo
+//Conexion a mongo
 const connect = async () => {
+  console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("MONGO_TEST:", process.env.MONGO_TEST);
+  //se fija si conectarse a la bd de prueba o a la de prod
   const mongoURI = process.env.NODE_ENV === "test" ? process.env.MONGO_TEST : process.env.MONGO;
-  
   console.log(`🌍 Conectando a: ${mongoURI}`);
 
   try {
@@ -67,7 +69,9 @@ const allowedOrigins = [
   'https://creek-project.vercel.app',
   'https://creek-project-ruby.vercel.app',
   'https://creek-project.onrender.com',
-  'https://web-camping-arroyito-micavargas130s-projects.vercel.app'
+  'https://web-camping-arroyito-micavargas130s-projects.vercel.app',
+  'https://web-camping-arroyito-git-production-micavargas130s-projects.vercel.app',
+  'https://creek-project-micavargas130-micavargas130s-projects.vercel.app'
 ];
 
 // Usar CORS como middleware global
@@ -91,8 +95,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+app.use('/uploads', express.static(path.join(__dirname, '../admin/public/uploads')));
 
 // Ruta para manejar la carga de imágenes
 app.post("/lodge/upload", upload.single("photos"), (req, res) => {
@@ -117,7 +120,6 @@ app.use("/lodge_x_status", lodge_x_statusRoute);
 app.use("/tents", tentsRoute);
 app.use("/accounting", accountingRoute);
 app.use("/graphs", graphsRoute);
-app.use('/uploads', express.static('uploads'));
 
 // Middleware de manejo de errores
 app.use((err, req, res, next) => {
@@ -132,15 +134,15 @@ app.use((err, req, res, next) => {
 });
 
 // Conectar y escuchar en el puerto
-const PORT = process.env.PORT || (process.env.NODE_ENV === 'test' ? 0 : 3000);
-if (process.env.NODE_ENV === 'test') {
-    console.log(`Connected to backend on port ${PORT}!`);
-  }
-if (process.env.NODE_ENV !== 'test') {
-app.listen(PORT, () => {
-  connect();
-  console.log(`Connected to backend on port ${PORT}!`);
-});
-}
+const PORT = process.env.PORT || 3000;
+const startServer = async () => {
+  await connect(); // Se conecta a MONGO o MONGO_TEST según entorno
+
+  app.listen(PORT, () => {
+    console.log(`✅ Backend escuchando en el puerto ${PORT} (modo ${process.env.NODE_ENV})`);
+  });
+};
+
+startServer();
 
 export { app, connect};
