@@ -29,20 +29,10 @@ const server = http.createServer(app);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PERSISTENT_DIR = "/data/uploads"; //Render Disk para imgs
-const LOCAL_DIR = path.resolve(__dirname, "api/public/uploads"); //path local para imgs
+const PERSISTENT_DIR = "/data/uploads"; //Render Disk
+const LOCAL_DIR = path.resolve(__dirname, "api/public/uploads"); //path para img local
 
-//si no existe el Render Disk que se suba a local
-const USING_RENDER_DISK = fs.existsSync("/data");
-const UPLOADS_DIR = USING_RENDER_DISK ? PERSISTENT_DIR : LOCAL_DIR;
-
-//crear la carpeta si no existe
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-  console.log("Carpeta creada:", UPLOADS_DIR);
-}
-
-console.log("Sirviendo /uploads desde:", UPLOADS_DIR);
+const UPLOADS_DIR = fs.existsSync("/data") ? PERSISTENT_DIR : LOCAL_DIR;
 
 //conexion a mongo
 const connect = async () => {
@@ -105,6 +95,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// Servir estáticos desde donde realmente guardamos
 app.use("/uploads", express.static(UPLOADS_DIR));
 
 app.post("/lodge/upload", upload.single("photos"), (req, res, next) => {

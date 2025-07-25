@@ -221,6 +221,7 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
+
 export const uploadPhotos = async (req, res) => {
   upload.array("photos", 10)(req, res, async (err) => {
     if (err) {
@@ -237,7 +238,7 @@ export const uploadPhotos = async (req, res) => {
 
       const lodgeId = req.params.id;
 
-      // Path público
+      // 👇 Guardamos el path PÚBLICO (el que vas a consumir desde el front)
       const filePaths = req.files.map((file) => `uploads/${file.filename}`);
 
       const updatedLodge = await Lodges.findByIdAndUpdate(
@@ -258,7 +259,7 @@ export const uploadPhotos = async (req, res) => {
 };
 
 export const deletePhoto = async (req, res) => {
-  const { photo } = req.body;  // "uploads/xxxx.png"
+  const { photo } = req.body; 
   const { id } = req.params;
 
   try {
@@ -268,8 +269,9 @@ export const deletePhoto = async (req, res) => {
     lodge.photos = lodge.photos.filter((p) => p !== photo);
     await lodge.save();
 
-    const filename = path.basename(photo);
-    const diskPath = path.join("/data/uploads", filename);
+    //borrar el archivo físico
+    const filename = path.basename(photo); 
+const diskPath = path.join("/data/uploads", filename);
 
     if (fs.existsSync(diskPath)) {
       fs.unlinkSync(diskPath);

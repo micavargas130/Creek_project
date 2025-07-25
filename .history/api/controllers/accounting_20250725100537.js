@@ -271,7 +271,7 @@ export const addPartialPayment = async (req, res, next) => {
 // Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "/data/uploads"); //render Disk persistente
+    cb(null, "/data/uploads"); // Carpeta persistente en Render
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
@@ -318,7 +318,7 @@ export const uploadReceipt = async (req, res, next) => {
 export const deleteReceipt = async (req, res, next) => {
   try {
     const { paymentId } = req.params; 
-    const { receiptPath } = req.body;
+    const { receiptPath } = req.body; 
 
     const payment = await PaymentHistory.findById(paymentId);
     if (!payment) return res.status(404).json("Pago no encontrado");
@@ -326,8 +326,11 @@ export const deleteReceipt = async (req, res, next) => {
     const toDelete = receiptPath || payment.receipt?.[0];
     if (!toDelete) return res.status(404).json("No hay comprobante que eliminar");
 
-    //uso el disk persistente
-    const diskPath = path.join("/data/uploads", path.basename(toDelete));
+    const diskPath = path.join(
+      process.cwd(),
+      "api/public/uploads",
+      path.basename(toDelete)
+    );
     console.log("Intentando borrar archivo:", diskPath);
 
     if (fs.existsSync(diskPath)) {
@@ -343,8 +346,6 @@ export const deleteReceipt = async (req, res, next) => {
     return next(error);
   }
 };
-
-
 export const returnPayment = async (req, res, next) => {
   try { 
     const amount = req.body.amount;

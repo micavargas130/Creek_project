@@ -39,7 +39,7 @@ const UPLOADS_DIR = USING_RENDER_DISK ? PERSISTENT_DIR : LOCAL_DIR;
 //crear la carpeta si no existe
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-  console.log("Carpeta creada:", UPLOADS_DIR);
+  console.log("📁 Carpeta creada:", UPLOADS_DIR);
 }
 
 console.log("Sirviendo /uploads desde:", UPLOADS_DIR);

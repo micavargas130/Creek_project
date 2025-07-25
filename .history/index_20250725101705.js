@@ -29,20 +29,8 @@ const server = http.createServer(app);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PERSISTENT_DIR = "/data/uploads"; //Render Disk para imgs
-const LOCAL_DIR = path.resolve(__dirname, "api/public/uploads"); //path local para imgs
-
-//si no existe el Render Disk que se suba a local
-const USING_RENDER_DISK = fs.existsSync("/data");
-const UPLOADS_DIR = USING_RENDER_DISK ? PERSISTENT_DIR : LOCAL_DIR;
-
-//crear la carpeta si no existe
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-  console.log("Carpeta creada:", UPLOADS_DIR);
-}
-
-console.log("Sirviendo /uploads desde:", UPLOADS_DIR);
+const PERSISTENT_DIR = "/data/uploads"; // Render Disk
+const LOCAL_DIR = path.resolve(__dirname, "api/public/uploads"); //path 
 
 //conexion a mongo
 const connect = async () => {
@@ -100,13 +88,19 @@ app.use(cookieParser());
 
 //multer para las imagenes
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, UPLOADS_DIR),
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname)),
+  destination: (req, file, cb) => {
+    cb(null, UPLOADS_DIR);
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
 });
 const upload = multer({ storage });
 
-app.use("/uploads", express.static(UPLOADS_DIR));
+console.log("Sirviendo /uploads desde:", UPLOADS_DIR);
+app.use('/uploads', express.static(path.join(process.cwd(), 'api/public/uploads')));
 
+//ruta para manejar la carga de imágenes
 app.post("/lodge/upload", upload.single("photos"), (req, res, next) => {
   try {
     if (!req.file) {
@@ -117,7 +111,6 @@ app.post("/lodge/upload", upload.single("photos"), (req, res, next) => {
     return next(error);
   }
 });
-
 
 //rutas
 app.use("/notifications", notificationsRoute);

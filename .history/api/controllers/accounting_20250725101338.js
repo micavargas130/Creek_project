@@ -271,7 +271,7 @@ export const addPartialPayment = async (req, res, next) => {
 // Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "/data/uploads"); //render Disk persistente
+    cb(null, "/data/uploads"); // Render Disk persistente
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
@@ -326,7 +326,7 @@ export const deleteReceipt = async (req, res, next) => {
     const toDelete = receiptPath || payment.receipt?.[0];
     if (!toDelete) return res.status(404).json("No hay comprobante que eliminar");
 
-    //uso el disk persistente
+    // Usamos el disk persistente
     const diskPath = path.join("/data/uploads", path.basename(toDelete));
     console.log("Intentando borrar archivo:", diskPath);
 
