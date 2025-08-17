@@ -79,6 +79,7 @@ export const getTents = async(req, res, next) =>{
 export const getOccupiedPositions = async (req, res, next) => {
   try {
       const tents = await Tents.find().populate('status');
+      console.log("tents2", tents)
 
       const occupiedPositions = tents
           .filter(tent => tent.location && tent.status?.status === "Activa") 
@@ -87,7 +88,6 @@ export const getOccupiedPositions = async (req, res, next) => {
                       last_name: tent.last_name
            }));
 
-        console.log("tents2", occupiedPositions)
 
       res.status(200).json({ occupiedPositions });
   } catch (err) {

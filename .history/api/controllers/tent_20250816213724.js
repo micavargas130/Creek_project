@@ -87,7 +87,7 @@ export const getOccupiedPositions = async (req, res, next) => {
                       last_name: tent.last_name
            }));
 
-        console.log("tents2", occupiedPositions)
+            console.log("tents2", occupiedPositions)
 
       res.status(200).json({ occupiedPositions });
   } catch (err) {

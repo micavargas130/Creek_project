@@ -1,6 +1,6 @@
 import "./mapComponent.scss";
-import { useState, useEffect } from "react";
-import Tooltip from "@mui/material/Tooltip";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import FestivalRoundedIcon from '@mui/icons-material/FestivalRounded';
 import HouseSidingRoundedIcon from '@mui/icons-material/HouseSidingRounded';
 import PoolIcon from '@mui/icons-material/Pool';
@@ -52,8 +52,6 @@ const MapComponent = ({ onCellClick, lodgesInfo }) => {
     const lodge = lodgesInfo.find(
       (lodge) => lodge.location.row === row && lodge.location.col === col
     );
-
-    console.log("lodges",lodge);
   
     if (lodge) {
       // Verificar el estado de la cabaña
@@ -104,43 +102,24 @@ return (
               const isSelected = selectedCell === `${row}-${col}`;
 
               return (
-                <Tooltip
-                title={
-                  isCellOccupied
-                    ? (() => {
-                        const tent = occupiedPositions.find(
-                          (p) => p.location.row === row && p.location.col === col
-                        );
-                        return tent
-                          ? `${tent.first_name || ""} ${tent.last_name || ""}`
-                          : "";
-                      })()
-                    : isLodgeCell && lodgeState === "ocupado"
-                    ? `${lodgeName} - ${lodgesInfo.find(
-                        (l) => l.location.row === row && l.location.col === col
-                      )?.user?.first_name || ""} ${
-                        lodgesInfo.find(
-                          (l) => l.location.row === row && l.location.col === col
-                        )?.user?.last_name || ""
-                      }`
-                    : lodgeName
-                }
-                arrow
-                placement="top"
-              >
                 <div
-                  key={col}
-                  id={`${row}-${col}`}
-                  className={`map-cell 
-                    ${isCellOccupied ? "occupied" : ""} 
-                    ${lodgeState} 
-                    ${isLodgeCell && lodgeState === "ocupado" ? "occupiedLodge" : ""} 
-                    ${isLodgeCell && lodgeState === "desocupada" ? "emptyLodge" : ""} 
-                    ${isLodgeCell && lodgeState === "mantenimiento" ? "maintainedLodge" : ""} 
-                    ${isTentCell ? "" : ""} 
-                    ${isSelected ? "Activaselected" : ""}`}
-                  onClick={() => handleCellClick(row, col)}
-                >
+                    key={col}
+                    id={`${row}-${col}`}
+                    className={`map-cell 
+                      ${isCellOccupied ? "occupied" : ""} 
+                      ${lodgeState} 
+                      ${isLodgeCell && lodgeState === "ocupado" ? "occupiedLodge" : ""} 
+                      ${isLodgeCell && lodgeState === "desocupada" ? "emptyLodge" : ""} 
+                      ${isLodgeCell && lodgeState === "mantenimiento" ? "maintainedLodge" : ""} 
+                      ${isTentCell ? "" : ""} 
+                      ${isSelected ? "Activaselected" : ""}`}
+                    onClick={() => handleCellClick(row, col)}
+                    title={
+                      isCellOccupied
+                        ? `${occupiedPositions.find(p => p.location.row === row && p.location.col === col)?.first_name || ""} ${occupiedPositions.find(p => p.location.row === row && p.location.col === col)?.last_name || ""}`
+                        : lodgeName
+                    }
+                  >
                   {iconType === "HouseSidingRoundedIcon" && <HouseSidingRoundedIcon className="house-cell" />}
                   {iconType === "FestivalRoundedIcon" && <FestivalRoundedIcon className="icon" />}
                   {iconType === "OtherHousesIcon" && <OtherHousesIcon className="mainhouse-cell" />}
@@ -148,9 +127,8 @@ return (
                   {iconType === "RestaurantIcon" && <RestaurantIcon className="restaurant-cell" />}
                   {iconType === "GarageIcon" && <GarageIcon className="garage-cell" />}
                   {iconType === "GrillIcon" && <GrillIcon className="grill-cell" />}
+                  {lodgeName && <div className="tooltip">{lodgeName}</div>}
                 </div>
-              </Tooltip>              
-
               );
             })}
           </div>

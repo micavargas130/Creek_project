@@ -80,7 +80,7 @@ export const getLodges = async (req, res) => {
           .populate("status") 
           .populate({
             path: "booking",
-            populate: { path: "user", select: "name email phone first_name last_name", options: { strictPopulate: false } }
+            populate: { path: "user", select: "name email phone ", options: { strictPopulate: false } }
           });
 
         //Verificar si latestStatus existe antes de acceder a sus propiedades

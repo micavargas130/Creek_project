@@ -79,23 +79,16 @@ export const getTents = async(req, res, next) =>{
 export const getOccupiedPositions = async (req, res, next) => {
   try {
       const tents = await Tents.find().populate('status');
-
       const occupiedPositions = tents
-          .filter(tent => tent.location && tent.status?.status === "Activa") 
-          .map(tent =>({location: tent.location,
-                      first_name: tent.first_name,
-                      last_name: tent.last_name
-           }));
+          .filter(tent => tent.location) // Filtrar si la ubicación existe
+          .map(tent => tent.location);
 
-        console.log("tents2", occupiedPositions)
-
-      res.status(200).json({ occupiedPositions });
+      res.status(200).json({ occupiedPositions, first_name, last_name });
   } catch (err) {
       console.log(err);
       next(err);
   }
 };
-
 
 export const deleteTent = async(req, res, next) =>{
     try{

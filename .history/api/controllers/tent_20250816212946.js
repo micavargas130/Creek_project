@@ -79,15 +79,13 @@ export const getTents = async(req, res, next) =>{
 export const getOccupiedPositions = async (req, res, next) => {
   try {
       const tents = await Tents.find().populate('status');
+      console.log("tents2", tents)
 
       const occupiedPositions = tents
           .filter(tent => tent.location && tent.status?.status === "Activa") 
-          .map(tent =>({location: tent.location,
-                      first_name: tent.first_name,
-                      last_name: tent.last_name
-           }));
+          .map(tent => tent.location);
 
-        console.log("tents2", occupiedPositions)
+       const tent = await Tents.findByIdAndUpdate(req.params.id).populate('status')  //busca la carpa con el id que le pasamos 
 
       res.status(200).json({ occupiedPositions });
   } catch (err) {
