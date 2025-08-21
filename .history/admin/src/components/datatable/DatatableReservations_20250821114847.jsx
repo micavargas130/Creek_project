@@ -88,6 +88,7 @@ const Datatable = () => {
     }
   };
     //Cuando se hace click en "Aceptar" en el widget del cobro
+   // Datatable.jsx
   const confirmFinishClick = async ({ status, amount }) => {
   const booking = selectedBooking;
   if (!booking) return;
@@ -102,7 +103,7 @@ const Datatable = () => {
 
     const paymentHistoryData = {
       accounting: existingAccounting._id,
-      amount, 
+      amount, // 👈 viene del modal (pago total o parcial)
       status,
     };
 

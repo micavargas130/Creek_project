@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+// components/props/SelectPaymentStatus.jsx
+import React from "react";
+import useState
 
 const SelectPaymentStatus = ({
   amountToPay,
@@ -10,26 +12,21 @@ const SelectPaymentStatus = ({
   onCancel,
   selectedBooking
 }) => {
+
   const [loading, setLoading] = useState(false);
 
   const handleConfirm = async () => {
     setLoading(true);
     try {
-      if (selectedStatus === "pagada") {
-        await onConfirm({
-          status: "pagada",
-          amount: amountToPay,
-        });
-      } else {
-        await onConfirm({
-          status: "parcial",
-          amount: partialPayment || 0,
-        });
-      }
+      // Si onConfirm es async espera su resolución
+      await onConfirm();
+    } catch (error) {
+      console.error("Error al confirmar:", error);
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="modal">
@@ -65,13 +62,8 @@ const SelectPaymentStatus = ({
         ) : (
           <p>Monto asignado: ${amountToPay}</p>
         )}
-
-        <button onClick={handleConfirm} disabled={loading}>
-          {loading ? "Confirmando..." : "Confirmar"}
-        </button>
-        <button onClick={onCancel} disabled={loading}>
-          Cancelar
-        </button>
+        <button onClick={onConfirm}>Confirmar</button>
+        <button onClick={onCancel}>Cancelar</button>
       </div>
     </div>
   );

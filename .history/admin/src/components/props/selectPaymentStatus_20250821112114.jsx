@@ -1,3 +1,4 @@
+// components/props/SelectPaymentStatus.jsx
 import React, { useState } from "react";
 
 const SelectPaymentStatus = ({
@@ -15,17 +16,10 @@ const SelectPaymentStatus = ({
   const handleConfirm = async () => {
     setLoading(true);
     try {
-      if (selectedStatus === "pagada") {
-        await onConfirm({
-          status: "pagada",
-          amount: amountToPay,
-        });
-      } else {
-        await onConfirm({
-          status: "parcial",
-          amount: partialPayment || 0,
-        });
-      }
+      // Si onConfirm es async espera su resolución
+      await onConfirm();
+    } catch (error) {
+      console.error("Error al confirmar:", error);
     } finally {
       setLoading(false);
     }
@@ -67,7 +61,7 @@ const SelectPaymentStatus = ({
         )}
 
         <button onClick={handleConfirm} disabled={loading}>
-          {loading ? "Confirmando..." : "Confirmar"}
+          {loading ? "Cargando..." : "Confirmar"}
         </button>
         <button onClick={onCancel} disabled={loading}>
           Cancelar
@@ -78,3 +72,4 @@ const SelectPaymentStatus = ({
 };
 
 export default SelectPaymentStatus;
+

@@ -88,37 +88,44 @@ const Datatable = () => {
     }
   };
     //Cuando se hace click en "Aceptar" en el widget del cobro
-  const confirmFinishClick = async ({ status, amount }) => {
-  const booking = selectedBooking;
-  if (!booking) return;
-  try {
-    const bookingId = booking._id;
-    const { data: existingAccounting } = await axiosInstance.get(`/accounting/booking/${bookingId}`);
+    const confirmFinishClick = async () => {
+    const booking = selectedBooking;
+    if (!booking) return;
+    try {
+      const bookingId = booking._id;
+      let payment = 0;
+      const { data: existingAccounting } = await axiosInstance.get(`/accounting/booking/${bookingId}`);
 
-    if (!existingAccounting || !existingAccounting._id) {
-      alert("No se encontró un registro contable para esta reserva.");
-      return;
+      if (selectedStatus === "pagado") {
+        payment = existingAccounting.remainingAmount;
+      } else if (selectedStatus === "parcial") {
+        payment = partialPayment;
+      } 
+    
+      if (!existingAccounting || !existingAccounting._id) {
+        alert("No se encontró un registro contable para esta reserva.");
+        return;
+      }
+      const paymentHistoryData = {
+        accounting: existingAccounting._id,
+        amount: payment,
+        status: selectedStatus.toLowerCase()
+      };
+  
+      await axiosInstance.post(`/accounting/pay/${existingAccounting._id}`, paymentHistoryData); //crea un nuevo pago 
+      await axiosInstance.put(`/bookings/${bookingId}/updateStatusCompleted`); //pone la reserva como completada
+      reservationsObserver.notify("reservationCompleted", { booking });  
+      reservationsObserver.notify("reservationChange");
+      
+      //para dar tiempo a que se actualicen los cambios en la lodge 
+       navigate('/lodges');
+      
+    } catch (error) {
+      console.error("Error al finalizar la reserva y registrar el pago:", error);
+    } finally {
+      setModalVisible(false);
     }
-
-    const paymentHistoryData = {
-      accounting: existingAccounting._id,
-      amount, 
-      status,
-    };
-
-    await axiosInstance.post(`/accounting/pay/${existingAccounting._id}`, paymentHistoryData);
-    await axiosInstance.put(`/bookings/${bookingId}/updateStatusCompleted`);
-    reservationsObserver.notify("reservationCompleted", { booking });
-    reservationsObserver.notify("reservationChange");
-
-    navigate("/lodges");
-  } catch (error) {
-    console.error("Error al finalizar la reserva y registrar el pago:", error);
-  } finally {
-    setModalVisible(false);
-  }
-};
-
+  };
 
   
   //FUNCION PARA QUE LA RESERVA SE PONGA ACTIVA
@@ -159,9 +166,7 @@ const Datatable = () => {
       setLoadingActivation(false);
     setShowDepositSummary(false); 
     }
-  };
-
-
+  }; 
   //funcion boton info
   const handleInfoClick = async (row) => {
     const currentStatus = row.status.status;  
