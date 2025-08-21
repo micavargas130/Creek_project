@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// components/props/SelectPaymentStatus.jsx
+import React from "react";
 
 const SelectPaymentStatus = ({
   amountToPay,
@@ -10,38 +11,38 @@ const SelectPaymentStatus = ({
   onCancel,
   selectedBooking
 }) => {
-  const [loading, setLoading] = useState(false);
 
-  const handleConfirm = async () => {
-    setLoading(true);
-    try {
-      if (selectedStatus === "pagada") {
-        await onConfirm({
-          status: "pagada",
-          amount: amountToPay,
-        });
-      } else {
-        await onConfirm({
-          status: "parcial",
-          amount: partialPayment || 0,
-        });
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleConfirm = () => {
+  if (selectedStatus === "pagada") {
+    onConfirm({
+      status: "pagada",
+      amount: amountToPay, // 🔥 pago completo
+    });
+  } else {
+    onConfirm({
+      status: "parcial",
+      amount: partialPayment || 0,
+    });
+  }
+};
 
   return (
     <div className="modal">
       <div className="modalContent">
         <h2>Seleccionar estado del pago</h2>
         <select
-          value={selectedStatus}
-          onChange={(e) => setSelectedStatus(e.target.value)}
-        >
+            value={selectedStatus}
+            onChange={(e) => {
+              const value = e.target.value;
+              setSelectedStatus(value);
+              if (value === "pagada") {
+                setPartialPayment(null); 
+              }
+            }}
+          >
           <option value="pagada">Pagada</option>
           <option value="parcial">Parcial</option>
-        </select>
+         </select>
 
         {selectedStatus === "parcial" ? (
           <div>
@@ -65,13 +66,9 @@ const SelectPaymentStatus = ({
         ) : (
           <p>Monto asignado: ${amountToPay}</p>
         )}
+        <button onClick={handleConfirm}>Confirmar</button>
 
-        <button onClick={handleConfirm} disabled={loading}>
-          {loading ? "Confirmando..." : "Confirmar"}
-        </button>
-        <button onClick={onCancel} disabled={loading}>
-          Cancelar
-        </button>
+        <button onClick={onCancel}>Cancelar</button>
       </div>
     </div>
   );

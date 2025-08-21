@@ -102,7 +102,7 @@ const Datatable = () => {
 
     const paymentHistoryData = {
       accounting: existingAccounting._id,
-      amount, 
+      amount, // 👈 viene del modal (pago total o parcial)
       status,
     };
 
