@@ -11,13 +11,13 @@ export const createBooking = async (req, res, next) => {
     //Busca el id del status pendiente
     const pendingStatus = await BookingStatus.findOne({ status: "Pendiente" });
   
-    //busca el precio de las cabañas
+    //Busca el precio de las cabañas
     const prices = await Price.find({ category: "cabañas" }).sort({ createdAt: -1 }).limit(1);
     if (prices.length === 0) {
       return res.status(400).json({ error: "No hay precios registrados para cabañas" });
     }
 
-    //calcula el precio final a cobrar
+    //Calcula el precio final a cobrar
     const latestPrice = prices[0];
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
@@ -59,7 +59,7 @@ export const createBooking = async (req, res, next) => {
         return res.status(404).json({ error: "Usuario no encontrado" });
       }
       
-      //trae los datos de la lodge para poder adquirir el nombre
+      //Trae los datos de la lodge para poder adquirir el nombre
       const lodgeData = await Lodge.findById({_id: lodge});
       const lodgeName = lodgeData.name
 
@@ -112,7 +112,7 @@ export const getBooking = async (req, res, next) => {
 
 export const getBookingByUser = async (req, res, next) => {
   try {
-    const bookings = await Booking.find({ user: req.params.userId }).populate('status'); 
+    const bookings = await Booking.find({ user: req.params.userId }).populate('status'); // Populate para obtener el estado completo
     res.status(200).json(bookings);
   } catch (err) {
     next(err);
@@ -121,7 +121,7 @@ export const getBookingByUser = async (req, res, next) => {
 
 export const deleteBookingByLodge = async (req, res, next) => {
   try {
-    const booking = await Booking.findOneAndDelete({ lodge: req.params.lodgeId }).populate('status'); 
+    const booking = await Booking.findOneAndDelete({ lodge: req.params.lodgeId }).populate('status'); // Populate para obtener el estado completo
     res.status(200).json(booking);
   } catch (err) {
     next(err);
@@ -203,17 +203,18 @@ export const setStatusCompleted = async (req, res, next) => {
   try {
     const bookingId = req.params.id;
 
+    // Buscar el estado "Completada" en la colección de BookingStatus
     const completedStatus = await BookingStatus.findOne({ status: 'Completada' });
     if (!completedStatus) {
       return res.status(500).json({ error: 'El estado "Completada" no existe en la base de datos' });
     }
 
-    //realizar la actualización en la base de datos
+    // Realiza la actualización en la base de datos
     const updatedBooking = await Booking.findByIdAndUpdate(
       bookingId,
-      { status: completedStatus._id }, 
+      { status: completedStatus._id }, // Referenciar el estado "Completada"
       { new: true }
-    ).populate('status'); //populate para obtener el estado completo
+    ).populate('status'); // Populate para obtener el estado completo
 
 
     res.json(updatedBooking);
@@ -223,12 +224,12 @@ export const setStatusCompleted = async (req, res, next) => {
   }
 };
 
-//cancelar manualmente
+//Cancelar manualmente
 export const setStatusCanceled = async (req, res, next) => {
   try {
     const bookingId = req.params.id;
 
-    //buscar la reserva
+    // Buscar la reserva
     const booking = await Booking.findById(bookingId).populate("user").populate("lodge");
     if (!booking) {
       return res.status(404).json({ error: "Reserva no encontrada" });
@@ -285,7 +286,7 @@ export const autoCancelPendingBookings = async () => {
     }
     const now = new Date();
 
-    //buscar reservas pendientes que se crearon hace más de 2 días
+    // Buscar reservas pendientes cuyo checkIn fue hace más de 2 días
     const outdatedBookings = await Booking.find({
       status: pendingStatus._id,
       createdAt: { $lte: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000) },
@@ -295,7 +296,7 @@ export const autoCancelPendingBookings = async () => {
       booking.status = canceledStatus._id;
       await booking.save();
 
-      //enviar email
+      // Enviar email
       if (booking.user && booking.user.email) {
         await sendCancellationEmail(booking.user.email, booking.user.first_name, {
           checkIn: booking.checkIn,

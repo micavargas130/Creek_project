@@ -24,7 +24,7 @@ export const userColumns = [
   },
   {
     field: "totalPeople",
-    headerName: "Nro Huespedes",
+    headerName: "",
     width: 100,
     valueGetter: (params) => {
       return params.row.numberOfAdults + params.row.numberOfChildren;

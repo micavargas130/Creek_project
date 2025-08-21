@@ -150,7 +150,6 @@ const Datatable = () => {
       };
   
       await axiosInstance.put(`/bookings/${bookingId}/updateStatusActive`);
-      reservationsObserver.notify("reservationChange", bookingId);
   
       const { data: accountingData } = await axiosInstance.post(`/accounting/createAccounting`, paymentData);
       //modifico el registro con el valor de la seña
@@ -168,7 +167,7 @@ const Datatable = () => {
       setShowDepositSummary(false); 
     }
   };
-
+  
   //funcion boton info
   const handleInfoClick = async (row) => {
     const currentStatus = row.status.status;  
