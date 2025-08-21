@@ -11,7 +11,7 @@ export const createBooking = async (req, res, next) => {
     //Busca el id del status pendiente
     const pendingStatus = await BookingStatus.findOne({ status: "Pendiente" });
   
-    //busca el precio de las cabañas
+    //Busca el precio de las cabañas
     const prices = await Price.find({ category: "cabañas" }).sort({ createdAt: -1 }).limit(1);
     if (prices.length === 0) {
       return res.status(400).json({ error: "No hay precios registrados para cabañas" });

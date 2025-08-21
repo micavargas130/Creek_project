@@ -150,7 +150,6 @@ const Datatable = () => {
       };
   
       await axiosInstance.put(`/bookings/${bookingId}/updateStatusActive`);
-      reservationsObserver.notify("reservationChange", bookingId);
   
       const { data: accountingData } = await axiosInstance.post(`/accounting/createAccounting`, paymentData);
       //modifico el registro con el valor de la seña
@@ -165,10 +164,9 @@ const Datatable = () => {
       console.error("Error al marcar la cabaña como ocupada y registrar el pago:", error);
     } finally {
       setLoadingActivation(false);
-      setShowDepositSummary(false); 
+     setShowDepositSummary(false); 
     }
   };
-
   //funcion boton info
   const handleInfoClick = async (row) => {
     const currentStatus = row.status.status;  

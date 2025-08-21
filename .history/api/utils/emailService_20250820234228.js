@@ -153,7 +153,7 @@ export const sendBookingWithDepositEmail = async (userEmail, userName, password,
         </ul>
          <p>Una vez transferido por favor enviar comprobante al siguiente whatsapp: 3804345131</p>
 
-        <p><strong>Importante:</strong> Si no se recibe la seña antes de las proximas 48 horas, la reserva sera cancelada automáticamente.</p>
+        <p><strong>Importante:</strong> Si no se recibe la seña antes de las proximas 48 horas, la reserva podrá ser cancelada automáticamente.</p>
         <br>
         <p>¡Gracias por elegirnos!</p>
         <p><strong>Equipo de Camping Arroyito</strong></p>

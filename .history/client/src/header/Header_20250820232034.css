@@ -163,18 +163,30 @@
 
 @media (max-width: 480px) {
   .headerSearch {
-    flex-direction: column;
-    align-items: stretch; /* que se expandan al 100% */
+      flex-direction: column;
+      align-items: flex-start;
   }
+
+  .headerSearchText {
+      margin-right: 0;
+      margin-bottom: 0.5rem;
+  }
+
+  .headerIcon img {
+  max-height: 40px;
+}
 
   .headerSearchItem {
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 0.5rem;
+      margin-right: 0;
+      width: 100%;
   }
 
-  .headerSearch button {
-    width: 100%;   /* botón ocupa toda la línea */
-    margin-left: 0;
+  .header .login {
+      font-size: 0.875rem;
+  }
+
+  .options {
+      width: 100%;
+      left: 0;
   }
 }
