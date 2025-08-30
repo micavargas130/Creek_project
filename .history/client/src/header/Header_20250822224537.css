@@ -1,0 +1,180 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 8rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1000;
+}
+
+.headerIcon {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0dbf84;
+  text-decoration: none;
+}
+
+.headerIcon:hover {
+  color: #0a9c68;
+}
+
+.headerSearch {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 2px solid #0dbf84;
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  width: 70%;          /* 🔹 hacelo más largo aumentando el porcentaje */
+  max-width: 1000px;   /* 🔹 dale un límite mayor si querés */
+  flex-wrap: nowrap;   /* 🔹 evita que se acomoden en varias filas */
+}
+
+.headerSearchItem {
+  flex: 2;             /* 🔹 ahora cada ítem crece más */
+  min-width: 150px;    /* 🔹 y no se achican tanto */
+  margin-right: 1rem;
+}
+
+
+
+
+.headerSearchText {
+  color: #676767;
+  cursor: pointer;
+  margin-right: 1.6rem;
+}
+
+.headerSearch button {
+  flex-shrink: 0;         
+  margin-left: auto;      
+}
+
+.headerSearchText:hover {
+  color: #0dbf84;
+}
+
+.date,
+.options {
+  position: absolute;
+  top: 60px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.options {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.optionItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.optionCounter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.optionCounterButton {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #0dbf84;
+  color: #0dbf84;
+  background-color: #fff;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.optionCounterButton:hover {
+  background-color: #0dbf84;
+  color: #fff;
+}
+
+.header .login {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  background-color: #f8f8f8;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.header .login:hover {
+  background-color: #fff;
+  border-color: #0dbf84;
+}
+
+.header .login svg {
+  width: 24px;
+  height: 24px;
+  fill: #676767;
+}
+
+.header .login:hover svg {
+  fill: #0dbf84;
+}
+
+.header .user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header .user-info span {
+  color: #676767;
+}
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+  .header {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .headerIcon {
+      font-size: 1.25rem;
+  }
+
+  .headerSearch {
+      width: 100%;
+      margin: 1rem 0;
+  }
+
+  .headerSearchText {
+      font-size: 0.875rem;
+  }
+
+  .header .login {
+      padding: 0.25rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerSearch {
+    flex-direction: column;
+    align-items: stretch; /* que se expandan al 100% */
+  }
+
+  .headerSearchItem {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .headerSearch button {
+    width: 100%;   /* botón ocupa toda la línea */
+    margin-left: 0;
+  }
+}
