@@ -45,18 +45,18 @@ const ChartContainer = ({ rawData, processedData, chartData, totalMoney, totalIn
          return <ChartIncomeExpense data={incomeExpenseData} />;
      
        case "ingresosServicios":
-        const filteredServicesData = rawData.filter(entry => {
-          const entryDate = new Date(entry.date);
-          const matchesYear = entryDate.getFullYear() === selectedYear;
-          const matchesMonth = selectedMonth === "" || entryDate.getMonth() === Number(selectedMonth);
-          return matchesYear && matchesMonth;
-        });      
+  const filteredServicesData = rawData.filter(entry => {
+    const entryDate = new Date(entry.date);
+    const matchesYear = entryDate.getFullYear() === selectedYear;
+    const matchesMonth = selectedMonth === "" || entryDate.getMonth() === Number(selectedMonth);
+    return matchesYear && matchesMonth;
+  });
 
-        return (
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <IncomeByServiceChart data={filteredServicesData} />
-          </div>
-        );
+  return (
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <IncomeByServiceChart data={filteredServicesData} />
+    </div>
+  );
 
      
        case "widgets":

@@ -108,9 +108,9 @@ const Datatable = () => {
 
     await axiosInstance.post(`/accounting/pay/${existingAccounting._id}`, paymentHistoryData);
     await axiosInstance.put(`/bookings/${bookingId}/updateStatusCompleted`);
-    globalObserver.notify("changesLodges");
-    globalObserver.notify("reservationCompleted", { booking });
-    globalObserver.notify("reservationChange");
+    reservationsObserver.notify("changesLodges");
+    reservationsObserver.notify("reservationCompleted", { booking });
+    reservationsObserver.notify("reservationChange");
 
     navigate("/lodges");
   } catch (error) {
@@ -153,7 +153,7 @@ const Datatable = () => {
         status: "seña"
       };
       await axiosInstance.post(`/accounting/pay/${accountingData._id}`, paymentHistoryData);
-      globalObserver.notify("reservationChange");
+      reservationsObserver.notify("reservationChange");
     } catch (error) {
       console.error("Error al marcar la cabaña como ocupada y registrar el pago:", error);
     } finally {

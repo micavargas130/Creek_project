@@ -31,11 +31,11 @@ const Datatable = () => {
     refetch(); // actualiza cuando cambia una reserva
   };
   
-  globalObserver.subscribe("reservationCompleted", handleReservationChange);
-  globalObserver.subscribe("reservationChange", handleReservationChange);
+  reservationsObserver.subscribe("reservationCompleted", handleReservationChange);
+  reservationsObserver.subscribe("reservationChange", handleReservationChange);
   return () => {
-    globalObserver.unsubscribe("reservationChange", handleReservationChange);
-    globalObserver.unsubscribe("reservationCompleted", handleReservationChange);
+    reservationsObserver.unsubscribe("reservationChange", handleReservationChange);
+     reservationsObserver.unsubscribe("reservationCompleted", handleReservationChange);
   };
    }, []);
 
@@ -49,7 +49,7 @@ const Datatable = () => {
     if (!confirmCancel) return; 
     try {
       await axiosInstance.put(`/bookings/${params.row._id}/updateStatusCanceled`);
-      globalObserver.notify("reservationChange"); // Recarga la página para reflejar los cambios
+      reservationsObserver.notify("reservationChange"); // Recarga la página para reflejar los cambios
     } catch (error) {
       console.error("Error cancelando la reserva:", error);
     }
@@ -108,9 +108,9 @@ const Datatable = () => {
 
     await axiosInstance.post(`/accounting/pay/${existingAccounting._id}`, paymentHistoryData);
     await axiosInstance.put(`/bookings/${bookingId}/updateStatusCompleted`);
-    globalObserver.notify("changesLodges");
-    globalObserver.notify("reservationCompleted", { booking });
-    globalObserver.notify("reservationChange");
+    reservationsObserver.notify("changesLodges");
+    reservationsObserver.notify("reservationCompleted", { booking });
+    reservationsObserver.notify("reservationChange");
 
     navigate("/lodges");
   } catch (error) {
@@ -153,7 +153,7 @@ const Datatable = () => {
         status: "seña"
       };
       await axiosInstance.post(`/accounting/pay/${accountingData._id}`, paymentHistoryData);
-      globalObserver.notify("reservationChange");
+      reservationsObserver.notify("reservationChange");
     } catch (error) {
       console.error("Error al marcar la cabaña como ocupada y registrar el pago:", error);
     } finally {
