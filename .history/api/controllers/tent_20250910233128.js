@@ -21,14 +21,12 @@ export const createTent = async (req, res, next) => {
         const timeDifference = checkOutDate - checkInDate;
         const daysDifference = Math.round(timeDifference / (1000 * 3600 * 24));
 
-        if (daysDifference < 0) {
-             return res.status(400).json({ message: "La fecha de check-out no puede ser anterior a la de check-in" });
-        }        
+        if (daysDifference <= 0) {
+            return res.status(400).json({ message: "La fecha de check-out debe ser posterior a la de check-in" });
+        }
 
-        //si checkIn === checkOut contarlo como 1 dia
-        const daysCount = daysDifference === 0 ? 1 : daysDifference;        
-
-        const paymentAmount =(numberOfAdults * price.priceAdult + numberOfChildren * price.priceChild) * daysCount;
+        // Calcular el monto total basado en la cantidad de días
+        const paymentAmount = ((numberOfAdults * price.priceAdult) + (numberOfChildren * price.priceChild)) * daysDifference;
 
         const newTent = new Tents({
             ...req.body,

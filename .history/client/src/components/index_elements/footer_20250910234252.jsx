@@ -23,7 +23,7 @@ function Footer() {
             <div className="footer-right">
                 <h1>Contáctanos:</h1>
                 <div className="social-links">
-                    <a href="https://www.facebook.com/CampingArroyitoSanJuan/?locale=es_LA" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
                         <FontAwesomeIcon icon={faFacebook} /> Facebook
                     </a>
                    <h1><FontAwesomeIcon icon={faPhone} /> Teléfono: 3804342425</h1> 

@@ -28,6 +28,7 @@ export const createTent = async (req, res, next) => {
         //si checkIn === checkOut contarlo como 1 dia
         const daysCount = daysDifference === 0 ? 1 : daysDifference;        
 
+        // Calcular el monto total basado en la cantidad de días
         const paymentAmount =(numberOfAdults * price.priceAdult + numberOfChildren * price.priceChild) * daysCount;
 
         const newTent = new Tents({
