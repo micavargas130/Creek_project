@@ -28,14 +28,13 @@ const Datatable = (props) => {
   const location = useLocation();
   
   useEffect(() => {
-  refetch();
-
-  const handleStatusChange = () => refetch();
-  globalObserver.subscribe("changesLodges", handleStatusChange);
-
-  return () => globalObserver.unsubscribe("changesLodges", handleStatusChange);
-}, [location.pathname, refetch]);
-
+    refetch();
+  
+    const handleStatusChange = () => refetch();
+    globalObserver.subscribe("changesLodges", handleStatusChange);
+  
+    return () => globalObserver.unsubscribe("changesLodges", handleStatusChange);
+  }, [location.pathname]);
 
   //para cuando se elige el estado "mantenimiento"
   const handleMaintenanceSubmit = (params) => {

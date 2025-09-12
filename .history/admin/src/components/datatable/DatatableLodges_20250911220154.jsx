@@ -25,17 +25,16 @@ const Datatable = (props) => {
 
   const currentUser = JSON.parse(localStorage.getItem("user")) || null;
   const isAdmin = currentUser?.isAdmin;
-  const location = useLocation();
-  
-  useEffect(() => {
+const location = useLocation();
+
+useEffect(() => {
   refetch();
 
   const handleStatusChange = () => refetch();
   globalObserver.subscribe("changesLodges", handleStatusChange);
 
   return () => globalObserver.unsubscribe("changesLodges", handleStatusChange);
-}, [location.pathname, refetch]);
-
+}, [location.pathname]);
 
   //para cuando se elige el estado "mantenimiento"
   const handleMaintenanceSubmit = (params) => {

@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { userColumns } from "../../datatablesourceLodges.js";
 import { Link} from "react-router-dom";
-import { useNavigate, useLocation } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useState, useEffect } from "react";
 import useFetch from "../../hooks/useFetch.js";
 import axiosInstance from "../../axios/axiosInstance.js"
@@ -25,17 +25,13 @@ const Datatable = (props) => {
 
   const currentUser = JSON.parse(localStorage.getItem("user")) || null;
   const isAdmin = currentUser?.isAdmin;
-  const location = useLocation();
-  
+
   useEffect(() => {
   refetch();
-
   const handleStatusChange = () => refetch();
   globalObserver.subscribe("changesLodges", handleStatusChange);
-
   return () => globalObserver.unsubscribe("changesLodges", handleStatusChange);
-}, [location.pathname, refetch]);
-
+}, [location.pathname]);
 
   //para cuando se elige el estado "mantenimiento"
   const handleMaintenanceSubmit = (params) => {
