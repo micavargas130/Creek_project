@@ -41,7 +41,7 @@ const SelectPaymentStatus = ({
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
         >
-          <option value="pagado">Pagado</option>
+          <option value="pagada">Pagado</option>
           <option value="parcial">Parcial</option>
         </select>
 

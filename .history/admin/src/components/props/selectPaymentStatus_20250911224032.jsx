@@ -15,14 +15,13 @@ const SelectPaymentStatus = ({
   const handleConfirm = async () => {
     setLoading(true);
     try {
-      if (selectedStatus === "pagado") {
+      if (selectedStatus === "pagada") {
         console.log("aca")
         await onConfirm({
           status: "pagado",
           amount: amountToPay,
         });
       } else {
-        console.log("aca2")
         await onConfirm({
           status: "parcial",
           amount: partialPayment || 0,
@@ -41,7 +40,7 @@ const SelectPaymentStatus = ({
           value={selectedStatus}
           onChange={(e) => setSelectedStatus(e.target.value)}
         >
-          <option value="pagado">Pagado</option>
+          <option value="pagada">Pagada</option>
           <option value="parcial">Parcial</option>
         </select>
 

@@ -108,15 +108,11 @@ const Datatable = () => {
 
     await axiosInstance.post(`/accounting/pay/${existingAccounting._id}`, paymentHistoryData);
     await axiosInstance.put(`/bookings/${bookingId}/updateStatusCompleted`);
+    globalObserver.notify("changesLodges");
+    globalObserver.notify("reservationCompleted", { booking });
+    globalObserver.notify("reservationChange");
 
-    navigate("/lodges");  // primero navegar
-    
-    setTimeout(() => {
-      globalObserver.notify("changesLodges");
-      globalObserver.notify("reservationCompleted", { booking });
-      globalObserver.notify("reservationChange");
-    }, 100);
-
+    navigate("/lodges");
   } catch (error) {
     console.error("Error al finalizar la reserva y registrar el pago:", error);
   } finally {
