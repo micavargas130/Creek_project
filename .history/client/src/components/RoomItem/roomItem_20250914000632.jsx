@@ -3,8 +3,6 @@ import axios from "axios";
 import { differenceInCalendarDays } from "date-fns";
 import { useState, useEffect } from "react";
 import { Chip } from "@mui/material";
-import { format } from "date-fns";
-
 
 export default function RoomItem({ item, updateBookingList }) {
   const [lodge, setLodge] = useState(null);
@@ -73,7 +71,7 @@ export default function RoomItem({ item, updateBookingList }) {
           <p className="text-green-600 font-medium">
             Cancelación gratuita hasta {(() => {
               const date = new Date(item.checkOut);
-              date.setDate(date.getDate() - 5);
+              date.setDate(date.getDate() - 3);
               return date.toLocaleDateString("es-AR");
             })()}
           </p>)}

@@ -68,10 +68,10 @@ export default function RegisterPage(){
           <input type="text" placeholder="Apellido" value={last_name} onChange={ev => setLastName(ev.target.value)}/> 
           <input type="email" value={email} disabled={!!googleEmail} onChange={ev => setEmail(ev.target.value)}/>
           <input type="text" placeholder="Contraseña" value={password} onChange={ev => setPassword(ev.target.value)}/>
-          <input type="number" placeholder="Telefono" value={phone} onChange={ev => setPhone(ev.target.value)}/>
+          <input type="number" placeholder="Phone" value={phone} onChange={ev => setPhone(ev.target.value)}/>
           <input type="number" placeholder="DNI" value={dni} onChange={ev => setDni(ev.target.value)}/>
           <input type="date" value={birthday} onChange={ev => setBirthday(ev.target.value)}/>
-          <input type="text" placeholder="Ocupacion" value={ocupation} onChange={ev => setOcupation(ev.target.value)}/>
+          <input type="text" placeholder="Ocupation" value={ocupation} onChange={ev => setOcupation(ev.target.value)}/>
           
           <button className="primary">Guardar</button>
           <div className="text-center py-2 text-gray-500">

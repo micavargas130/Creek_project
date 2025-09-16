@@ -104,11 +104,6 @@
   margin-bottom: 10px;
 }
 
-.lodgeImages {
-  margin: 0 auto;
-  max-width: 1500px; /* o el valor que mejor funcione según tu diseño */
-}
-
 .lodgeImgWrapper {
   overflow: hidden;
   border-radius: 12px;
@@ -121,13 +116,12 @@
 }
 
 .lodgeImg {
-  display: flex;
   width: 90%;
-  height: 500px; /* Tamaño uniforme */
-  object-fit:fill; /* Recorta la imagen si es más grande */
+  height: 500px;
+  object-fit: cover; 
   border-radius: 12px;
-  transition: transform 0.3s ease;
 }
+
 
 /* Detalles */
 .lodgeDetails {
