@@ -73,7 +73,7 @@ export default function RoomItem({ item, updateBookingList }) {
           <p className="text-green-600 font-medium">
             Cancelación gratuita hasta {(() => {
               const date = new Date(item.checkOut);
-              date.setDate(date.getDate() - 4);
+              date.setDate(date.getDate() - 3);
               return date.toLocaleDateString("es-AR");
             })()}
           </p>)}

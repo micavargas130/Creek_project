@@ -121,13 +121,12 @@
 }
 
 .lodgeImg {
-  display: flex;
   width: 90%;
-  height: 500px; /* Tamaño uniforme */
-  object-fit:fill; /* Recorta la imagen si es más grande */
+  height: 500px;
+  object-fit: cover; /* recorta la imagen pero mantiene la proporción */
   border-radius: 12px;
-  transition: transform 0.3s ease;
 }
+
 
 /* Detalles */
 .lodgeDetails {
@@ -228,7 +227,8 @@
 
 .bookNowButton  {
   border: none;
-  right: 10px;
+  margin-top: 10px;
+  margin-left: 70px;
   padding: 12px;
   background-color: #0dbf84;
   color: white;

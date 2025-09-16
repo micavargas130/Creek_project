@@ -121,13 +121,12 @@
 }
 
 .lodgeImg {
-  display: flex;
   width: 90%;
-  height: 500px; /* Tamaño uniforme */
-  object-fit:fill; /* Recorta la imagen si es más grande */
+  height: 500px;
+  object-fit: cover; 
   border-radius: 12px;
-  transition: transform 0.3s ease;
 }
+
 
 /* Detalles */
 .lodgeDetails {
