@@ -27,9 +27,8 @@ export default function AccountPage() {
           const activeBookings = response.data.filter(
             (booking) =>( booking.status?.status === "Activa" ||  booking.status?.status === "Pendiente") 
           );
-          console.log(response.data)
-
-          setBookings(activeBookings);
+          const sortedBookings = activeBookings.sort(  (a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          setBookings(sortedBookings);
         })
         .catch((error) => {
           console.error("Error fetching bookings:", error);
@@ -100,7 +99,8 @@ export default function AccountPage() {
             <div className="text-center bg-white p-8 rounded-lg shadow-lg w-100 mt-4">
             <h3 className="text-xl font-medium mb-2">Cambiar Contraseña</h3>
               <form onSubmit={handleChangePassword} className="flex flex-col gap-4">
-              <input
+              <div className="relative w-full">
+                <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Nueva contraseña"
                   value={newPassword}
@@ -114,10 +114,13 @@ export default function AccountPage() {
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
-                <button type="submit" className="btn-primary w-full">
-                  Cambiar
-                </button>
-              </form>
+              </div>
+            
+              <button type="submit" className="btn-primary w-full">
+                Cambiar
+              </button>
+            </form>
+
             </div>
             <div>
               <button onClick={logout} className="primary max-w-sm mt-2">

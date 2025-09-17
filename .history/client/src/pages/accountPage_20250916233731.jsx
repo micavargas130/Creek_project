@@ -27,9 +27,8 @@ export default function AccountPage() {
           const activeBookings = response.data.filter(
             (booking) =>( booking.status?.status === "Activa" ||  booking.status?.status === "Pendiente") 
           );
-          console.log(response.data)
-
-          setBookings(activeBookings);
+          const sortedBookings = activeBookings.sort(  (a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          setBookings(sortedBookings);
         })
         .catch((error) => {
           console.error("Error fetching bookings:", error);
@@ -87,37 +86,41 @@ export default function AccountPage() {
       <div>
         <nav className="w-full flex justify-center mt-6 gap-9">
           <Link className={linkClasses("profile")} to={"/account"}>
-            My Profile
+            Mi Perfil
           </Link>
           <Link className={linkClasses("bookings")} to={"/account/bookings"}>
-            My Bookings
+            Mis Reservas
           </Link>
         </nav>
         {subpage === "profile" && user && (
           <div className="text-center mt-4">
-            Logged in as {user.first_name} {user.last_name} with email:{" "}
+            Ingresaste como {user.first_name} {user.last_name} con el Email:{" "}
             {user.email}
             <div className="text-center bg-white p-8 rounded-lg shadow-lg w-100 mt-4">
             <h3 className="text-xl font-medium mb-2">Cambiar Contraseña</h3>
-              <form onSubmit={handleChangePassword} className="flex flex-col gap-4">
-              <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Nueva contraseña"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="inputField w-full p-2 border-2 border-[#0dbf84] rounded-full text-center pr-10"
-                />
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-                <button type="submit" className="btn-primary w-full">
-                  Cambiar
-                </button>
-              </form>
+              <<form onSubmit={handleChangePassword} className="flex flex-col gap-4">
+  <div className="relative w-full">
+    <input
+      type={showPassword ? "text" : "password"}
+      placeholder="Nueva contraseña"
+      value={newPassword}
+      onChange={(e) => setNewPassword(e.target.value)}
+      className="inputField w-full p-2 border-2 border-[#0dbf84] rounded-full text-center pr-10"
+    />
+    <button
+      type="button"
+      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+      onClick={() => setShowPassword(!showPassword)}
+    >
+      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+    </button>
+  </div>
+
+  <button type="submit" className="btn-primary w-full">
+    Cambiar
+  </button>
+</form>
+
             </div>
             <div>
               <button onClick={logout} className="primary max-w-sm mt-2">
