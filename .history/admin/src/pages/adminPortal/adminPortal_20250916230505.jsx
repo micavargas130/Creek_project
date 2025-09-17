@@ -69,7 +69,7 @@ import {
           setReservasPorMes(limitadoOrdenado); 
           setReservasPorMes(limitado);
           const rankingOrdenado = [...res2.data].sort((a, b) => b.total - a.total);
-          setReservasPorCabaña(rankingOrdenado);
+setReservasPorCabaña(rankingOrdenado);
           setPromedioHuespedes(res3.data);
           setPromedioEstadias(res4.data);
           
