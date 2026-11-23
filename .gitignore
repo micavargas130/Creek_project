@@ -1,1 +1,19 @@
 node_modules
+
+# variables de entorno (secretos): usar los .env.example como plantilla
+.env
+.env.local
+.env.*.local
+
+# historial local del editor (extension Local History)
+.history/
+
+# builds y reportes generados
+build/
+dist/
+coverage/
+yarn-error.log
+npm-debug.log*
+
+# imagenes subidas en desarrollo local
+api/public/uploads/
