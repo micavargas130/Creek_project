@@ -1,28 +1,29 @@
 import express from "express";
 import { createNotification, deleteNotification, getNotification, getNotifications,  updateNotificationViewing, closeNotification, getClosedNotification} from "../controllers/notification.js";
-import {  verifyAdmin } from "../utils/verifyToken.js";
+import { verifyToken, verifyStaff } from "../utils/verifyToken.js";
 
 const router = express.Router();
 
 
 //CREATE
-router.post("/", createNotification); //poner el verifyAdmin despues
-router.post("/close/:notificationId", closeNotification) 
+//los clientes logueados generan notificaciones al reservar o cancelar
+router.post("/", verifyToken, createNotification);
+router.post("/close/:notificationId", verifyStaff, closeNotification)
 
 //UPDATE
-router.put("/:id", updateNotificationViewing);
+router.put("/:id", verifyStaff, updateNotificationViewing);
 
 
 //DELETE
-router.delete("/:id", deleteNotification);
+router.delete("/:id", verifyStaff, deleteNotification);
 
 
 //GET
-router.get("/:id", getNotification);
-router.get('/closed/:userId', getClosedNotification)
+router.get("/:id", verifyStaff, getNotification);
+router.get('/closed/:userId', verifyStaff, getClosedNotification)
 
 //GET ALL
-router.get("/", getNotifications);
+router.get("/", verifyStaff, getNotifications);
 
 
 export default router

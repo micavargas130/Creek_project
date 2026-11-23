@@ -6,7 +6,7 @@ export const getTotalMoney = (data) => {
   return data.reduce((accumulator, currentValue) => {
     // Ignorar si no tiene status o si está cancelado
     if (
-      currentValue.status._id === "686f099aacd6f16c7fd3c905"
+      currentValue.status?.status === "cancelado"
     ) {
       return accumulator;
     }
@@ -27,7 +27,7 @@ export const getTotalMoney = (data) => {
     }
     return data.reduce((accumulator, currentValue) => {
 
-      if (currentValue && currentValue.amount && currentValue.type === "Ingreso" && currentValue.status._id !== "686f099aacd6f16c7fd3c905") {
+      if (currentValue && currentValue.amount && currentValue.type === "Ingreso" && currentValue.status?.status !== "cancelado") {
         
         return accumulator + currentValue.amount;
       } else {

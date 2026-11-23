@@ -245,10 +245,10 @@ const Single = () => {
                           {payment.receipt && payment.receipt.length > 0 ? (
                             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                               <img
-                                src={`https://creek-project.onrender.com/${payment.receipt[0]}`}
+                                src={`${axiosInstance.defaults.baseURL}/${payment.receipt[0]}`}
                                 alt="Comprobante"
                                 style={{ width: 80, height: 80, objectFit: "cover", cursor: "pointer" }}
-                                onClick={() => window.open(`https://creek-project.onrender.com/${payment.receipt[0]}`, "_blank")}
+                                onClick={() => window.open(`${axiosInstance.defaults.baseURL}/${payment.receipt[0]}`, "_blank")}
                               />
                               <DeleteForeverIcon
                                 onClick={async () => {

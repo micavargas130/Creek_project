@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import RoomItem from "../components/RoomItem/roomItem.jsx";
 import { UserContext } from "../context/UserContext";
 import { Eye, EyeOff } from "lucide-react"; 
 
 export default function AccountPage() {
-  const { ready, user, setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [loadingBookings, setLoadingBookings] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [newPassword, setNewPassword] = useState("");
@@ -37,7 +37,7 @@ export default function AccountPage() {
           setLoadingBookings(false); // finaliza carga
         });
     }
-  }, [ready, user, subpage]);
+  }, [user, subpage]);
 
   async function logout() {
     try {
@@ -77,8 +77,8 @@ export default function AccountPage() {
     return classes;
   }
 
-  if (ready && !user) {
-    navigate('/login');
+  if (!user) {
+    return <Navigate to="/login" />;
   }
   
   return (

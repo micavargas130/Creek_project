@@ -101,7 +101,7 @@ const handleCommentSubmit = async () => {
 
   //FUNCIONES PARA LOS GRAFICOS
   useEffect(() => {
-    const chartData = data.filter((entry) => (entry.status._id !== "686f099aacd6f16c7fd3c905"))
+    const chartData = data.filter((entry) => (entry.status?.status !== "cancelado"))
     .map((entry) => ({
       name: entry.date,
       Total: entry.amount,
@@ -112,7 +112,7 @@ const handleCommentSubmit = async () => {
   const processDataForChart = (data) => {
   let accumulatedTotal = 0;
   return data
-    .filter((entry) => (entry.type !== "Ingreso" || entry.status._id !== "686f099aacd6f16c7fd3c905"))
+    .filter((entry) => (entry.type !== "Ingreso" || entry.status?.status !== "cancelado"))
     .map((entry) => {
       accumulatedTotal += entry.type === "Ingreso" ? entry.amount : -entry.amount;
       return {

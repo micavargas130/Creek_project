@@ -1,6 +1,14 @@
 import Booking from '../models/Bookings.js';
 import Tent from '../models/Tents.js';
 import Accounting from '../models/Accounting.js';
+import BookingStatus from '../models/BookingsStatus.js';
+import PaymentStatus from '../models/PaymentStatus.js';
+
+//filtro para que las reservas canceladas no cuenten en las estadisticas
+const notCanceledBookings = async () => {
+  const canceled = await BookingStatus.findOne({ status: "Cancelada" });
+  return canceled ? { status: { $ne: canceled._id } } : {};
+};
 
 export const agruparPorMes = (entries) => {
   const resultado = {};
@@ -12,7 +20,7 @@ export const agruparPorMes = (entries) => {
     if (!resultado[mes]) {
       resultado[mes] = { ingresos: 0, egresos: 0 };
     }
-    if (entry.type === "Ingreso" && entry.status._id !== "686f099aacd6f16c7fd3c905") {
+    if (entry.type === "Ingreso") {
       resultado[mes].ingresos += entry.amount;
     } else if (entry.type === "Egreso") {
       resultado[mes].egresos += entry.amount;
@@ -68,18 +76,22 @@ export const getReservationsOverTime = async (req, res) => {
       groupBy.year = { $year: "$checkIn" };
     }
 
-    const bookings = await Booking.aggregate([
-      { $match: match },
+    //los ultimos 6 periodos: ordenar descendente, limitar y volver a ordenar ascendente
+    const lastPeriods = [
       { $group: { _id: groupBy, total: { $sum: 1 } } },
+      { $sort: { "_id.year": -1, "_id.month": -1, "_id.day": -1 } },
+      { $limit: 6 },
       { $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } },
-      { $limit: 6 }
+    ];
+
+    const bookings = await Booking.aggregate([
+      { $match: { ...match, ...(await notCanceledBookings()) } },
+      ...lastPeriods,
     ]);
 
     const tents = await Tent.aggregate([
       { $match: match },
-      { $group: { _id: groupBy, total: { $sum: 1 } } },
-      { $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } },
-      { $limit: 6 }
+      ...lastPeriods,
     ]);
 
     res.status(200).json({ bookings, tents });
@@ -128,15 +140,16 @@ export const agruparPorDia = (entries) => {
 
 export const getAccountingEvolution = async (req, res, next) => {
   try {
-    const year = parseInt(req.query.year);
-    const month = req.query.month !== "" ? parseInt(req.query.month) : null;
+    const year = req.query.year ? parseInt(req.query.year) : new Date().getFullYear();
+    const month = req.query.month ? parseInt(req.query.month) : null;
 
     const startDate = month !== null ? new Date(year, month, 1) : new Date(year, 0, 1);
     const endDate = month !== null ? new Date(year, month + 1, 0, 23, 59, 59) : new Date(year, 11, 31, 23, 59, 59);
 
-    const entries = await Accounting.find({ 
+    const canceledPayment = await PaymentStatus.findOne({ status: "cancelado" });
+    const entries = await Accounting.find({
      date: { $gte: startDate, $lte: endDate },
-     status: { $ne: "686f099aacd6f16c7fd3c905" } // excluye cancelados
+     ...(canceledPayment && { status: { $ne: canceledPayment._id } }) // excluye cancelados
     });
 
     const grouped = month !== null
@@ -174,7 +187,7 @@ export const getReservationsByLodge = async (req, res) => {
 
   try {
     const result = await Booking.aggregate([
-      { $match: match },
+      { $match: { ...match, ...(await notCanceledBookings()) } },
       {
         $group: {
           _id: "$lodge",
@@ -209,6 +222,7 @@ export const getReservationsByLodge = async (req, res) => {
   export const getAverageGuests = async (req, res) => {
     try {
       const bookings = await Booking.aggregate([
+        { $match: await notCanceledBookings() },
         {
           $project: {
             totalGuests: { $add: ["$numberOfAdults", "$numberOfChildren"] }
@@ -248,6 +262,7 @@ export const getReservationsByLodge = async (req, res) => {
   export const getAverageStayDuration = async (req, res) => {
     try {
       const bookings = await Booking.aggregate([
+        { $match: await notCanceledBookings() },
         {
           $project: {
             stayLength: {

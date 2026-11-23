@@ -208,7 +208,7 @@ return (
                   setAñoRanking(e.target.value);
                 }}
               >
-                {[2023, 2024, 2025].map((año) => (
+                {Array.from({ length: 4 }, (_, i) => new Date().getFullYear() - i).map((año) => (
                   <MenuItem key={año} value={año}>{año}</MenuItem>
                 ))}
               </Select>

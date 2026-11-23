@@ -1,7 +1,11 @@
 import express from 'express';
 import { createAccounting, getAccountings, getAccounting, returnPayment, paymentHistory, getPaymentHistoryByEntity, deleteAccounting, updatePaymentStatus, getAccountingByFilter, getAccountingByBooking, deleteReceipt, uploadReceipt, addCommentToAccounting } from '../controllers/accounting.js';
+import { verifyStaff } from "../utils/verifyToken.js";
 
 const router = express.Router();
+
+//todo lo de contabilidad es solo para el staff
+router.use(verifyStaff);
 
 //POST
 router.post('/createAccounting', createAccounting);

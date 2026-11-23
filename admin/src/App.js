@@ -32,20 +32,31 @@ import LodgeHistoryPage from "./components/datatable/DatatableLodgeHistory.jsx";
 // Others
 import LodgeInfo from "./pages/lodgeInfo/lodgeInfo.jsx";
 import AdminPortal from "./pages/adminPortal/adminPortal.jsx";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useContext } from "react";
-import { AuthContext } from "../src/context/AuthContext.js";
-import { UserContextProvider } from '../src/context/UserContext.jsx';
+import { UserContext, UserContextProvider } from '../src/context/UserContext.jsx';
+
+//cualquier pagina del panel requiere estar logueado (admin o empleado)
+const ProtectedRoute = () => {
+  const { user } = useContext(UserContext);
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+  return <Outlet />;
+};
+
+//estadisticas, contabilidad y empleados son solo para administradores (igual que en el Sidebar)
+const AdminRoute = () => {
+  const { user } = useContext(UserContext);
+
+  if (user?.isEmployee && !user?.isAdmin) {
+    return <Navigate to="/" />;
+  }
+  return <Outlet />;
+};
 
 function App() {
-  const ProtectedRoute = ({children}) => {
-    const {user} = useContext(AuthContext)
-
-    if(!user){
-      return <Navigate to="/login" />
-    }
-    return children;
-  }
   
   return (
     <BrowserRouter>
@@ -54,15 +65,9 @@ function App() {
           <Route path="/">
             <Route path="login" element={<Login />} />
             <Route path="loading" element={<Loading />} />
+            <Route element={<ProtectedRoute />}>
             <Route path="change-password" element={<ChangePassword />} />
-            <Route 
-              index
-              element={
-                <ProtectedRoute>
-                  <Home />
-                </ProtectedRoute>
-              } 
-            />
+            <Route index element={<Home />} />
             <Route path="bookings">
               <Route index element={<ListReservations />} />
               <Route path=":bookingId" element={<SingleReservations />} />
@@ -82,6 +87,7 @@ function App() {
               <Route path="new" element={<NewTent />} />
               <Route path="historico" element={<ListTentsHistoric />} />
             </Route>
+            <Route element={<AdminRoute />}>
             <Route path="accounting">
               <Route index element={<ListAccounting />} />
               <Route path="new" element={<NewAccounting />} />
@@ -95,6 +101,8 @@ function App() {
             </Route>
             <Route path="admin">
               <Route index element={<AdminPortal />} />
+            </Route>
+            </Route>
             </Route>
           </Route>
         </Routes>

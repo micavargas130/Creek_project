@@ -22,9 +22,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
     },
 
+    //sparse: los usuarios de Google no tienen dni y no deben chocar entre si
     dni: {
         type: String,
-        unique: true
+        unique: true,
+        sparse: true
     },
 
     phone: {
@@ -55,7 +57,25 @@ const UserSchema = new mongoose.Schema({
         default: false
     },
 
+    googleId: {
+        type: String,
+        required: false,
+    },
+
+    isGoogleUser: {
+        type: Boolean,
+        default: false
+    },
+
 }, { timestamps: true });
+
+//nunca devolver el hash de la contraseña en las respuestas
+UserSchema.set("toJSON", {
+    transform: (doc, ret) => {
+        delete ret.password;
+        return ret;
+    },
+});
 
 export default mongoose.model("User", UserSchema);
 

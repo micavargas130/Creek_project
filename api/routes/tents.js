@@ -1,8 +1,11 @@
 import express from "express";
-import Tents from "../models/Tents.js"
 import { createTent, deleteTent, getTent, getTents, getOccupiedPositions, updateTent } from "../controllers/tent.js";
+import { verifyStaff } from "../utils/verifyToken.js";
 
 const router = express.Router();
+
+//las carpas tienen datos personales de los huespedes, solo staff
+router.use(verifyStaff);
 
 //POST
 router.post("/", createTent);

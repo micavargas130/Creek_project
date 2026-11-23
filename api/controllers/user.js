@@ -6,7 +6,13 @@ export default User;
 
 export const updateUser = async(req, res, next) =>{
     try{
-        const updateUser = await User.findByIdAndUpdate(req.params.id, {$set:req.body}, {new:true})  
+        //la contraseña se cambia por /changePassword (hasheada) y los roles solo los toca un admin
+        const { password, isAdmin, isEmployee, ...fields } = req.body;
+        if (req.user?.isAdmin) {
+            if (isAdmin !== undefined) fields.isAdmin = isAdmin;
+            if (isEmployee !== undefined) fields.isEmployee = isEmployee;
+        }
+        const updateUser = await User.findByIdAndUpdate(req.params.id, {$set:fields}, {new:true})
         res.status(200).json(updateUser)
     }catch(err) {
         next(err);

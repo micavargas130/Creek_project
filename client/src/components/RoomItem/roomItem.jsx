@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import axios from "axios";
-import { differenceInCalendarDays } from "date-fns";
+import { differenceInCalendarDays, parseISO, subDays } from "date-fns";
 import { useState, useEffect } from "react";
 import { Chip } from "@mui/material";
 import { format } from "date-fns";
@@ -13,7 +13,6 @@ export default function RoomItem({ item, updateBookingList }) {
     const fetchLodge = async () => {
       try {
         const response = await axios.get(`/lodges/${item.lodge}`);
-                setLodge("e", item);
 
         setLodge(response.data);
       } catch (error) {
@@ -40,7 +39,8 @@ export default function RoomItem({ item, updateBookingList }) {
   };
 
   const today = new Date();
-  const checkInDate = new Date(item.checkIn);
+  //la fecha viene en UTC (00:00Z): se toma solo el dia para no correrla por la zona horaria
+  const checkInDate = parseISO(item.checkIn.slice(0, 10));
   const daysDifference = differenceInCalendarDays(checkInDate, today);
   const isCancellationAllowed = daysDifference > 2;
 
@@ -51,7 +51,7 @@ export default function RoomItem({ item, updateBookingList }) {
         <p className="text-lg text-gray-600 mb-2">{lodge ? lodge.name : "Cargando..."}</p>
         <div className="text-gray-500 space-y-1 text-sm">
           <p><strong>Check-in:</strong> {item.checkIn.slice(0, 10).split("-").reverse().join("/")}</p>
-          <p><strong>Check-in:</strong> {item.checkOut.slice(0, 10).split("-").reverse().join("/")}</p>
+          <p><strong>Check-out:</strong> {item.checkOut.slice(0, 10).split("-").reverse().join("/")}</p>
           <p><strong>Estado:</strong>
               <Chip
                 label={
@@ -71,11 +71,7 @@ export default function RoomItem({ item, updateBookingList }) {
               />
           {item.status.status === "Activa" && (
           <p className="text-green-600 font-medium">
-            Cancelación gratuita hasta {(() => {
-              const date = new Date(item.checkOut);
-              date.setDate(date.getDate() - 3);
-              return date.toLocaleDateString("es-AR");
-            })()}
+            Cancelación gratuita hasta {subDays(checkInDate, 3).toLocaleDateString("es-AR")}
           </p>)}
           </p>
         </div>

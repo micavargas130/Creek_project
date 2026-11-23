@@ -6,6 +6,7 @@ export default function RegisterPage(){
   const location = useLocation();
   const googleEmail = location.state?.email || "";
   const userId = location.state?.userId || null;
+  const googleToken = location.state?.token || null;
 
   const [first_name,setFirstName] = useState('');
   const [last_name, setLastName] = useState('');
@@ -30,7 +31,7 @@ export default function RegisterPage(){
           password,
           birthday,
           ocupation
-        });
+        }, { headers: { Authorization: `Bearer ${googleToken}` } });
       } else {
         //registro normal
         await axios.post('/register', {

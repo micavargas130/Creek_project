@@ -1,26 +1,25 @@
 import express from "express";
 import { createEmployee, getEmployee,getEmployees,  updateEmployee, getEmployeeByUserId} from "../controllers/employee.js";
+import { verifyStaff, verifyAdmin } from "../utils/verifyToken.js";
 
 
 const router = express.Router();
 
-router.put("/update/:id", updateEmployee); 
+router.put("/update/:id", verifyAdmin, updateEmployee);
 
 //GET
-router.get("/:id", getEmployee);
-router.get("/user/:userId", getEmployeeByUserId );
+router.get("/:id", verifyStaff, getEmployee);
+router.get("/user/:userId", verifyStaff, getEmployeeByUserId );
 
 //CREATE
-router.post("/", createEmployee); //poner el verifyAdmin despues
+router.post("/", verifyAdmin, createEmployee);
 
 //UPDATE
 
-//Para updatear un empleado hay que pasarle el ID y los datos a modificar
-//verifyAdmin? 
 
 
 //GET ALL
-router.get("/", getEmployees);
+router.get("/", verifyStaff, getEmployees);
 
 //DELETE
 

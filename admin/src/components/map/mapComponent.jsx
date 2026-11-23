@@ -42,7 +42,12 @@ const MapComponent = ({ onCellClick, lodgesInfo }) => {
     ];  
 
     if (nonSelectableIcons.includes(iconType) || lodgeState === "ocupado") {
-      return; 
+      return;
+    }
+
+    //tampoco un lugar donde ya hay una carpa activa
+    if (occupiedPositions.some((p) => p.location?.row === row && p.location?.col === col)) {
+      return;
     }  
 
     const cellId = `${row}-${col}`;  

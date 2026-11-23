@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../../context/UserContext.jsx";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../axios/axiosInstance.js";
 
 const Sidebar = () => {
   const { user} = useContext(UserContext);
@@ -19,13 +18,8 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    try {
-      await axiosInstance.post("/logout");
-      logout(); // Utiliza la función de logout del contexto de usuario
-      navigate("/login"); // Redirige al usuario al inicio de sesión después de cerrar sesión
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
+    await logout(); // Utiliza la función de logout del contexto de usuario
+    navigate("/login"); // Redirige al usuario al inicio de sesión después de cerrar sesión
   };
 
   return (
@@ -57,7 +51,7 @@ const Sidebar = () => {
               <span>Carpas</span>
             </li>
           </Link> 
-          {!user.isEmployee && (
+          {!user?.isEmployee && (
           <div>
             <p className="title">ADMINISTRACION</p>
             <Link to="/admin" style={{ textDecoration: "none" }}>

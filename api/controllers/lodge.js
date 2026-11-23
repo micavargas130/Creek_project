@@ -1,5 +1,6 @@
 import multer from "multer";
 import path from "path";
+import { UPLOADS_DIR } from "../utils/uploads.js";
 import fs from "fs";
 import Lodges from '../models/Lodges.js';
 import Accounting from '../models/Accounting.js';
@@ -11,6 +12,9 @@ import LodgeXStatus from "../models/Lodge_X_Status.js";
 export const createLodge = async (req, res, next) => {
   try {
     const status = await Status.findOne({ status: "desocupada" });
+    if (!status) {
+      return res.status(500).json({ message: 'El estado "desocupada" no existe en la base de datos' });
+    }
     const newLodge = new Lodges({
       ...req.body,
       state: status._id,
@@ -134,7 +138,7 @@ export const countByTitle = async (req, res, next) =>{
 const getDatesInRange = (start, end) => {
   const date = new Date(start);
   let list = [];
-  while (date <= new Date(end)) {
+  while (date < new Date(end)) { //el dia de salida no se cuenta como ocupado
     list.push(new Date(date).toISOString().split("T")[0]); //formato YYYY-MM-DD
     date.setDate(date.getDate() + 1);
   }
@@ -151,7 +155,7 @@ export const getLodgesByAvailableDate = async (req, res) => {
     const lodges = await Lodges.find();
     const canceledStatus = await BookingStatus.findOne({ status: "Cancelada" });
     const overlappingBookings = await Booking.find({
-      status: { $ne: canceledStatus._id },
+      ...(canceledStatus && { status: { $ne: canceledStatus._id } }),
       $or: [ { checkIn: { $lt: new Date(checkOut) },
                 checkOut: { $gt: new Date(checkIn) }, },
       ],
@@ -169,7 +173,6 @@ export const getLodgesByAvailableDate = async (req, res) => {
 export const getLodgeAvailability = async (req, res) => {
   try {
     const lodgeId = req.params.id;
-    console.log("lodge", lodgeId);
 
     //obtener el estado "Cancelada" para excluirlo de la consulta
     const canceledStatus = await BookingStatus.findOne({ status: "Cancelada" });
@@ -177,10 +180,8 @@ export const getLodgeAvailability = async (req, res) => {
     //buscar solo reservas activas
     const activeBookings = await Booking.find({
       lodge: lodgeId,
-      status: { $ne: canceledStatus._id }, //ignorar las reservas canceladas
+      ...(canceledStatus && { status: { $ne: canceledStatus._id } }), //ignorar las reservas canceladas
     }).select("checkIn checkOut");
-
-    console.log("activeBookings", activeBookings)
 
     //extraer todas las fechas ocupadas
     let occupiedDates = [];
@@ -189,7 +190,6 @@ export const getLodgeAvailability = async (req, res) => {
       occupiedDates = occupiedDates.concat(dates);
     });
 
-    console.log("ocupadas", occupiedDates)
 
     res.json({ occupiedDates });
   } catch (error) {
@@ -202,7 +202,7 @@ export const getLodgeAvailability = async (req, res) => {
 //Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "/data/uploads"); 
+    cb(null, UPLOADS_DIR);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
@@ -269,7 +269,7 @@ export const deletePhoto = async (req, res) => {
     await lodge.save();
 
     const filename = path.basename(photo);
-    const diskPath = path.join("/data/uploads", filename);
+    const diskPath = path.join(UPLOADS_DIR, filename);
 
     if (fs.existsSync(diskPath)) {
       fs.unlinkSync(diskPath);
