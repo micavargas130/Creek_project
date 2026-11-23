@@ -18,8 +18,9 @@ const Chart = ({ title }) => {
         if (!user || !user._id) return;
         const response = await axiosInstance.get(`/notifications/closed/${user._id}`);
 
+        //se ignoran avisos cuyo cliente o cabaña ya no existen
         const enrichedNotifications = await Promise.all(
-          response.data.map(async (notification) => {
+          response.data.filter((n) => n.client && n.cabain).map(async (notification) => {
             const userResponse = await axiosInstance.get(`/user/${notification.client._id}`);
             const lodgeResponse = await axiosInstance.get(`/lodges/${notification.cabain}`);
 
@@ -86,10 +87,10 @@ const Chart = ({ title }) => {
             <div className="notification-content">
               <div className="notification-type">{notification.type}</div>
               <div className="notification-details">
-                Cliente: {notification.client.first_name} {notification.client.last_name}
+                Cliente: {notification.client?.first_name} {notification.client?.last_name}
               </div>
               <div className="notification-details">
-                Cabaña: {notification.cabain.name || notification.cabain.number || "-"}
+                Cabaña: {notification.cabain?.name || notification.cabain?.number || "-"}
               </div>
               <div className="notification-date">
                 {new Date(notification.date).toLocaleString()}

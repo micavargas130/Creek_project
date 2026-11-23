@@ -88,12 +88,12 @@ export default function LodgeInfo() {
 
   const handleDeletePhoto = async (photo) => {
   try {
-    const res = await axiosInstance.post(`/lodges/deletePhoto/${id}`, { photo });
-    const updatedPhotos = res.data.updatedPhotos;
+    await axiosInstance.post(`/lodges/deletePhoto/${id}`, { photo });
 
+    //el backend solo responde un mensaje: se saca la foto de la lista local
     setFormData((prevData) => ({
       ...prevData,
-      photos: updatedPhotos,
+      photos: prevData.photos.filter((p) => p !== photo),
     }));
   } catch (err) {
     console.error("Error deleting photo:", err);
@@ -145,7 +145,7 @@ export default function LodgeInfo() {
                  {formData.photos?.map((photo, i) => (
                    <div className="lodgeImgWrapper" key={i}>
                      <img
-                       src={`https://creek-project.onrender.com/${photo}`}
+                       src={`${axiosInstance.defaults.baseURL}/${photo}`}
                        alt="Imagen de la cabaña"
                        className="lodgeImg"
                      />
@@ -173,7 +173,7 @@ export default function LodgeInfo() {
                 {formData.photos?.map((photo, i) => (
                   <div className="lodgeImgWrapper" key={i}>
                     <img
-                      src={`https://creek-project.onrender.com/${photo}`}
+                      src={`${axiosInstance.defaults.baseURL}/${photo}`}
                       alt="Imagen de la cabaña"
                       className="lodgeImg"
                     />

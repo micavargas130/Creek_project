@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import useFetch from "../hooks/useFetch.js";
+import { API_URL } from "../config.js";
 import { UserContext } from "../context/UserContext";
 import { DateRange } from "react-date-range";
 import { format } from "date-fns";
@@ -36,7 +37,8 @@ const parsedDates = storedDates
       key: "selection"
     }];
 
-const [localDates, setLocalDates] = useState(location.state?.dates || dates || parsedDates);
+//dates del contexto arranca como [] (truthy), por eso se chequea el largo
+const [localDates, setLocalDates] = useState(location.state?.dates || (dates?.length ? dates : parsedDates));
   const [openDate, setOpenDate] = useState(false);
   const id = location.pathname.split("/")[2];
   const navigate = useNavigate();
@@ -75,6 +77,12 @@ const [localDates, setLocalDates] = useState(location.state?.dates || dates || p
 
   async function bookThisLodge() {
     if (user) {
+      const checkIn = format(new Date(localDates[0].startDate), 'yyyy-MM-dd');
+      const checkOut = format(new Date(localDates[0].endDate), 'yyyy-MM-dd');
+      if (checkOut <= checkIn) {
+        alert("La fecha de salida debe ser posterior a la de ingreso.");
+        return;
+      }
       try {
 
         setIsLoading(true);
@@ -82,8 +90,8 @@ const [localDates, setLocalDates] = useState(location.state?.dates || dates || p
         const sendEmailFlag = true;
         await axios.post('/bookings/createBooking', {
           lodge: id,
-          checkIn: format(new Date(localDates[0].startDate), 'yyyy-MM-dd'),
-          checkOut: format(new Date(localDates[0].endDate), 'yyyy-MM-dd'),
+          checkIn,
+          checkOut,
           user: user._id,
           numberOfAdults: options.adult,
           numberOfChildren: options.children,
@@ -92,12 +100,13 @@ const [localDates, setLocalDates] = useState(location.state?.dates || dates || p
           origin: "cliente", 
         });
 
+        //la reserva ya quedo hecha: si falla el aviso al admin no se le muestra error al cliente
         await axios.post(`/notifications/`, {
           type: "Nueva reserva",
           cabain: id,
           client: user._id,
           date: Date.now()
-        });
+        }).catch((err) => console.error("Error creando notificación:", err));
 
         setIsLoading(false);
         alert('Cabaña reservada exitosamente');
@@ -194,7 +203,7 @@ const totalPrice = totalPricePerNight * nights;
                 {data.photos.map((photo, i) => (
                   <div key={i}>
                     <img
-                      src={`https://creek-project.onrender.com/${photo}`}
+                      src={`${API_URL}/${photo}`}
                       alt={`Foto ${i}`}
                       className="lodgeImg"
                     />
@@ -203,7 +212,7 @@ const totalPrice = totalPricePerNight * nights;
               </Slider>
             ) : (
               <img
-                src={`https://creek-project.onrender.com/${data.photos?.[0]}`}
+                src={data.photos?.[0] ? `${API_URL}/${data.photos[0]}` : "/images/logoCamping.png"}
                 alt="Foto única"
                 className="lodgeImg"
               />

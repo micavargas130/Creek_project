@@ -6,15 +6,15 @@ const AddTask = ({ onSave, onCancel }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [description, setDescription] = useState("");
-  const [isLoading, setIsLoading] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [repeatWeekly, setRepeatWeekly] = useState(false);
 
   const handleSubmit = () => {
-    setIsLoading(true);
     if (!task || !startDate || !endDate || !description) {
       alert("Completá todos los campos");
       return;
     }
+    setIsLoading(true);
     onSave({ task, description, startDate, endDate, repeatWeekly });
     setIsLoading(false);
 

@@ -3,7 +3,7 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 const IncomeByServiceChart = ({ data }) => {
   // Procesar los datos para agrupar ingresos por tipo de servicio
   const incomeData = data
-    .filter(entry => (entry.type === "Ingreso" && entry.status._id !== "686f099aacd6f16c7fd3c905")) // Filtrar solo ingresos
+    .filter(entry => (entry.type === "Ingreso" && entry.status?.status !== "cancelado")) // Filtrar solo ingresos
     .reduce((acc, entry) => {
       let category = "Otros";
       if (entry.lodge) category = "Cabañas";

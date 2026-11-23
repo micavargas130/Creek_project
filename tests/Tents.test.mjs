@@ -1,6 +1,7 @@
 import { test} from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';
+import { adminAuth } from './auth_helper.js';
 import { app } from '../index.js';  // Asegúrate de importar `connect`
 import { disconnectFromDB } from './testing_db.js';
 
@@ -20,7 +21,7 @@ let createdTentId;
       numberOfChildren: 3,      
     };
 
-    const response = await request(app).post("/tents").send(newTent);
+    const response = await request(app).post("/tents").set('Authorization', adminAuth()).send(newTent);
 
     createdTentId = response.body._id; 
 
@@ -31,7 +32,7 @@ let createdTentId;
 
   // 🏕️ **2. Obtener una carpa por ID**
   test("GET /tents/:id debe devolver una carpa", async () => {
-    const response = await request(app).get(`/tents/${createdTentId}`);
+    const response = await request(app).get(`/tents/${createdTentId}`).set('Authorization', adminAuth());
 
     console.log("📥 Respuesta GET por ID:", response.body);
 
@@ -41,21 +42,21 @@ let createdTentId;
 
   // 🏕️ **3. Obtener todas las carpas**
   test("GET /tents debe devolver todas las carpas", async () => {
-    const response = await request(app).get("/tents");
+    const response = await request(app).get("/tents").set('Authorization', adminAuth());
 
     assert.strictEqual(response.status, 200);
   });
 
 
    test("GET /tents/occupiedPositions debe devolver posiciones ocupadas", async () => {
-        const response = await request(app).get("/tents/occupiedPositions");
+        const response = await request(app).get("/tents/occupiedPositions").set('Authorization', adminAuth());
     
     
         assert.strictEqual(response.status, 200);
       });
 
   test("DELETE /tents/:id debe eliminar una carpa", async () => {
-    const response = await request(app).delete(`/tents/${createdTentId}`);
+    const response = await request(app).delete(`/tents/${createdTentId}`).set('Authorization', adminAuth());
 
     assert.strictEqual(response.status, 200);
     assert.strictEqual(response.body, "Carpa eliminada");

@@ -7,8 +7,11 @@ import {
   deleteSchedule,
   deleteAllSchedules 
 } from "../controllers/schedule.js";
+import { verifyStaff } from "../utils/verifyToken.js";
 
 const router = express.Router();
+
+router.use(verifyStaff);
 
 // Crear un nuevo horario
 router.post("/", createSchedule);

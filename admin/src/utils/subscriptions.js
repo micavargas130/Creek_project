@@ -24,6 +24,8 @@ globalObserver.subscribe("reservationCompleted", async ({ booking }) => {
   } catch (error) {
     console.error("Error actualizando estado de cabaña:", error);
   }
+  //recargar la lista de cabañas recien cuando el nuevo estado ya esta guardado
+  globalObserver.notify("changesLodges");
 });
 
 

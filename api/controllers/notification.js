@@ -76,11 +76,11 @@ export const getNotification = async(req, res, next) =>{
 
 export const updateNotificationViewing = async (req, res, next) => {
     try {
-      const { id } = req.params.id;
+      const { id } = req.params;
       const { closed } = req.body;
   
       // Busca la notificación por su ID en la base de datos
-      const notification = await Notification.findById(id);
+      const notification = await Notifications.findById(id);
   
       if (!notification) {
         return res.status(404).json({ message: "Notification not found" });
@@ -125,22 +125,17 @@ export const deleteOldNotifications = async () => {
       const today = moment().startOf('day').toDate(); // Hoy a las 00:00
       const tomorrow = moment(today).add(1, 'day').toDate(); // Mañana a las 00:00
   
-      // Buscar reservas de cabañas con checkout hoy
+      // Buscar reservas de cabañas (no canceladas) con checkout hoy
+      const canceledStatus = await BookingStatus.findOne({ status: "Cancelada" });
       const lodgeBookings = await Bookings.find({
-        "checkOut": { $gte: today, $lt: tomorrow }
+        "checkOut": { $gte: today, $lt: tomorrow },
+        ...(canceledStatus && { status: { $ne: canceledStatus._id } }),
       }).populate("lodge").populate("user");
-  
-      // Buscar carpas con checkout hoy
-      const tentBookings = await Tents.find({
-        "checkOut": { $gte: today, $lt: tomorrow }
-      });
   
       // Crear notificaciones para cabañas
       for (const booking of lodgeBookings) {
-        const fullName = `${booking.user.first_name} ${booking.user.last_name}`;
-        const lodgeName = booking.lodge.name;
-
-        console.log("booking", booking);
+        //si se borro el usuario o la cabaña no hay a quien avisar
+        if (!booking.user || !booking.lodge) continue;
   
         const notification = new Notifications({
           type: "Checkout",
@@ -150,19 +145,9 @@ export const deleteOldNotifications = async () => {
         });
         await notification.save();
       }
-  
-      // Crear notificaciones para carpas
-      for (const tent of tentBookings) {
-        const fullName = `${tent.first_name} ${tent.last_name}`;
-  
-        const notification = new Notifications({
-          type: "Aviso de Checkout",
-          cabain: lodgeBookings.lodge._id,
-          client: lodgeBookings.user._id,
-          date: new Date(),
-        });
-        await notification.save();
-      }
+
+      //las carpas no tienen usuario ni cabaña asociados, y el panel de notificaciones
+      //del admin necesita ambos para mostrarlas, asi que por ahora no se generan avisos de carpas
       console.log("✅ Notificaciones de check-out generadas.");
     } catch (error) {
       console.error("❌ Error generando notificaciones de check-out:", error);
@@ -187,8 +172,8 @@ export const deleteOldNotifications = async () => {
     }).populate("user").populate("lodge");
 
     for (const booking of pendingBookings) {
+      if (!booking.user || !booking.lodge) continue;
       const fullName = `${booking.user.first_name} ${booking.user.last_name}`;
-      const lodgeName = booking.lodge.name;
 
       // Evitar notificaciones duplicadas: comprobamos si ya existe una
       const alreadyExists = await Notifications.findOne({

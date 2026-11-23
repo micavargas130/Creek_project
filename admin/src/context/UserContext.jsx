@@ -25,12 +25,13 @@ const UserContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
+        //la sesion (datos + token) queda guardada en localStorage al hacer login
         const storedUser = JSON.parse(localStorage.getItem("user"));
-        if (storedUser) {
+        if (storedUser?.token) {
           dispatchUser({ type: "SET_USER", payload: storedUser });
         } else {
-          const response = await axiosInstance.get("/profile");
-          dispatchUser({ type: "SET_USER", payload: response.data });
+          localStorage.removeItem("user");
+          dispatchUser({ type: "CLEAR_USER" });
         }
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -63,10 +64,12 @@ const UserContextProvider = ({ children }) => {
   const logout = async () => {
     try {
       await axiosInstance.post("/logout");
-      dispatchUser({ type: "CLEAR_USER" });
-      localStorage.removeItem("user"); // Eliminar del localStorage
     } catch (err) {
       console.error("Error logging out:", err);
+    } finally {
+      //aunque falle el request, la sesion local se cierra igual
+      dispatchUser({ type: "CLEAR_USER" });
+      localStorage.removeItem("user"); // Eliminar del localStorage
     }
   };
 

@@ -23,8 +23,23 @@ const notificationSchema = new mongoose.Schema({
     },
 
     closedBy: [{
-        type: mongoose.Schema.Types.ObjectId 
+        type: mongoose.Schema.Types.ObjectId
     }],
+
+    closed: {
+        type: Boolean,
+        default: false,
+    },
+
+    clientName: {
+        type: String,
+    },
+
+    //reserva que origino el aviso (se usa para no duplicar avisos de seña pendiente)
+    relatedBooking: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Booking",
+    },
 },
 
 {timestamps: true }

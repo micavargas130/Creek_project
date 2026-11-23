@@ -38,24 +38,21 @@ const Datatable = (props) => {
 
 
   //para cuando se elige el estado "mantenimiento"
-  const handleMaintenanceSubmit = (params) => {
+  const handleMaintenanceSubmit = async (params) => {
     try {
-      axiosInstance.post(`lodge_x_status/`, {
+      //esperar a que se guarde antes de recargar la lista
+      await axiosInstance.post(`lodge_x_status/`, {
         lodge: params.row._id,
         status: "668f308770711974d54762d0",
         comment: maintenanceText,
       });
-  
-      //cierra el diálogo y recarga la página
-      closeDialog();
-      globalObserver.notify("changesLodges");
-
     } catch (error) {
       console.error('Error al enviar el comentario de mantenimiento al servidor:', error);
     }
+    //cierra el diálogo y recarga la lista
     closeDialog();
+    setMaintenanceText("");
     globalObserver.notify("changesLodges");
-
   };
 
   //Abrir ventana para dejar el comment
@@ -151,7 +148,7 @@ const Datatable = (props) => {
             </div>
   
             {/*si la reserva no está pagada y está ocupada, muestra advertencia */}
-            {!isPaid && isOccupied && (
+            {!isPaid && isOccupied && params.row.paymentInfo?._id && (
               <Tooltip title="Reserva no pagada">
                <Link to={`/accounting/${params.row.paymentInfo._id}`} style={{ textDecoration: "none" }}>
                 <WarningIcon color="error" style={{ marginLeft: 8 }} />

@@ -1,5 +1,5 @@
+import "dotenv/config"; //primero, para que las variables esten cargadas cuando se importan los demas modulos
 import express from "express";
-import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 import multer from "multer";
@@ -17,40 +17,21 @@ import lodge_x_statusRoute from "./api/routes/lodge_x_status.js";
 import lodgeRoute from "./api/routes/lodges.js";
 import bookingsRoute from "./api/routes/bookings.js";
 import accountingRoute from "./api/routes/accounting.js";
-import { fileURLToPath } from "url";
-import http from "http";
-import fs from "fs";
+import { UPLOADS_DIR } from "./api/utils/uploads.js";
+import User from "./api/models/User.js";
+import { verifyStaff } from "./api/utils/verifyToken.js";
 import "./api/utils/cronJobs.js";
 
-dotenv.config();
 const app = express();
-const server = http.createServer(app);
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const PERSISTENT_DIR = "/data/uploads"; //Render Disk para imgs
-const LOCAL_DIR = path.resolve(__dirname, "api/public/uploads"); //path local para imgs
-
-//si no existe el Render Disk que se suba a local
-const USING_RENDER_DISK = fs.existsSync("/data");
-const UPLOADS_DIR = USING_RENDER_DISK ? PERSISTENT_DIR : LOCAL_DIR;
-
-//crear la carpeta si no existe
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-  console.log("Carpeta creada:", UPLOADS_DIR);
-}
 
 console.log("Sirviendo /uploads desde:", UPLOADS_DIR);
 
 //conexion a mongo
 const connect = async () => {
-  console.log("NODE_ENV:", process.env.NODE_ENV);
-  console.log("MONGO_TEST:", process.env.MONGO_TEST);
   const mongoURI =
     process.env.NODE_ENV === "test" ? process.env.MONGO_TEST : process.env.MONGO;
-  console.log(`🌍 Conectando a: ${mongoURI}`);
+  //no loguear la URI: tiene usuario y contraseña de la base
+  console.log(`🌍 Conectando a MongoDB (${process.env.NODE_ENV || "development"})`);
 
   try {
     await mongoose.connect(mongoURI, {
@@ -58,15 +39,20 @@ const connect = async () => {
       useUnifiedTopology: true,
     });
     console.log(`✅ Conectado a MongoDB (${process.env.NODE_ENV})`);
+
+    //actualiza los indices de usuarios (el de dni paso a ser sparse para los usuarios de Google sin dni);
+    //mongo no cambia un indice existente por si solo
+    try {
+      await User.syncIndexes();
+    } catch (error) {
+      console.error("⚠️ No se pudieron sincronizar los índices de usuarios:", error.message);
+    }
   } catch (error) {
     console.error("❌ Error conectando a MongoDB:", error);
     throw error;
   }
 };
 mongoose.connection.on("disconnected", () => {
-  const mongoURI =
-    process.env.NODE_ENV === "test" ? process.env.MONGO_TEST : process.env.MONGO;
-  console.log(`🌍 Conectando a: ${mongoURI}`);
   console.log("MongoDB disconnected!");
 });
 
@@ -107,7 +93,7 @@ const upload = multer({ storage });
 
 app.use("/uploads", express.static(UPLOADS_DIR));
 
-app.post("/lodge/upload", upload.single("photos"), (req, res, next) => {
+app.post("/lodge/upload", verifyStaff, upload.single("photos"), (req, res, next) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
@@ -142,7 +128,8 @@ app.use((err, req, res, next) => {
     success: false,
     status: errorStatus,
     message: errorMessage,
-    stack: err.stack,
+    //el stack solo en desarrollo, no exponer detalles internos en produccion
+    ...(process.env.NODE_ENV !== "production" && !process.env.RENDER && { stack: err.stack }),
   });
 });
 

@@ -57,7 +57,7 @@ const LodgeHistoryPage = () => {
         return (
           <div className="cellAction">
             {/* Verifica si el nombre del estado es "ocupada" */}
-            {params.row.status && params.row.status.status === "ocupado" && (
+            {params.row.status?.status === "ocupado" && params.row.paymentInfo?._id && (
               <Link to={`/accounting/${params.row.paymentInfo._id}`} style={{ textDecoration: "none" }}>
                 <div className="viewButton">View</div>
               </Link>

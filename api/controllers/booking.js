@@ -4,13 +4,34 @@ import { sendBookingEmailwithPass, sendBookingWithDepositEmail, sendBookingEmail
 import User from "../models/User.js"; 
 import Price from '../models/Prices.js';
 import Lodge from '../models/Lodges.js';
+import { isStaff } from "../utils/verifyToken.js";
 
 export const createBooking = async (req, res, next) => {
   try {
-    const { lodge, checkIn, checkOut, user, numberOfAdults, numberOfChildren, sendEmail, password, origin } = req.body;
-    //Busca el id del status pendiente
+    const { lodge, checkIn, checkOut, numberOfAdults, numberOfChildren, sendEmail, password, origin } = req.body;
+    //un cliente solo puede reservar para si mismo; el staff puede reservar para cualquiera
+    const user = isStaff(req.user) ? req.body.user : req.user.id;
+
+    if (!(new Date(checkOut) > new Date(checkIn))) {
+      return res.status(400).json({ message: "La fecha de salida debe ser posterior a la de ingreso." });
+    }
+
+    //Busca el id del status pendiente y cancelada
     const pendingStatus = await BookingStatus.findOne({ status: "Pendiente" });
-  
+    const canceledStatus = await BookingStatus.findOne({ status: "Cancelada" });
+    if (!pendingStatus || !canceledStatus) {
+      return res.status(500).json({ error: 'Faltan los estados "Pendiente"/"Cancelada" en la base de datos' });
+    }
+
+    //validar antes de guardar para no dejar reservas a medias
+    const [userInfo, lodgeData] = await Promise.all([User.findById(user), Lodge.findById(lodge)]);
+    if (!userInfo) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+    if (!lodgeData) {
+      return res.status(404).json({ error: "Cabaña no encontrada" });
+    }
+
     //busca el precio de las cabañas
     const prices = await Price.find({ category: "cabañas" }).sort({ createdAt: -1 }).limit(1);
     if (prices.length === 0) {
@@ -21,13 +42,12 @@ export const createBooking = async (req, res, next) => {
     const latestPrice = prices[0];
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
-    let nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
-    if(nights < 1){nights = 1;}
+    const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
     const totalPrice = ((numberOfAdults * latestPrice.priceAdult) + (numberOfChildren * latestPrice.priceChild)) * nights;
 
     const overlappingBooking = await Booking.findOne({
       lodge: lodge,
-      status: { $ne: "668ddd316630f103dda28cdf" }, 
+      status: { $ne: canceledStatus._id },
       $or: [
         {
           checkIn: { $lt: checkOut },
@@ -54,29 +74,20 @@ export const createBooking = async (req, res, next) => {
     await newBooking.save();
   
     if (sendEmail) {
-      const userInfo = await User.findById(user);
-      if (!userInfo) {
-        return res.status(404).json({ error: "Usuario no encontrado" });
-      }
-      
-      //trae los datos de la lodge para poder adquirir el nombre
-      const lodgeData = await Lodge.findById({_id: lodge});
-      const lodgeName = lodgeData.name
-
       const emailData = {
         checkIn,
         checkOut,
-        lodgeName: lodgeName,
+        lodgeName: lodgeData.name,
         totalPrice,
       };
 
       if (origin === "manual") {
         await sendBookingEmailwithPass(userInfo.email, userInfo.first_name, password, emailData);
+        console.log("Correo enviado a:", userInfo.email);
       } else if (origin === "cliente") {
         await sendBookingWithDepositEmail(userInfo.email, userInfo.first_name, password, emailData);
+        console.log("Correo enviado a:", userInfo.email);
       }
-
-      console.log("Correo enviado a:", userInfo.email);
     } else {
       console.log("Reserva creada SIN envío de correo.");
     }
@@ -186,10 +197,10 @@ export const setStatusActive = async (req, res, next) => {
   totalPrice: updatedBooking.totalAmount || 'N/A',
 };
 
-    const userEmail = updatedBooking.user.email;
-    const userName = updatedBooking.user.first_name;
-
-    await sendBookingEmail(userEmail, userName, bookingDetails);
+    //si el usuario fue borrado igual se activa la reserva, solo no se manda el mail
+    if (updatedBooking.user?.email) {
+      await sendBookingEmail(updatedBooking.user.email, updatedBooking.user.first_name, bookingDetails);
+    }
 
     res.json(updatedBooking);
   } catch (error) {
@@ -234,6 +245,11 @@ export const setStatusCanceled = async (req, res, next) => {
       return res.status(404).json({ error: "Reserva no encontrada" });
     }
 
+    //un cliente solo puede cancelar sus propias reservas
+    if (!isStaff(req.user) && String(booking.user?._id) !== req.user.id) {
+      return res.status(403).json({ error: "No podés cancelar esta reserva" });
+    }
+
     // Buscar el estado "Cancelada"
     const canceledStatus = await BookingStatus.findOne({ status: "Cancelada" });
     if (!canceledStatus) {
@@ -261,7 +277,7 @@ export const setStatusCanceled = async (req, res, next) => {
       await sendCancellationEmail(booking.user.email, booking.user.first_name, {
         checkIn: formatDate(booking.checkIn),
         checkOut: formatDate(booking.checkOut),
-        lodgeName: booking.lodge.name,
+        lodgeName: booking.lodge?.name || "Tu alojamiento",
         totalPrice: booking.totalAmount,
       });
     }
@@ -285,27 +301,34 @@ export const autoCancelPendingBookings = async () => {
     }
     const now = new Date();
 
-    //buscar reservas pendientes que se crearon hace más de 2 días
+    //buscar reservas pendientes que se crearon hace más de 3 días (el plazo que se le informa al cliente por mail)
     const outdatedBookings = await Booking.find({
       status: pendingStatus._id,
-      createdAt: { $lte: new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000) },
+      createdAt: { $lte: new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000) },
     }).populate("user").populate("lodge");
 
+    const toDate = (date) => new Date(date).toLocaleDateString("es-AR", { timeZone: "UTC" });
+
     for (const booking of outdatedBookings) {
-      booking.status = canceledStatus._id;
-      await booking.save();
+      //cada reserva por separado: si una falla no frena la cancelacion de las demas
+      try {
+        //solo se actualiza el estado (save() revalidaria todo el documento y fallaria con reservas viejas incompletas)
+        await Booking.updateOne({ _id: booking._id }, { status: canceledStatus._id });
 
-      //enviar email
-      if (booking.user && booking.user.email) {
-        await sendCancellationEmail(booking.user.email, booking.user.first_name, {
-          checkIn: booking.checkIn,
-          checkOut: booking.checkOut,
-          lodgeName: booking.lodge?.name || "Tu alojamiento",
-          totalPrice: booking.totalAmount,
-        });
+        //enviar email
+        if (booking.user && booking.user.email) {
+          await sendCancellationEmail(booking.user.email, booking.user.first_name, {
+            checkIn: toDate(booking.checkIn),
+            checkOut: toDate(booking.checkOut),
+            lodgeName: booking.lodge?.name || "Tu alojamiento",
+            totalPrice: booking.totalAmount,
+          });
+        }
+
+        console.log(`Reserva ${booking._id} cancelada automáticamente`);
+      } catch (error) {
+        console.error(`Error cancelando automáticamente la reserva ${booking._id}:`, error.message);
       }
-
-      console.log(`Reserva ${booking._id} cancelada automáticamente`);
     }
   } catch (error) {
     console.error("Error al cancelar reservas pendientes automáticamente:", error);

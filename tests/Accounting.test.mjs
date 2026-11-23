@@ -2,6 +2,7 @@ process.env.NODE_ENV = 'test';
 import { test} from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';
+import { adminAuth } from './auth_helper.js';
 import { app } from '../index.js'; 
 import {disconnectFromDB } from './testing_db.js';
 
@@ -18,38 +19,38 @@ test('POST /accounting debe crear un registro contable', async () => {
     date: '2025-02-05T00:00:00.000Z',
     status: "parcial",
   };
-  const response = await request(app).post('/accounting/createAccounting').send(newAccounting);
+  const response = await request(app).post('/accounting/createAccounting').set('Authorization', adminAuth()).send(newAccounting);
   assert.strictEqual(response.status, 200);
   assert.ok(response.body._id);
   createdAccountingId = response.body._id;
 });
 
 test('GET /accounting debe devolver estado 200', async () => {
-    const response = await request(app).get('/accounting');
+    const response = await request(app).get('/accounting').set('Authorization', adminAuth());
     assert.strictEqual(response.status, 200);
   });
 
 test('GET /accounting/:id debe devolver un registro contable específico', async () => {
-  const response = await request(app).get(`/accounting/${createdAccountingId}`);
+  const response = await request(app).get(`/accounting/${createdAccountingId}`).set('Authorization', adminAuth());
   assert.strictEqual(response.status, 200);
   assert.strictEqual(response.body._id, createdAccountingId);
 });
 
 
 test('PUT /accounting/status/:id debe actualizar el estado de pago', async () => {
-  const response = await request(app).put(`/accounting/status/${createdAccountingId}`).send({ status: 'parcial' });
+  const response = await request(app).put(`/accounting/status/${createdAccountingId}`).set('Authorization', adminAuth()).send({ status: 'parcial' });
   assert.strictEqual(response.status, 200);
   assert.strictEqual(response.body.status.status, 'parcial');
 });
 
 test('GET /accounting/filter?filter=month debe devolver contabilidad del mes', async () => {
-  const response = await request(app).get('/accounting/filter?filter=month');
+  const response = await request(app).get('/accounting/filter?filter=month').set('Authorization', adminAuth());
   assert.strictEqual(response.status, 200);
   assert.ok(response.body.totalMoney !== undefined);
 });
 
 test('DELETE /accounting/:id debe eliminar un registro contable', async () => {
-  const response = await request(app).delete(`/accounting/${createdAccountingId}`);
+  const response = await request(app).delete(`/accounting/${createdAccountingId}`).set('Authorization', adminAuth());
   assert.strictEqual(response.status, 200);
 });
 

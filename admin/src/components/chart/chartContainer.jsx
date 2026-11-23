@@ -18,7 +18,7 @@ const ChartContainer = ({ rawData, processedData, chartData, totalMoney, totalIn
   const fetchData = async () => {
     try {
       const res = await axiosInstance.get(`/graphs/evolution?year=${selectedYear}&month=${selectedMonth}`);
-      const filteredData = res.data.filter(entry => entry.status?._id !== "686f099aacd6f16c7fd3c905");
+      const filteredData = res.data.filter(entry => entry.status?.status !== "cancelado");
       setEvolutionData(filteredData);
     } catch (err) {
       console.error("Error al obtener datos de evolución:", err);
@@ -87,7 +87,7 @@ const ChartContainer = ({ rawData, processedData, chartData, totalMoney, totalIn
             onChange={(e) => setSelectedYear(Number(e.target.value))}
             label="Año"
           >
-            {[2025, 2024, 2023].map((year) => (
+            {Array.from({ length: 4 }, (_, i) => new Date().getFullYear() - i).map((year) => (
               <MenuItem key={year} value={year}>
                 {year}
               </MenuItem>

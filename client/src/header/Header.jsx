@@ -49,7 +49,7 @@ export default function Header() {
   <header className="header">
     <Link to="/" className="headerIcon flex items-center gap-2">
       <img 
-        src="images/logoCamping.png" 
+        src="/images/logoCamping.png" 
         alt="Camping Arroyito" 
         className="h-20 w-auto"
       />

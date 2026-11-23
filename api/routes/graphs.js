@@ -6,8 +6,11 @@ import {
   getAverageStayDuration,
   getReservationsOverTime
 } from "../controllers/graphs.js";
+import { verifyStaff } from "../utils/verifyToken.js";
 
 const router = express.Router();
+
+router.use(verifyStaff);
 
 router.get("/evolution", getAccountingEvolution);
 router.get("/reservas-tiempo", getReservationsOverTime);

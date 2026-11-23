@@ -3,7 +3,6 @@ import { Link, useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
 import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -19,23 +18,21 @@ export default function LoginPage() {
       setUser(data);
       setRedirect(true);
     } catch (err) {
-      if (err.response?.status === 400) alert("Email o contraseña incorrecto");
       if (err.response?.status === 404) alert("Email no registrado");
+      else if (err.response?.status === 400) alert(err.response.data?.message === "Incorrect password or email" ? "Email o contraseña incorrecto" : err.response.data?.message || "Email o contraseña incorrecto");
+      else alert("No se pudo iniciar sesión. Inténtalo nuevamente.");
     }
   }
 
   async function handleGoogleLoginSuccess(credentialResponse) {
   try {
-    const userInfo = jwtDecode(credentialResponse.credential);
-
+    //el backend verifica la credencial con Google, no se confia en datos decodificados en el navegador
     const { data } = await axios.post("/login/google", {
-      email: userInfo.email,
-      name: userInfo.name,
-      googleId: userInfo.sub,
+      credential: credentialResponse.credential,
     });
 
     if (data.needsProfileCompletion) {
-     navigate("/register", { state: { email: data.email, userId: data.userId } });
+     navigate("/register", { state: { email: data.email, userId: data.userId, token: data.token } });
     } else {
       //login normal
       setUser(data.user);
@@ -44,6 +41,7 @@ export default function LoginPage() {
 
   } catch (err) {
     console.error("Error en login con Google:", err);
+    alert("No se pudo iniciar sesión con Google. Inténtalo nuevamente.");
     }
   }
 

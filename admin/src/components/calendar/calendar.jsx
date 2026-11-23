@@ -12,6 +12,7 @@ const Calendar = ({ lodgeId, onDateSelect, checkIn, checkOut, readOnly = false }
   const [highlightedDates, setHighlightedDates] = useState([]);
 
   useEffect(() => {
+  if (!lodgeId) return; //todavia no se eligio cabaña
   axiosInstance.get(`/lodges/occupied-dates/${lodgeId}`)
     .then((res) => {
       const events = res.data.occupiedDates.map((date) => ({

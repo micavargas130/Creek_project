@@ -112,7 +112,7 @@ const Datatable = () => {
     navigate("/lodges");  // primero navegar
     
     setTimeout(() => {
-      globalObserver.notify("changesLodges");
+      //"reservationCompleted" actualiza la cabaña y despues avisa "changesLodges"
       globalObserver.notify("reservationCompleted", { booking });
       globalObserver.notify("reservationChange");
     }, 100);

@@ -2,6 +2,7 @@ process.env.NODE_ENV = 'test';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import request from 'supertest';
+import { adminAuth } from './auth_helper.js';
 import { app } from '../index.js'; 
 import { disconnectFromDB } from './testing_db.js';
 
@@ -18,26 +19,26 @@ test('POST /bookings debe crear una reserva', async () => {
     numberOfChildren: 2,
     totalAmount: 5000
   };
-  const response = await request(app).post('/bookings/createBooking').send(newBooking);
+  const response = await request(app).post('/bookings/createBooking').set('Authorization', adminAuth()).send(newBooking);
   assert.strictEqual(response.status, 200);
   assert.ok(response.body._id);
   createdBookingId = response.body._id;
 });
 
 test('GET /bookings debe devolver estado 200', async () => {
-  const response = await request(app).get('/bookings');
+  const response = await request(app).get('/bookings').set('Authorization', adminAuth());
   assert.strictEqual(response.status, 200);
 });
 
 
 test('GET /bookings/:id debe devolver una reserva específica', async () => {
-  const response = await request(app).get(`/bookings/${createdBookingId}`);
+  const response = await request(app).get(`/bookings/${createdBookingId}`).set('Authorization', adminAuth());
   assert.strictEqual(response.status, 200);
   assert.strictEqual(response.body._id, createdBookingId);
 });
 
 test('DELETE /bookings/:id debe eliminar una reserva', async () => {
-  const response = await request(app).delete(`/bookings/${createdBookingId}`);
+  const response = await request(app).delete(`/bookings/${createdBookingId}`).set('Authorization', adminAuth());
   assert.strictEqual(response.status, 200);
 });
 

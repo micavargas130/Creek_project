@@ -5,6 +5,7 @@ import Price from "../models/Prices.js";
 import multer from "multer";
 import fs from "fs";
 import path from "path";
+import { UPLOADS_DIR } from "../utils/uploads.js";
 
 export const createAccounting = async (req, res, next) => {
   try {
@@ -78,7 +79,6 @@ export const getAccountings = async (req, res, next) => {
 export const getAccounting = async (req, res, next) => {
     try {
       const accounting = await Accounting.findById(req.params.id).populate('status').populate('lodge').populate('tent')
-      res.status(200).json(accounting);;
       res.status(200).json(accounting);
     } catch (err) {
       next(err);
@@ -110,8 +110,9 @@ export const getAccounting = async (req, res, next) => {
         dateRange = null; 
       }
   
+      const canceledPayment = await PaymentStatus.findOne({ status: "cancelado" });
       const filtro = {
-        status: { $ne: "686f099aacd6f16c7fd3c905" }, // excluir status cancelado
+        ...(canceledPayment && { status: { $ne: canceledPayment._id } }), // excluir status cancelado
         ...(dateRange && { date: dateRange })        // incluir rango de fechas si existe
       };
       
@@ -147,7 +148,7 @@ export const deleteAccounting = async (req, res, next) => {
             return res.status(404).json({ message: 'Accounting not found' });
         }
 
-        await PaymentStatus.deleteMany({ accounting: accountingId });
+        await PaymentHistory.deleteMany({ accounting: accountingId });
 
         res.status(200).json({ message: 'Accounting deleted successfully' });
     } catch (err) {
@@ -271,7 +272,7 @@ export const addPartialPayment = async (req, res, next) => {
 // Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "/data/uploads"); //render Disk persistente
+    cb(null, UPLOADS_DIR);
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
@@ -327,7 +328,7 @@ export const deleteReceipt = async (req, res, next) => {
     if (!toDelete) return res.status(404).json("No hay comprobante que eliminar");
 
     //uso el disk persistente
-    const diskPath = path.join("/data/uploads", path.basename(toDelete));
+    const diskPath = path.join(UPLOADS_DIR, path.basename(toDelete));
     console.log("Intentando borrar archivo:", diskPath);
 
     if (fs.existsSync(diskPath)) {
@@ -381,27 +382,33 @@ export const returnPayment = async (req, res, next) => {
 }; 
 export const paymentHistory = async (req, res, next) => {
     try {
-        const { amount } = req.body;
+        const amount = Number(req.body.amount);
+        if (!Number.isFinite(amount) || amount <= 0) {
+            return res.status(400).json({ message: 'Monto inválido' });
+        }
         const accounting = await Accounting.findById(req.params.accountingId);
 
         if (!accounting) {
-            return res.status(404).json({ message: 'Registro de contabilidad no encontrado' });     
+            return res.status(404).json({ message: 'Registro de contabilidad no encontrado' });
         }
 
-        // Calcular el nuevo saldo restante
-        const newRemainingAmount = accounting.remainingAmount - amount;
+        // Calcular el nuevo saldo restante (si nunca se pago nada, el saldo es el total)
+        const newRemainingAmount = (accounting.remainingAmount ?? accounting.totalAmount) - amount;
         let newStatus;
         const depositAmount = accounting.totalAmount * 0.3;
 
         if (newRemainingAmount <= 0) {
           newStatus = "pagado";
-        } else if (amount === depositAmount) {
+        } else if (Math.abs(amount - depositAmount) < 0.01) { //tolerancia por redondeo (ej: 7 * 0.3)
           newStatus = "seña";
         } 
         else {
           newStatus = "parcial";
         }
         const status = await PaymentStatus.findOne({ status: newStatus });
+        if (!status) {
+            return res.status(500).json({ message: `El estado de pago "${newStatus}" no existe en la base de datos` });
+        }
 
         //Crear un nuevo registro en PaymentHistory
         const paymentHistory = new PaymentHistory({
@@ -414,8 +421,7 @@ export const paymentHistory = async (req, res, next) => {
 
         //Actualizar el registro de Accounting
         accounting.remainingAmount = newRemainingAmount <= 0 ? 0 : newRemainingAmount;
-        const oldAmount = accounting.amount;
-        accounting.amount = oldAmount + amount;
+        accounting.amount = (accounting.amount || 0) + amount;
         accounting.status = status._id; // Cambia el estado de accounting
         await accounting.save(); 
   

@@ -3,6 +3,7 @@ import "./roomPage.css";
 import axios from "axios";
 import SearchItem from "../components/SearchItem/searchItem";
 import { SearchContext } from "../context/SearchContext";
+import { format } from "date-fns";
 
 export default function RoomsPage() {
   const [lodges, setLodges] = useState([]);
@@ -45,11 +46,13 @@ useEffect(() => {
 }, []);
 
 
+  //noches de la estadia en hora local (el dia de salida queda libre, igual que en el backend)
   const getDatesInRange = (start, end) => {
-    const date = new Date(start.getTime());
+    const date = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+    const last = new Date(end.getFullYear(), end.getMonth(), end.getDate());
     const list = [];
-    while (date <= end) {
-      list.push(date.toISOString().split('T')[0]);
+    while (date < last) {
+      list.push(format(date, "yyyy-MM-dd"));
       date.setDate(date.getDate() + 1);
     }
     return list;

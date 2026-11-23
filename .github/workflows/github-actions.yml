@@ -27,7 +27,9 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Configurar Variables de Entorno
-        run: echo "MONGO_TEST=${{ secrets.MONGO_TEST }}" >> .env
+        run: |
+          echo "MONGO_TEST=${{ secrets.MONGO_TEST }}" >> .env
+          echo "JWT_KEY=ci-solo-para-tests" >> .env
 
       - name: Ejecutar Tests
         run: npm test

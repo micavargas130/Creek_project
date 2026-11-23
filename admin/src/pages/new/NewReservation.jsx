@@ -196,10 +196,10 @@ const New = () => {
                 </div>
                 <div>
                  <label>Check-In</label>
-                  <input type="date" value={checkIn} min={moment().format("DD-MM-YYYY")} 
+                  <input type="date" value={checkIn} min={moment().format("YYYY-MM-DD")}
                     onChange={(e) => {
                       const selected = e.target.value;
-                      const today = moment().format("DD-MM-YYYY");
+                      const today = moment().format("YYYY-MM-DD");
                       if (selected < today) {
                         alert("No puedes seleccionar una fecha pasada");
                         return;
@@ -213,16 +213,16 @@ const New = () => {
                   <input
                     type="date"
                     value={checkOut}
-                    min={checkIn || moment().format("DD-MM-YYYY")}
+                    min={checkIn || moment().format("YYYY-MM-DD")}
                     onChange={(e) => {
                       const selected = e.target.value;
-                      const today = moment().format("DD-MM-YYYY");
+                      const today = moment().format("YYYY-MM-DD");
                       if (selected < today) {
                         alert("No puedes seleccionar una fecha pasada");
                         return;
                                       }
-                                      if (checkIn && selected < checkIn) {
-                        alert("La fecha de salida no puede ser anterior a la de entrada");
+                                      if (checkIn && selected <= checkIn) {
+                        alert("La fecha de salida debe ser posterior a la de entrada");
                         return;
                       }
                       setCheckOut(selected);

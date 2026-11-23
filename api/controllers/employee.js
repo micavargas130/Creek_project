@@ -17,16 +17,19 @@ export const createEmployee = async (req, res, next) => {
             password: hashedPassword,  // Contraseña encriptada
             first_name,
             last_name,
-            dni,
+            dni: dni || undefined,
             phone,
             birthday,
             isEmployee: true
         });
 
-        const savedUser = await newUser.save();
-
-        // Obtener el estado por defecto (e.g., "Activo")
+        // Obtener el estado por defecto antes de crear nada, para no dejar un usuario sin empleado
         const defaultStatus = await Status.findOne({ name: "Activo" });
+        if (!defaultStatus) {
+            return res.status(500).json({ message: 'El estado "Activo" no existe en la base de datos' });
+        }
+
+        const savedUser = await newUser.save();
 
         // Crear el empleado asociado al usuario y al estado por defecto
         const newEmployee = new Employee({
@@ -51,29 +54,31 @@ export const updateEmployee = async (req, res, next) => {
     const { userId, statusName, ...employeeData } = req.body;
 
     try {
-        // Buscar el estado por nombre
-        const status = await Status.findOne({ name: statusName });
-        if (!status) {
-            return res.status(404).json({ message: 'Estado no encontrado' });
+        // Buscar el estado por nombre (es opcional: si no viene, se mantiene el actual)
+        const update = { ...employeeData };
+        if (statusName) {
+            const status = await Status.findOne({ name: statusName });
+            if (!status) {
+                return res.status(404).json({ message: 'Estado no encontrado' });
+            }
+            update.status = status._id;
         }
 
-        // Actualizar los datos del empleado, incluyendo el ID del estado
-        const updatedEmployee = await Employee.findByIdAndUpdate(req.params.id, { 
-            $set: { ...employeeData, status: status._id }  // Guardar el ID del estado encontrado
-        }, { new: true });
+        const updatedEmployee = await Employee.findByIdAndUpdate(req.params.id, { $set: update }, { new: true });
 
         if (userId) {
             // Actualizar los datos del usuario si se proporcionan
-            const { email, password, first_name, last_name, dni, phone, birthday, occupation } = req.body;
+            const { email, password, first_name, last_name, dni, phone, birthday, ocupation } = req.body;
             await User.findByIdAndUpdate(userId, {
                 email,
-                password,
+                //la contraseña siempre se guarda hasheada
+                password: password ? await bcrypt.hash(password, 10) : undefined,
                 first_name,
                 last_name,
-                dni,
+                dni: dni || undefined,
                 phone,
                 birthday,
-                occupation
+                ocupation
             }, { new: true });
         }
 

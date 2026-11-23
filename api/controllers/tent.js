@@ -6,6 +6,18 @@ export const createTent = async (req, res, next) => {
     try {
         const { numberOfAdults, numberOfChildren, checkIn, checkOut } = req.body;
         const status = await Status.findOne({ status: "Activa" });
+        if (!status) {
+            return res.status(500).json({ message: 'El estado "Activa" no existe en la base de datos' });
+        }
+
+        //no permitir dos carpas activas en el mismo lugar del mapa
+        const { location } = req.body;
+        if (location?.row != null && location?.col != null) {
+            const occupied = await Tents.findOne({ status: status._id, "location.row": location.row, "location.col": location.col });
+            if (occupied) {
+                return res.status(409).json({ message: "Ese lugar del mapa ya está ocupado por otra carpa" });
+            }
+        }
 
         // Obtener el último precio ingresado para carpas
         const price = await Price.findOne({ category: "carpas" }).sort({ createdAt: -1 });
