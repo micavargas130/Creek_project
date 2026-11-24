@@ -6,7 +6,9 @@ A full-stack booking and management system for **Camping Arroyito**, a campgroun
 - **Admin panel:** an internal dashboard where staff manage bookings, lodges, tents, payments, prices, employees and schedules.
 - **REST API:** an Express + MongoDB backend shared by both frontends.
 
-🌐 **Live site:** https://creek-project.vercel.app
+🌐 **Live demo**
+- **Client site:** https://creek-project.vercel.app
+- **Admin panel:** https://creek-project-ruby.vercel.app (staff login required)
 
 ---
 
